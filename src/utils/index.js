@@ -1,0 +1,1 @@
+export { componentHasMethod } from './componentHasMethod';
