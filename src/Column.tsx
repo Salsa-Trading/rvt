@@ -1,39 +1,32 @@
 import * as React from 'react';
-import Header from './Header';
-import Cell from './Cell';
+import { SortDirections } from './SortDirection';
 
 export type ColumnProps = {
-  canSort: boolean;
-  name: string;
-  field: string;
+  canSort?: boolean;
+  sortDirection?: SortDirections;
+  name?: string;
+  field?: string;
+  format?: (data) => any;
+  cell?: any;
+  header?: any;
 }
-
 
 export default class Column extends React.Component<ColumnProps, {}> {
 
   public static propTypes = {
     canSort: React.PropTypes.bool,
     name: React.PropTypes.string,
-    field: React.PropTypes.string
+    field: React.PropTypes.string,
+    header: React.PropTypes.any,
+    cell: React.PropTypes.any
   };
 
   public static defaultProps = {
     canSort: false
   };
 
-  private header: any;
-  private cell: any;
-
   constructor(props, context) {
     super(props, context);
-    React.Children.forEach(this.props.children, (child: any) => {
-      if (child.type === Header) {
-        this.header = child;
-      }
-      if (child.type === Cell) {
-        this.cell = child;
-      }
-    });
   }
 
   public render() {

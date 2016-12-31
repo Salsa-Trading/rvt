@@ -38,10 +38,6 @@ const propTypes = {
    */
   scrollWheelRows: React.PropTypes.number,
   /**
-   *  The delta of the scroll wheel movement
-   */
-  scrollWheelDelta: React.PropTypes.number,
-  /**
    *  The static height of each row
    */
   rowHeight: React.PropTypes.number,
@@ -100,10 +96,9 @@ const defaultProps = {
   height: '100%',
   width: '100%',
   scrollWheelRows: 5,
-  scrollWheelDelta: 53
 };
 
-export type TableProps = {
+export type TableBaseProps = {
   rowCount: number;
   getRow: (rowIndex: number) => any;
   height?: number|string;
@@ -111,16 +106,18 @@ export type TableProps = {
   topRow?: number;
   onTopRowChanged?: (topRow: number) => void;
   scrollWheelRows?: number;
-  scrollWheelDelta?: number;
   rowHeight?: number;
   headerHeight?: number;
   containerClassName?: string;
   containerStyle?: any;
   className?: string;
   style?: any;
+};
+
+export type TableProps = TableBaseProps & {
   header: React.ComponentClass<any>|React.StatelessComponent<any>|React.ReactElement<any>;
   row: React.ComponentClass<any>|React.StatelessComponent<any>|React.ReactElement<any>;
-};
+}
 
 export default class Table extends React.Component<TableProps, {
   topRowControlled?: boolean;
@@ -221,10 +218,10 @@ export default class Table extends React.Component<TableProps, {
    * @private
    */
   private onWheel(e) {
-    const { scrollWheelRows, scrollWheelDelta } = this.props;
+    const { scrollWheelRows } = this.props;
     e.stopPropagation();
     e.preventDefault();
-    this.setTopRow(this.getTopRow() + ((e.deltaY / scrollWheelDelta) * scrollWheelRows));
+    this.setTopRow(this.getTopRow() + ((e.deltaY > 0 ? 1 : -1) * scrollWheelRows));
   }
 
   /**
@@ -314,7 +311,8 @@ export default class Table extends React.Component<TableProps, {
     const rowElement = React.isValidElement(row) ? row : React.createElement(row as any);
     const rows = new Array(rowCount);
     for (let i = 0; i < rowCount; i++) {
-      rows[i] = React.cloneElement(rowElement, Object.assign({}, this.getRowProps(topRow, i), { key: i}));
+      let props = Object.assign({}, this.getRowProps(topRow, i), { key: i});
+      rows[i] = React.cloneElement(rowElement, props);
     }
     return rows;
   }

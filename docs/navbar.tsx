@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router';
-import { Navbar } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
+import { Nav, Navbar, NavItem } from 'react-bootstrap';
 // import { LinkContainer } from 'react-router-bootstrap';
 
 export default class NavBar extends React.Component<{
@@ -16,6 +17,13 @@ export default class NavBar extends React.Component<{
           <Navbar.Toggle />
         </Navbar.Header>
         <Navbar.Collapse>
+          <Nav>
+            <LinkContainer to='/examples'>
+              <NavItem>
+                Examples
+              </NavItem>
+            </LinkContainer>
+          </Nav>
         </Navbar.Collapse>
       </Navbar>
     );

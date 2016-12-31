@@ -1,10 +1,10 @@
 import * as React from 'react';
 import GridRow from './GridRow';
 import GridHeader from './GridHeader';
-import Table, {TableProps} from './Table';
+import Table, { TableBaseProps } from './Table';
 
-export default class Grid extends React.Component<TableProps & {
-  onSortSelection: () => void;
+export default class Grid extends React.Component<TableBaseProps & {
+  onSortSelection?: () => void;
 }, {}> {
 
   public static propTypes = {
@@ -24,8 +24,12 @@ export default class Grid extends React.Component<TableProps & {
   private createColumns() {
     const columns = [];
     React.Children.forEach(this.props.children, (child: any) => {
-      const col = new child.type.default(child.props);
-      columns.push(col);
+      if (React.isValidElement(child)) {
+        columns.push(child);
+      }
+      else {
+        columns.push(React.createElement(child, child.props));
+      }
     });
     return columns;
   }

@@ -1,15 +1,14 @@
 import * as React from 'react';
 import SortIndicator from './SortIndicator';
-import Column, { ColumnProps } from './Column';
 
 export default class GridHeaderCell extends React.Component<{
   onSortSelection: () => void;
-  column: ColumnProps
+  column: any
 }, {}> {
 
   public static propTypes = {
     onSortSelection: React.PropTypes.func,
-    column: Column.propTypes
+    column: React.PropTypes.any
   };
 
   public render() {
@@ -38,7 +37,7 @@ export default class GridHeaderCell extends React.Component<{
             {!canSort ? null :
               <SortIndicator
                 sortDirection={sortDirection}
-                onSortSelection={d => onSortSelection ? onSortSelection(d, this.props.column) : null}
+                onSortSelection={d => onSortSelection ? onSortSelection(d, this.props.column.props) : null}
               />
             }
           </div>
