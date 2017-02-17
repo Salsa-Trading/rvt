@@ -5,6 +5,7 @@ import Table, { TableBaseProps } from './Table';
 
 export default class Grid extends React.Component<TableBaseProps & {
   onSortSelection?: () => void;
+  onWidthChanged?: (width: number, column: any) => void;
 }, {}> {
 
   public static propTypes = {
@@ -36,9 +37,9 @@ export default class Grid extends React.Component<TableBaseProps & {
 
   public render() {
     const columns = this.createColumns();
-    const { onSortSelection } = this.props;
+    const { onSortSelection, onWidthChanged } = this.props;
 
-    const header = <GridHeader columns={columns} onSortSelection={onSortSelection} />;
+    const header = <GridHeader columns={columns} onSortSelection={onSortSelection} onWidthChanged={onWidthChanged} />;
     const row = <GridRow columns={columns} />;
 
     return (

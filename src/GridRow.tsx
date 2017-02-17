@@ -23,6 +23,8 @@ export default class GridRow extends React.Component<{
       <tr className={className}>
         {(columns || []).map((c, i) => {
           const cellProps = Object.assign({}, c.props, c.cell ? c.cell.props : {}, {data, width: c.props.width});
+          delete cellProps.canSort;
+          delete cellProps.sortDirection;
           return <Cell key={i} {...cellProps} />;
         })}
       </tr>

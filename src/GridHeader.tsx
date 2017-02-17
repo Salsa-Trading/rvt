@@ -3,6 +3,7 @@ import GridHeaderCell from './GridHeaderCell';
 
 export default class GridHeader extends React.Component<{
   onSortSelection: any;
+  onWidthChanged: (width: number, column: any) => void;
   columns: any;
 }, {}> {
 
@@ -16,13 +17,13 @@ export default class GridHeader extends React.Component<{
   }
 
   public render() {
-    const { onSortSelection } = this.props;
+    const { onSortSelection, onWidthChanged } = this.props;
     const columns = this.props.columns || [];
 
     return (
       <thead>
         <tr>
-          {columns.map((column, i) => <GridHeaderCell key={i} column={column} onSortSelection={onSortSelection} />) }
+          {columns.map((column, i) => <GridHeaderCell key={i} column={column} onSortSelection={onSortSelection} onWidthChanged={onWidthChanged} />) }
         </tr>
       </thead>
     );

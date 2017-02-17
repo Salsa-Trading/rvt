@@ -31,7 +31,7 @@ module.exports = function(env) {
     output: {
       filename: '[name].bundle.js',
       path: outputPath,
-      publicPath: '/dist/',
+      publicPath: '/vendor/',
       library: '[name]_lib'
     },
     devtool: 'eval-cheap-module-source-map',

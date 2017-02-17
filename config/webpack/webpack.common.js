@@ -14,7 +14,7 @@ module.exports = function(_env) {
     postcss: postcss(),
     entry: entry(),
     output: output(),
-    developmenttool: developmenttool(),
+    devtool: devtool(),
     externals: externals(),
     plugins: plugins(),
     devServer: devServer()
@@ -51,6 +51,8 @@ function moduleObj() {
         exclude: /node_modules/,
         loaders: tsLoaders
       },
+      { test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url?limit=10000" },
+      { test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/, loader: 'file' },
       { test: /\.html$/, loader: 'file-loader?name=[name].[ext]' },
       { test: /\.scss$/, loaders: scssLoaders },
       { test: /\.css$/, loaders: cssLoaders },
@@ -76,8 +78,8 @@ function entry() {
         'webpack-dev-server/client?http://localhost:4000',
         'webpack/hot/only-dev-server',
         'react-hot-loader/patch',
-        'font-awesome-loader',
         'bootstrap-loader',
+        'font-awesome-loader',
         path.join(projectRoot, 'docs/index.tsx')
       ]
     }
@@ -85,7 +87,6 @@ function entry() {
   else if (env == 'production') {
     return {
       index: [
-        'font-awesome-loader',
         'bootstrap-loader',
         path.join(projectRoot, 'docs/index.tsx')
       ],
@@ -102,7 +103,7 @@ function output() {
   };
 };
 
-function developmenttool() {
+function devtool() {
   if (env == 'development' || env == 'test') {
     return 'eval-cheap-module-source-map';
   }

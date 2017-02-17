@@ -1,5 +1,6 @@
 import * as React from 'react';
 import SortDirection, {SortDirections} from './SortDirection';
+import { Icon } from 'react-fa';
 
 export default class SortIndicator extends React.Component<{
   sortDirection?: SortDirections,
@@ -24,21 +25,24 @@ export default class SortIndicator extends React.Component<{
   public render() {
     const { sortDirection, onSortSelection } = this.props;
 
+    let icon, nextDirection;
+    if(sortDirection === SortDirection.ASCENDING) {
+      icon = 'sort-asc';
+      nextDirection = SortDirection.DESCENDING;
+    }
+    else if(sortDirection === SortDirection.DESCENDING) {
+      icon = 'sort-desc';
+      nextDirection = SortDirection.NONE;
+    }
+    else {
+      icon = 'sort';
+      nextDirection = SortDirection.ASCENDING;
+    }
+
     return (
-      <div className='sortIndicator'>
-        <button
-          className={`ascending ${sortDirection === SortDirection.ASCENDING ? 'selected' : ''}`}
-          onClick={() => onSortSelection ? onSortSelection(SortDirection.ASCENDING) : null}
-        >
-          <span>{'\u25be'}</span>
-        </button>
-        <button
-          className={`descending ${sortDirection === SortDirection.DESCENDING ? 'selected' : ''}`}
-          onClick={() => onSortSelection ? onSortSelection(SortDirection.DESCENDING) : null }
-        >
-          <span>{'\u25be'}</span>
-        </button>
-      </div>
+      <button onClick={() => onSortSelection && onSortSelection(nextDirection)}>
+        <Icon name={icon} />
+      </button>
     );
   }
 }

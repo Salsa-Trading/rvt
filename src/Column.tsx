@@ -9,7 +9,8 @@ export type ColumnProps = {
   format?: (data) => any;
   cell?: any;
   header?: any;
-}
+  width?: number|string;
+};
 
 export default class Column extends React.Component<ColumnProps, {}> {
 
@@ -18,7 +19,11 @@ export default class Column extends React.Component<ColumnProps, {}> {
     name: React.PropTypes.string,
     field: React.PropTypes.string,
     header: React.PropTypes.any,
-    cell: React.PropTypes.any
+    cell: React.PropTypes.any,
+    width: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number,
+    ])
   };
 
   public static defaultProps = {
