@@ -5,11 +5,12 @@ export type ColumnProps = {
   canSort?: boolean;
   sortDirection?: SortDirections;
   name?: string;
-  field?: string;
   format?: (data) => any;
+  field?: string;
   cell?: any;
   header?: any;
   width?: number|string;
+  index?: number;
 };
 
 export default class Column extends React.Component<ColumnProps, {}> {
@@ -23,7 +24,8 @@ export default class Column extends React.Component<ColumnProps, {}> {
     width: React.PropTypes.oneOfType([
       React.PropTypes.string,
       React.PropTypes.number,
-    ])
+    ]),
+    index: React.PropTypes.number
   };
 
   public static defaultProps = {

@@ -1,24 +1,24 @@
 import * as React from 'react';
+import { ColumnProps } from './Column';
 import { get } from 'lodash';
 
 export default class Cell extends React.Component<{
-  format?: (data: any) => string;
-  field?: string;
+  column: ColumnProps;
   data?: any;
 }, {}> {
 
   public render() {
-    const { format, field, data, ...rest } = this.props;
+    const { column, data } = this.props;
     let value;
-    if (format) {
-      value = format(data);
+    if (column.format) {
+      value = column.format(data);
     }
     else {
-      value = get(data, field);
+      value = get(data, column.field);
     }
 
     return (
-      <td {...rest}>
+      <td width={column.width}>
         {value}
       </td>
     );

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { ColumnProps } from './Column';
 import GridRow from './GridRow';
 import GridHeader from './GridHeader';
 import Table, { TableBaseProps } from './Table';
@@ -6,6 +7,7 @@ import Table, { TableBaseProps } from './Table';
 export default class Grid extends React.Component<TableBaseProps & {
   onSortSelection?: () => void;
   onWidthChanged?: (width: number, column: any) => void;
+  onColumnMove?: (column: any, previousIndex: number, newIndex: number) => void;
 }, {}> {
 
   public static propTypes = {
@@ -22,24 +24,23 @@ export default class Grid extends React.Component<TableBaseProps & {
     this.table.calculateHeights();
   }
 
-  private createColumns() {
-    const columns = [];
-    React.Children.forEach(this.props.children, (child: any) => {
+  private createColumns(): ColumnProps[] {
+    return React.Children.map(this.props.children, (child: any) => {
       if (React.isValidElement(child)) {
-        columns.push(child);
+        return child.props;
       }
       else {
-        columns.push(React.createElement(child, child.props));
+        return child.props;
       }
     });
-    return columns;
   }
 
   public render() {
     const columns = this.createColumns();
-    const { onSortSelection, onWidthChanged } = this.props;
+    columns.sort((a, b) => a.index - b.index);
+    const { onSortSelection, onWidthChanged, onColumnMove } = this.props;
 
-    const header = <GridHeader columns={columns} onSortSelection={onSortSelection} onWidthChanged={onWidthChanged} />;
+    const header = <GridHeader columns={columns} onSortSelection={onSortSelection} onWidthChanged={onWidthChanged} onMove={onColumnMove} />;
     const row = <GridRow columns={columns} />;
 
     return (

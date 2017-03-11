@@ -1,8 +1,9 @@
 import * as React from 'react';
+import { ColumnProps } from './Column';
 import Cell from './Cell';
 
 export default class GridRow extends React.Component<{
-  columns: any;
+  columns: ColumnProps[];
   data?: any;
   className?: string;
 }, {}> {
@@ -21,11 +22,11 @@ export default class GridRow extends React.Component<{
     const { data, columns, className } = this.props;
     return (
       <tr className={className}>
-        {(columns || []).map((c, i) => {
-          const cellProps = Object.assign({}, c.props, c.cell ? c.cell.props : {}, {data, width: c.props.width});
-          delete cellProps.canSort;
-          delete cellProps.sortDirection;
-          return <Cell key={i} {...cellProps} />;
+        {(columns || []).map((column, i) => {
+          // const cellProps = Object.assign({}, column, column.cell ? column.cell.props : {}, {data, width: column.width});
+          // delete cellProps.canSort;
+          // delete cellProps.sortDirection;
+          return <Cell key={column.name} column={column} data={data} />;
         })}
       </tr>
     );

@@ -10,10 +10,9 @@ div.gridHeaderCell {
     flex: 1 auto;
   }
   
-  div.dragHandle {
+  div.resizeHandle {
     flex: 1 auto;
     width: 10px;
-    background-color: blue;
     cursor: col-resize;
   }
 
