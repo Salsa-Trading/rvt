@@ -120,12 +120,13 @@ export type TableProps = TableBaseProps & {
 };
 
 export default class Table extends React.Component<TableProps, {
-  topRowControlled?: boolean;
-  topRow?: number;
-  headerHeight?: number;
-  rowHeight?: number;
-  maxVisibleRows?: number;
-  calculatingHeights?: boolean;
+  topRowControlled: boolean;
+  topRow: number;
+  headerHeight: number;
+  rowHeight: number;
+  height: number;
+  maxVisibleRows: number;
+  calculatingHeights: boolean;
 }> {
 
   public static propTypes = propTypes;
@@ -274,7 +275,6 @@ export default class Table extends React.Component<TableProps, {
     const div = this.containerRef;
     const height = div.clientHeight;
     const header = div.querySelector('table > thead');
-    debugger;
     const headerHeight = header ? header.scrollHeight : 0;
     const scrollHeights = Array.prototype.slice.call(div.querySelectorAll('table > tbody > tr')).map(e => e.scrollHeight);
     const rowHeight = Math.max.apply(Math, scrollHeights);
@@ -380,7 +380,7 @@ export default class Table extends React.Component<TableProps, {
     return (
       <div className={`${containerClassName} calculator`}
            ref={(ref) => this.containerRef = ref }
-           style={Object.assign({}, containerStyle /*, {visibility: 'hidden'} */)}>
+           style={Object.assign({}, containerStyle, {visibility: 'hidden'})}>
         <div style={{overflowX: 'auto', overflowY: 'hidden'}}>
           <table className={tableClassName} style={tableStyle}>
             {header}

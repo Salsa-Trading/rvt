@@ -4,6 +4,8 @@ div.gridHeaderCell {
 
   div.name {
     flex: 1 100%;
+    flex-grow: 1;
+    align-self: flex-end;
   }
   
   div.sortIndicator {
