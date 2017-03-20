@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router';
-import { LinkContainer } from 'react-router-bootstrap';
-import { Nav, Navbar, NavItem } from 'react-bootstrap';
+import { MenuItem, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 // import { LinkContainer } from 'react-router-bootstrap';
 
 export default class NavBar extends React.Component<{
@@ -18,11 +17,12 @@ export default class NavBar extends React.Component<{
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav>
-            <LinkContainer to='/examples'>
-              <NavItem>
-                Examples
-              </NavItem>
-            </LinkContainer>
+            <NavDropdown title='Examples' id='examples-dropdown'>
+              <MenuItem href='/examples/Grid'>Grid</MenuItem>
+              <MenuItem href='/examples/Performance'>Performance</MenuItem>
+              <MenuItem href='/examples/Style'>Style</MenuItem>
+              <MenuItem href='/examples/Table'>Table</MenuItem>
+            </NavDropdown>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
