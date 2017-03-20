@@ -1,9 +1,7 @@
 import * as React from 'react';
-import { SortDirections } from './SortDirection';
+import SortDirection, { SortDirections } from './SortDirection';
 
 export type ColumnProps = {
-  canSort?: boolean;
-  sortDirection?: SortDirections;
   name?: string;
   format?: (data) => any;
   field?: string;
@@ -11,12 +9,15 @@ export type ColumnProps = {
   header?: any;
   width?: number|string;
   index?: number;
+  canSort?: boolean;
+  sortDirection?: SortDirections;
+  canFilter?: boolean;
+  filter?: any;
 };
 
 export default class Column extends React.Component<ColumnProps, {}> {
 
   public static propTypes = {
-    canSort: React.PropTypes.bool,
     name: React.PropTypes.string,
     field: React.PropTypes.string,
     header: React.PropTypes.any,
@@ -25,11 +26,20 @@ export default class Column extends React.Component<ColumnProps, {}> {
       React.PropTypes.string,
       React.PropTypes.number,
     ]),
-    index: React.PropTypes.number
+    index: React.PropTypes.number,
+    canSort: React.PropTypes.bool,
+    sortDirection: React.PropTypes.oneOf([
+      SortDirection.NONE,
+      SortDirection.ASCENDING,
+      SortDirection.DESCENDING
+    ]),
+    canFilter: React.PropTypes.bool,
+    filter: React.PropTypes.any
   };
 
   public static defaultProps = {
-    canSort: false
+    canSort: false,
+    canFilter: false
   };
 
   constructor(props, context) {

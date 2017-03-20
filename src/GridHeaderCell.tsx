@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { findDOMNode } from 'react-dom';
 import SortIndicator from './SortIndicator';
+import { SortDirections } from './SortDirection';
+import Filter from './Filter';
 import { ColumnProps } from './Column';
 import { DragSource, DropTarget } from 'react-dnd';
 
@@ -70,7 +72,8 @@ const columnTarget = {
   isDragging: monitor.isDragging
 }))
 export default class GridHeaderCell extends React.Component<{
-  onSortSelection: () => void;
+  onSortSelection: (sortDirection: SortDirections) => void;
+  onFilterChanged: (filter: any) => void;
   onWidthChanged: (width: number, column: any) => void;
   column: ColumnProps;
   confirmDrop?: any;
@@ -132,15 +135,33 @@ export default class GridHeaderCell extends React.Component<{
         name,
         width,
         sortDirection,
-        canSort
+        canSort,
+        canFilter
       },
       onSortSelection,
+      onFilterChanged,
       connectDragSource,
       connectDropTarget,
       connectDragPreview
     } = this.props as any;
 
+    const sortSelectionHandler = d => onSortSelection ? onSortSelection(d, this.props.column) : null;
+
     const headerRef = (r) => headerElement = r;
+    let sortFilterControl;
+    if(canFilter) {
+      sortFilterControl = <Filter column={this.props.column} onSortSelection={sortSelectionHandler} onFilterChanged={onFilterChanged} />;
+    }
+    else if(canSort) {
+      sortFilterControl = (
+        <div className='sortIndicator'>
+          <SortIndicator
+            sortDirection={sortDirection}
+            onSortSelection={sortSelectionHandler}
+          />
+        </div>
+      );
+    }
 
     return connectDragPreview(connectDropTarget(
       <th key={name} style={{width, padding: 0}} ref={headerRef} >
@@ -150,14 +171,7 @@ export default class GridHeaderCell extends React.Component<{
               {name}
             </div>
           )}
-          {!canSort ? null :
-            <div className='sortIndicator'>
-              <SortIndicator
-                sortDirection={sortDirection}
-                onSortSelection={d => onSortSelection ? onSortSelection(d, this.props.column) : null}
-              />
-            </div>
-          }
+          {sortFilterControl}
           <div
             className='resizeHandle'
             onMouseDown={onResizeHandleMouseDown}

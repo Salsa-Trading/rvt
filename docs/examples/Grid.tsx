@@ -63,6 +63,10 @@ export default class GridExample extends React.Component<{
     this.setState({columnOrder});
   }
 
+  public onFilterChanged(filter: any) {
+    console.log('filter changed', filter);
+  }
+
   public render() {
     const { sortColumns, columnWidths, columnOrder } = this.state;
     const columnIndexes = (columnOrder.reduce((a, k, i) => { a[k] = i; return a; }, {} as any)) as any;
@@ -72,6 +76,7 @@ export default class GridExample extends React.Component<{
           getRow={this.getRow.bind(this)}
           rowCount={this.state.data.length}
           onSortSelection={this.onSortSelection.bind(this)}
+          onFilterChanged={this.onFilterChanged.bind(this)}
           onWidthChanged={this.onWidthChanged.bind(this)}
           onColumnMove={this.onColumnMove.bind(this)}
           className='table table-bordered table-condensed' >
@@ -80,7 +85,7 @@ export default class GridExample extends React.Component<{
             key='col1'
             field='col1'
             index={columnIndexes.col1}
-            canSort
+            canFilter
             sortDirection={sortColumns.col1}
             width={columnWidths.col1} />
 

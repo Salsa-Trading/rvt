@@ -6,6 +6,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 export class GridHeader extends React.Component<{
   onSortSelection: any;
+  onFilterChanged: any;
   onMove: (previousIndex: number, newIndex: number) => void;
   onWidthChanged: (width: number, column: any) => void;
   columns: ColumnProps[];
@@ -23,7 +24,7 @@ export class GridHeader extends React.Component<{
   }
 
   public render() {
-    const { onSortSelection, onWidthChanged, onMove } = this.props;
+    const { onSortSelection, onFilterChanged, onWidthChanged, onMove } = this.props;
     const { columns } = this.props;
 
     return (
@@ -34,6 +35,7 @@ export class GridHeader extends React.Component<{
               key={column.name}
               column={column}
               onSortSelection={onSortSelection}
+              onFilterChanged={onFilterChanged}
               onWidthChanged={onWidthChanged}
               onMove={onMove} />;
             })}

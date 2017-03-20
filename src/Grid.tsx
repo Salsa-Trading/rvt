@@ -2,10 +2,12 @@ import * as React from 'react';
 import { ColumnProps } from './Column';
 import GridRow from './GridRow';
 import GridHeader from './GridHeader';
+import { SortDirections } from './SortDirection';
 import Table, { TableBaseProps } from './Table';
 
 export default class Grid extends React.Component<TableBaseProps & {
-  onSortSelection?: () => void;
+  onSortSelection?: (sortDirection: SortDirections) => void;
+  onFilterChanged?: (filter: any) => void;
   onWidthChanged?: (width: number, column: any) => void;
   onColumnMove?: (column: any, previousIndex: number, newIndex: number) => void;
 }, {}> {
@@ -38,9 +40,15 @@ export default class Grid extends React.Component<TableBaseProps & {
   public render() {
     const columns = this.createColumns();
     columns.sort((a, b) => a.index - b.index);
-    const { onSortSelection, onWidthChanged, onColumnMove } = this.props;
+    const { onSortSelection, onFilterChanged, onWidthChanged, onColumnMove } = this.props;
 
-    const header = <GridHeader columns={columns} onSortSelection={onSortSelection} onWidthChanged={onWidthChanged} onMove={onColumnMove} />;
+    const header = <GridHeader
+      columns={columns}
+      onSortSelection={onSortSelection}
+      onFilterChanged={onFilterChanged}
+      onWidthChanged={onWidthChanged}
+      onMove={onColumnMove}
+    />;
     const row = <GridRow columns={columns} />;
 
     return (
