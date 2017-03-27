@@ -1,21 +1,22 @@
 {
+  "extends": ["tslint-react"],
   "rules": {
     "class-name": true,
     "comment-format": [true, "check-space"],
     "curly": true,
     "eofline": true,
-    "forin": true,
-    "indent": [true, "spaces", ""],
+    "forin": false,
+    "indent": [true, "spaces"],
     "label-position": true,
     "label-undefined": true,
-    "max-line-length": [true, 240],
+    "max-line-length": [true, 200],
     "member-access": true,
     "member-ordering": [true,
       "static-before-instance",
       "variables-before-functions"
     ],
     "no-arg": true,
-    "no-bitwise": true,
+    "no-bitwise": false,
     "no-console": [true,
       "debug",
       "info",
@@ -30,8 +31,8 @@
     "no-empty": false,
     "no-eval": true,
     "no-inferrable-types": true,
-    "no-shadowed-variable": true,
-    "no-string-literal": true,
+    "no-shadowed-variable": false,
+    "no-string-literal": false,
     "no-switch-case-fall-through": true,
     "no-trailing-whitespace": true,
     "no-unused-expression": true,
@@ -39,14 +40,16 @@
     "no-unreachable": true,
     "no-use-before-declare": true,
     "no-var-keyword": true,
+    "object-literal-sort-keys": false,
     "one-line": [true,
       "check-open-brace",
+      "check-finally",
       "check-whitespace"
     ],
     "quotemark": [true, "single", "avoid-escape"],
     "radix": false,
     "semicolon": [true, "always"],
-    "trailing-comma": [false, {
+    "trailing-comma": [true, {
       "singleline": "never",
       "multiline": "never"
     }],
@@ -64,6 +67,7 @@
       "check-operator",
       "check-separator",
       "check-type"
-    ]
+    ],
+    "jsx-no-multiline-js": false
   }
 }
