@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { findDOMNode } from 'react-dom';
-import SortIndicator from './SortIndicator';
-import { SortDirections } from './SortDirection';
 import Filter from './Filter';
-import { ColumnProps } from './Column';
+import { Column, SortDirection } from './Column';
 import { DragSource, DropTarget } from 'react-dnd';
 
 const columnSource = {
@@ -12,7 +10,7 @@ const columnSource = {
       column: props.column,
       index: props.column.index
     };
-  },
+  }
 };
 
 const columnTarget = {
@@ -42,12 +40,12 @@ const columnTarget = {
     // When dragging downwards, only onMove when the cursor is below 50%
     // When dragging upwards, only onMove when the cursor is above 50%
 
-    // Dragging downwards
+    // Dragging right
     if (dragIndex < hoverIndex && hoverClientX < hoverMiddleX) {
       return;
     }
 
-    // Dragging upwards
+    // Dragging left
     if (dragIndex > hoverIndex && hoverClientX > hoverMiddleX) {
       return;
     }
@@ -60,7 +58,7 @@ const columnTarget = {
     // but it's good here for the sake of performance
     // to avoid expensive index searches.
     monitor.getItem().index = hoverIndex;
-  },
+  }
 };
 
 @DropTarget('COLUMN', columnTarget, connect => ({
@@ -72,13 +70,13 @@ const columnTarget = {
   isDragging: monitor.isDragging
 }))
 export default class GridHeaderCell extends React.Component<{
-  onSortSelection: (sortDirection: SortDirections) => void;
-  onFilterChanged: (filter: any) => void;
-  onWidthChanged: (width: number, column: any) => void;
-  column: ColumnProps;
+  column: Column;
+  onSortSelection: (sortDirection: SortDirection, column: Column) => void;
+  onFilterChanged: (filter: any, column: Column) => void;
+  onWidthChanged: (width: number, column: Column) => void;
+  onMove?: (oldIndex: number, newIndex: number) => void;
   confirmDrop?: any;
   cancelDrop?: any;
-  onMove?: (previousIndex: number, newIndex: number) => void;
   isDragging?: boolean;
   connectDropTarget?: any;
   connectDragSource?: any;
@@ -131,12 +129,13 @@ export default class GridHeaderCell extends React.Component<{
     };
 
     const {
+      column,
       column: {
-        name,
+        header,
+        field,
         width,
-        sortDirection,
-        canSort,
-        canFilter
+        sortable,
+        filterable
       },
       onSortSelection,
       onFilterChanged,
@@ -146,38 +145,47 @@ export default class GridHeaderCell extends React.Component<{
     } = this.props as any;
 
     const sortSelectionHandler = d => onSortSelection ? onSortSelection(d, this.props.column) : null;
+    const filterChangedHandler = f => onFilterChanged ? onFilterChanged(f, this.props.column) : null;
 
     const headerRef = (r) => headerElement = r;
     let sortFilterControl;
-    if(canFilter) {
-      sortFilterControl = <Filter column={this.props.column} onSortSelection={sortSelectionHandler} onFilterChanged={onFilterChanged} />;
+    if(filterable) {
+      sortFilterControl = <Filter column={column} onSortSelection={sortSelectionHandler} onFilterChanged={filterChangedHandler} />;
     }
-    else if(canSort) {
+    else if(sortable) {
       sortFilterControl = (
-        <div className='sortIndicator'>
-          <SortIndicator
-            sortDirection={sortDirection}
-            onSortSelection={sortSelectionHandler}
-          />
+        <div>
+          <span className='fa fa-sort-asc' onClick={() => sortSelectionHandler('asc')} />
+          <span className='fa fa-sort-desc' onClick={() => sortSelectionHandler('desc')} />
         </div>
       );
     }
 
+    let headerClassName;
+    if(column.sortDirection) {
+      headerClassName = `sorted-${column.sortDirection}`;
+    }
+    else if(column.sortable) {
+      headerClassName = 'sortable';
+    }
+
     return connectDragPreview(connectDropTarget(
-      <th key={name} style={{width, padding: 0}} ref={headerRef} >
-        <div className='gridHeaderCell'>
+      <th key={field} ref={headerRef} style={{width, padding: 0}}>
+        <div className={`grid-header-cell ${headerClassName}`}>
           {connectDragSource(
-            <div className='name'>
-              {name}
+            <div className='header'>
+              {header}
             </div>
           )}
-          {sortFilterControl}
-          <div
-            className='resizeHandle'
-            onMouseDown={onResizeHandleMouseDown}
-          />
+          <div className='sort-filter'>
+            {sortFilterControl}
+          </div>
+          <div className='resize-handle' onMouseDown={onResizeHandleMouseDown} />
         </div>
       </th>
     ));
   }
+
+
 }
+

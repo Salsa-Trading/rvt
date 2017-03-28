@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { ColumnProps } from './Column';
-import SortDirection from './SortDirection';
+import { Column, SortDirection } from './Column';
 
 export default class Filter extends React.Component<{
-  column: ColumnProps
-  onSortSelection?: any;
+  column: Column
+  onSortSelection?: (sortDirection: SortDirection) => void;
   onFilterChanged: (filter: any) => void;
 }, {
   showFilter: boolean;
@@ -14,8 +13,8 @@ export default class Filter extends React.Component<{
   constructor(props, context) {
     super(props, context);
     this.state = {
-      filter: props.filter,
-      showFilter: false
+      showFilter: false,
+      filter: props.filter || ''
     };
   }
 
@@ -42,10 +41,10 @@ export default class Filter extends React.Component<{
     const { onSortSelection } = this.props;
     const { filter } = this.state;
     return (
-      <div className='filterPane'>
+      <div className='filter-pane'>
         <div>
-          <button type='button' onClick={() => onSortSelection(SortDirection.ASCENDING)}>Ascending</button>
-          <button type='button' onClick={() => onSortSelection(SortDirection.DESCENDING)}>Descending</button>
+          <button type='button' onClick={() => onSortSelection('asc')}>Ascending</button>
+          <button type='button' onClick={() => onSortSelection('desc')}>Descending</button>
         </div>
         <div>
           <input type='text' value={filter} onChange={this.handleFilterChanged.bind(this)} />
@@ -60,9 +59,19 @@ export default class Filter extends React.Component<{
 
   public render() {
     const { showFilter } = this.state;
+    let sortArrow;
+    if(this.props.column.sortDirection === 'asc') {
+      sortArrow = <span className='fa fa-long-arrow-down' />;
+    }
+    else if(this.props.column.sortDirection === 'desc') {
+      sortArrow = <span className='fa fa-long-arrow-up' />;
+    }
     return (
       <div>
-        <button type='button' className='filterButton' onClick={this.toggleFilterPane.bind(this)}>F</button>
+        <div>
+          <span className='fa fa-filter' onClick={this.toggleFilterPane.bind(this)}/>
+          {sortArrow}
+        </div>
         {showFilter && this.renderFilterPane()}
       </div>
     );

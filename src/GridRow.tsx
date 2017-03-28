@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { ColumnProps } from './Column';
-import Cell from './Cell';
+import { Column } from './Column';
+import { get } from 'lodash';
 
 export default class GridRow extends React.Component<{
-  columns: ColumnProps[];
+  columns: Column[];
   data?: any;
   className?: string;
 }, {}> {
@@ -18,16 +18,24 @@ export default class GridRow extends React.Component<{
     super(props, context);
   }
 
+  private renderTableCell(column: Column, data: any) {
+    if(column.cell) {
+      return column.cell(data);
+    }
+    else {
+      return get(data, column.field);
+    }
+  }
+
   public render() {
     const { data, columns, className } = this.props;
     return (
       <tr className={className}>
-        {(columns || []).map((column, i) => {
-          // const cellProps = Object.assign({}, column, column.cell ? column.cell.props : {}, {data, width: column.width});
-          // delete cellProps.canSort;
-          // delete cellProps.sortDirection;
-          return <Cell key={column.name} column={column} data={data} />;
-        })}
+        {(columns || []).map((column) => (
+          <td key={column.field} style={{width: column.width}}>
+            {this.renderTableCell(column, data)}
+          </td>
+        ))}
       </tr>
     );
   }

@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { ColumnProps } from './Column';
+import { Column, SortDirection } from './Column';
 import GridHeaderCell from './GridHeaderCell';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
 export class GridHeader extends React.Component<{
-  onSortSelection: any;
-  onFilterChanged: any;
-  onMove: (previousIndex: number, newIndex: number) => void;
-  onWidthChanged: (width: number, column: any) => void;
-  columns: ColumnProps[];
+  columns: Column[];
+  onSortSelection: (sortDirection: SortDirection, column: Column) => void;
+  onFilterChanged: (filter: any, column: Column) => void;
+  onWidthChanged: (width: number, column: Column) => void;
+  onMove?: (oldIndex: number, newIndex: number) => void;
 }, {}> {
 
   public static propTypes = {
@@ -32,7 +32,7 @@ export class GridHeader extends React.Component<{
         <tr>
           {columns.map((column) => {
             return <GridHeaderCell
-              key={column.name}
+              key={column.field}
               column={column}
               onSortSelection={onSortSelection}
               onFilterChanged={onFilterChanged}
