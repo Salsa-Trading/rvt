@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { Column, ColumnDefinitionProps, SortDirection } from './Column';
+import { Column, SortDirection } from './Column';
 import GridRow from './GridRow';
 import GridHeader from './GridHeader';
 import Table, { TableBaseProps } from './Table';
@@ -52,7 +52,7 @@ export default class Grid extends React.Component<TableBaseProps & {
 
   private createColumns(): Column[] {
     const { gridState, columnDefaults } = this.props;
-    return _.reject(_.map<any, ColumnDefinitionProps>(React.Children.toArray(this.props.children), 'props').map(c => {
+    return _.reject(_.map<any, Column>(React.Children.toArray(this.props.children), 'props').map(c => {
       const sort = _.find(gridState.sort, s => s.field === c.field);
       let order = _.find(gridState.order, s => s.field === c.field);
       return {
