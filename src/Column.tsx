@@ -2,7 +2,7 @@ import * as React from 'react';
 
 export type SortDirection = 'asc'|'desc';
 
-export type ColumnDefinitionProps = {
+export type Column = {
   name?: string;
   field?: string;
   cell?: (data: any) => JSX.Element
@@ -15,19 +15,22 @@ export type ColumnDefinitionProps = {
   hidden?: boolean;
 };
 
-export class ColumnDefinition extends React.Component<ColumnDefinitionProps, {}> {
+export class ColumnDefinition extends React.Component<Column, {}> {
 
   public static propTypes = {
     name: React.PropTypes.string,
     field: React.PropTypes.string,
     header: React.PropTypes.any,
     cell: React.PropTypes.any,
-    defaultWidth: React.PropTypes.oneOfType([
+    width: React.PropTypes.oneOfType([
       React.PropTypes.string,
       React.PropTypes.number
     ]),
     sortable: React.PropTypes.bool,
-    filterable: React.PropTypes.bool
+    filterable: React.PropTypes.bool,
+    sortDirection: React.PropTypes.string,
+    filter: React.PropTypes.any,
+    hidden: React.PropTypes.bool
   };
 
   public static defaultProps = {
@@ -43,11 +46,3 @@ export class ColumnDefinition extends React.Component<ColumnDefinitionProps, {}>
     return null;
   }
 }
-
-
-export type Column = ColumnDefinitionProps & {
-  width: number|string;
-  sortDirection?: SortDirection;
-  filter?: any;
-  hidden: boolean;
-};
