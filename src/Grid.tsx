@@ -55,13 +55,16 @@ export default class Grid extends React.Component<TableBaseProps & {
     return _.reject(_.map<any, Column>(React.Children.toArray(this.props.children), 'props').map(c => {
       const sort = _.find(gridState.sort, s => s.field === c.field);
       let order = _.find(gridState.order, s => s.field === c.field);
-      return {
-        ...columnDefaults,
-        ...c,
-        sortDirection: (sort && sort.direction) || undefined,
+      const columnState = _.omitBy({
+        sortDirection: sort && sort.direction,
         filter: gridState.filter[c.field],
         width: gridState.width[c.field],
         hidden: order && order.hidden
+      }, _.isUndefined);
+      return {
+        ...columnDefaults,
+        ...c,
+        ...columnState
       };
     }), 'hidden');
   }
