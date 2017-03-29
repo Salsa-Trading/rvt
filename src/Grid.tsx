@@ -108,47 +108,44 @@ export default class Grid extends React.Component<GridProps, {
     return _.reject(columns, 'hidden');
   }
 
-  private onSortSelection(direction: SortDirection, column: Column) {
+  private gridStateHelper(ensureColumnDisplay = false) {
     const { onGridStateChanged } = this.props;
     const gridState = Grid.getGridState(this.props.gridState);
-
     const newGridState = _.cloneDeep(gridState);
+
+    if(ensureColumnDisplay) {
+      if(!gridState.columnDisplay || gridState.columnDisplay.length === 0) {
+        const { columns } = this.state;
+        newGridState.columnDisplay = columns.map(c => ({field: c.field, hidden: false}));
+      }
+    }
+    return { newGridState, onGridStateChanged };
+  }
+
+  private onSortSelection(direction: SortDirection, column: Column) {
+    const { onGridStateChanged, newGridState } = this.gridStateHelper();
+
     _.remove(newGridState.sort, s => s.field === column.field);
     newGridState.sort.unshift({field: column.field, direction});
     onGridStateChanged(newGridState, GridStateChangeType.sort, column.field);
   }
 
   private onFilterChanged(filter: any, column: Column) {
-    const { onGridStateChanged } = this.props;
-    const gridState = Grid.getGridState(this.props.gridState);
+    const { onGridStateChanged, newGridState } = this.gridStateHelper();
 
-    const newGridState = _.cloneDeep(gridState);
-    newGridState.filter[column.field] = filter;
+    newGridState.filter[column.field]
     onGridStateChanged(newGridState,  GridStateChangeType.filter, column.field);
   }
 
   private onWidthChanged(width: number, column: Column) {
-    const { onGridStateChanged } = this.props;
-    const gridState = Grid.getGridState(this.props.gridState);
+    const { onGridStateChanged, newGridState } = this.gridStateHelper();
 
-    const newGridState = _.cloneDeep(gridState);
     newGridState.width[column.field] = width;
     onGridStateChanged(newGridState,  GridStateChangeType.width, column.field);
   }
 
-  private getOrder(gridState: GridState) {
-    if(gridState.columnDisplay && gridState.columnDisplay.length > 0) {
-      return gridState.columnDisplay;
-    }
-    const { columns } = this.state;
-    return columns.map(c => ({field: c.field, hidden: false}));
-  }
-
   private onMove(newIndex: number, column: Column) {
-    const { onGridStateChanged } = this.props;
-    const gridState = Grid.getGridState(this.props.gridState);
-    const newGridState = _.cloneDeep(gridState);
-    newGridState.columnDisplay = this.getOrder(gridState);
+    const { onGridStateChanged, newGridState } = this.gridStateHelper(true);
 
     const oldIndex = newGridState.columnDisplay.findIndex(o => o.field === column.field);
     newGridState.columnDisplay.splice(newIndex, 0, newGridState.columnDisplay.splice(oldIndex, 1)[0]);
