@@ -4,20 +4,29 @@ import Filter from './Filter';
 import { Column, SortDirection } from './Column';
 import { DragSource, DropTarget } from 'react-dnd';
 
+export type GridHeaderCellProps = {
+  column: Column;
+  index?: number;
+  onSortSelection?: (sortDirection: SortDirection, column: Column) => void;
+  onFilterChanged?: (filter: any, column: Column) => void;
+  onWidthChanged?: (width: number, column: Column) => void;
+  onMove?: (newIndex: number, column: Column) => void;
+};
+
 const columnSource = {
-  beginDrag(props) {
+  beginDrag(props: GridHeaderCellProps) {
     return {
       column: props.column,
-      index: props.column.index
+      index: props.index
     };
   }
 };
 
 const columnTarget = {
-  hover(props, monitor, component) {
+  hover(props: GridHeaderCellProps, monitor, component) {
     const dragIndex = monitor.getItem().index;
     const column = monitor.getItem().column;
-    const hoverIndex = props.column.index;
+    const hoverIndex = props.index;
 
     // Don't replace items with themselves
     if (dragIndex === hoverIndex) {
@@ -51,7 +60,7 @@ const columnTarget = {
     }
 
     // Time to actually perform the action
-    props.onMove(column, dragIndex, hoverIndex);
+    props.onMove(hoverIndex, column);
 
     // Note: we're mutating the monitor item here!
     // Generally it's better to avoid mutations,
@@ -61,20 +70,15 @@ const columnTarget = {
   }
 };
 
-@DropTarget('COLUMN', columnTarget, connect => ({
+@DropTarget<GridHeaderCellProps>('COLUMN', columnTarget, connect => ({
   connectDropTarget: connect.dropTarget()
 }))
-@DragSource('COLUMN', columnSource, (connect, monitor) => ({
+@DragSource<GridHeaderCellProps>('COLUMN', columnSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   connectDragPreview: connect.dragPreview(),
   isDragging: monitor.isDragging
 }))
-export default class GridHeaderCell extends React.Component<{
-  column: Column;
-  onSortSelection: (sortDirection: SortDirection, column: Column) => void;
-  onFilterChanged: (filter: any, column: Column) => void;
-  onWidthChanged: (width: number, column: Column) => void;
-  onMove?: (oldIndex: number, newIndex: number) => void;
+export default class GridHeaderCell extends React.Component<GridHeaderCellProps & {
   confirmDrop?: any;
   cancelDrop?: any;
   isDragging?: boolean;
@@ -185,7 +189,6 @@ export default class GridHeaderCell extends React.Component<{
       </th>
     ));
   }
-
 
 }
 
