@@ -10,7 +10,7 @@ export type GridState = {
   sort?: {field: string, direction: SortDirection}[];
   filter?: {[field: string]: any };
   width?: {[field: string]: number|string };
-  order?: {field: string, hidden: boolean}[];
+  columnDisplay?: {field: string, hidden: boolean}[];
 };
 
 export const GridStateChangeType = strEnum([
@@ -50,8 +50,8 @@ export default class Grid extends React.Component<GridProps, {
       sort: [],
       filter: {},
       width: {},
-      order: []
-    }
+      columnDisplay: []
+    } as GridState
   };
 
   private table: Table;
@@ -81,17 +81,17 @@ export default class Grid extends React.Component<GridProps, {
 
   private createColumns(props: React.Props<GridProps> & GridProps): Column[] {
     const { columnDefaults } = props;
-    const { sort, order, filter, width } = Grid.getGridState(props.gridState);
+    const { sort, columnDisplay, filter, width } = Grid.getGridState(props.gridState);
 
     let columns = _.map<any, Column>(React.Children.toArray(props.children), 'props').map(c => {
       const colSort = _.find(sort, s => s.field === c.field);
-      const colOrder = _.find(order, s => s.field === c.field);
+      const colDisplay = _.find(columnDisplay, s => s.field === c.field);
 
       const columnState = _.omitBy({
         sortDirection: colSort && colSort.direction,
         filter: filter[c.field],
         width: width[c.field],
-        hidden: colOrder && colOrder.hidden
+        hidden: colDisplay && colDisplay.hidden
       }, _.isUndefined);
 
       return {
@@ -101,8 +101,8 @@ export default class Grid extends React.Component<GridProps, {
       };
     });
 
-    if(order && order.length > 0) {
-      columns = _.sortBy(columns, c => order.findIndex(o => o.field === c.field));
+    if(columnDisplay && columnDisplay.length > 0) {
+      columns = _.sortBy(columns, c => columnDisplay.findIndex(o => o.field === c.field));
     }
 
     return _.reject(columns, 'hidden');
@@ -137,8 +137,8 @@ export default class Grid extends React.Component<GridProps, {
   }
 
   private getOrder(gridState: GridState) {
-    if(gridState.order && gridState.order.length > 0) {
-      return gridState.order;
+    if(gridState.columnDisplay && gridState.columnDisplay.length > 0) {
+      return gridState.columnDisplay;
     }
     const { columns } = this.state;
     return columns.map(c => ({field: c.field, hidden: false}));
@@ -148,10 +148,10 @@ export default class Grid extends React.Component<GridProps, {
     const { onGridStateChanged } = this.props;
     const gridState = Grid.getGridState(this.props.gridState);
     const newGridState = _.cloneDeep(gridState);
-    newGridState.order = this.getOrder(gridState);
+    newGridState.columnDisplay = this.getOrder(gridState);
 
-    const oldIndex = newGridState.order.findIndex(o => o.field === column.field);
-    newGridState.order.splice(newIndex, 0, newGridState.order.splice(oldIndex, 1)[0]);
+    const oldIndex = newGridState.columnDisplay.findIndex(o => o.field === column.field);
+    newGridState.columnDisplay.splice(newIndex, 0, newGridState.columnDisplay.splice(oldIndex, 1)[0]);
     onGridStateChanged(newGridState,  GridStateChangeType.order, column.field);
   }
 
