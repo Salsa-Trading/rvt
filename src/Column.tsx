@@ -3,10 +3,6 @@ import * as React from 'react';
 export type SortDirection = 'asc'|'desc';
 
 export type Column = {
-<<<<<<< HEAD
-  name?: string;
-=======
->>>>>>> 31b1cf791c4c9f1d641c22592518ba2b9d27a4a9
   field?: string;
   cell?: (data: any) => JSX.Element
   header?: JSX.Element|string;

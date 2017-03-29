@@ -4,6 +4,7 @@ import { Column, SortDirection } from './Column';
 import GridRow from './GridRow';
 import GridHeader, { GridHeaderType } from './GridHeader';
 import Table, { TableBaseProps } from './Table';
+import strEnum from './utils/strEnum';
 
 export type GridState = {
   sort?: {field: string, direction: SortDirection}[];
@@ -12,8 +13,21 @@ export type GridState = {
   order?: {field: string, hidden: boolean}[];
 };
 
+export const GridStateChangeType = strEnum([
+  'sort',
+  'filter',
+  'width',
+  'order'
+]);
+/** Create a Type */
+export type GridStateChangeType = keyof typeof GridStateChangeType;
+
+export function isDataChange(changeType: GridStateChangeType) {
+  return changeType === GridStateChangeType.sort || changeType === GridStateChangeType.filter;
+}
+
 type GridProps = TableBaseProps & {
-  onGridStateChanged: (newGridState: GridState, isDataChange: boolean, field?: string) => void;
+  onGridStateChanged: (newGridState: GridState, changeType: GridStateChangeType, field?: string) => void;
   gridState?: GridState;
   columnDefaults?: {
     sortable?: boolean;
@@ -101,7 +115,7 @@ export default class Grid extends React.Component<GridProps, {
     const newGridState = _.cloneDeep(gridState);
     _.remove(newGridState.sort, s => s.field === column.field);
     newGridState.sort.unshift({field: column.field, direction});
-    onGridStateChanged(newGridState, true, column.field);
+    onGridStateChanged(newGridState, GridStateChangeType.sort, column.field);
   }
 
   private onFilterChanged(filter: any, column: Column) {
@@ -110,7 +124,7 @@ export default class Grid extends React.Component<GridProps, {
 
     const newGridState = _.cloneDeep(gridState);
     newGridState.filter[column.field] = filter;
-    onGridStateChanged(newGridState, true, column.field);
+    onGridStateChanged(newGridState,  GridStateChangeType.filter, column.field);
   }
 
   private onWidthChanged(width: number, column: Column) {
@@ -119,7 +133,7 @@ export default class Grid extends React.Component<GridProps, {
 
     const newGridState = _.cloneDeep(gridState);
     newGridState.width[column.field] = width;
-    onGridStateChanged(newGridState, false, column.field);
+    onGridStateChanged(newGridState,  GridStateChangeType.width, column.field);
   }
 
   private getOrder(gridState: GridState) {
@@ -138,7 +152,7 @@ export default class Grid extends React.Component<GridProps, {
 
     const oldIndex = newGridState.order.findIndex(o => o.field === column.field);
     newGridState.order.splice(newIndex, 0, newGridState.order.splice(oldIndex, 1)[0]);
-    onGridStateChanged(newGridState, false);
+    onGridStateChanged(newGridState,  GridStateChangeType.order, column.field);
   }
 
   public render() {

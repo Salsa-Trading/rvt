@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { Grid, Column, GridState } from '../../src/index';
+import { Grid, Column, GridState, GridStateChangeType, isDataChange } from '../../src/index';
 import { generateData } from '../../test/dataUtils';
 
 import '../../src/styles/grid.scss';
@@ -29,16 +29,23 @@ export default class GridExample extends React.Component<{
     };
   };
 
-  private onGridStateChanged(gridState: GridState, isDataChange: boolean) {
+  private onGridStateChanged(gridState: GridState, changeType: GridStateChangeType) {
+    if(!isDataChange(changeType)) {
+      return this.setState({gridState});
+    }
+
     let { data } = this.state;
-    if(isDataChange) {
+    if(changeType === GridStateChangeType.filter) {
+      data = this.state.originalData;
       for(let field of Object.keys(gridState.filter)) {
         data = data.filter(d => _.some(gridState.filter[field], (filter) => filter ===  (_.get(d, field) as string || '')));
       }
-      if(gridState.sort && gridState.sort.length > 0) {
-        data = _.orderBy(data, [gridState.sort[0].field], [gridState.sort[0].direction]);
-      }
     }
+
+    if(gridState.sort && gridState.sort.length > 0) {
+      data = _.orderBy(data, [gridState.sort[0].field], [gridState.sort[0].direction]);
+    }
+
     this.setState({gridState, data});
   }
 
