@@ -98,9 +98,14 @@ const defaultProps = {
   scrollWheelRows: 5
 };
 
+export type RowProps = {
+  data: any;
+  index: number;
+  [k: string]: any;
+};
+
 export type TableBaseProps = {
   rowCount: number;
-  getRow: (rowIndex: number) => any;
   height?: number|string;
   width?: number|string;
   topRow?: number;
@@ -116,7 +121,8 @@ export type TableBaseProps = {
 
 export type TableProps = TableBaseProps & {
   header: React.ComponentClass<any>|React.StatelessComponent<any>|React.ReactElement<any>;
-  row: React.ComponentClass<any>|React.StatelessComponent<any>|React.ReactElement<any>;
+  row: React.ComponentClass<RowProps>|React.StatelessComponent<RowProps>|React.ReactElement<RowProps>;
+  getRow: (rowIndex: number) => {data: any, [k: string]: any};
 };
 
 export default class Table extends React.Component<TableProps, {
@@ -309,11 +315,12 @@ export default class Table extends React.Component<TableProps, {
     if(rowCount === 0) {
       return [];
     }
+
     const rowElement = React.isValidElement(row) ? row : React.createElement(row as any);
     const rows = new Array(rowCount);
     for (let i = 0; i < rowCount; i++) {
       let props = Object.assign({}, this.getRowProps(topRow, i), { key: i});
-      rows[i] = React.cloneElement(rowElement, props);
+      rows[i] = React.cloneElement(rowElement as any, props);
     }
     return rows;
   }

@@ -5,7 +5,7 @@ import { get } from 'lodash';
 export default class GridRow extends React.Component<{
   columns: Column[];
   data?: any;
-  className?: string;
+  rowProps?: React.HTMLProps<HTMLTableRowElement>;
 }, {}> {
 
   public static propTypes = {
@@ -28,9 +28,9 @@ export default class GridRow extends React.Component<{
   }
 
   public render() {
-    const { data, columns, className } = this.props;
+    const { data, columns, rowProps } = this.props;
     return (
-      <tr className={className}>
+      <tr {...rowProps} >
         {(columns || []).map((column) => (
           <td key={column.field} style={{width: column.width}}>
             {this.renderTableCell(column, data)}

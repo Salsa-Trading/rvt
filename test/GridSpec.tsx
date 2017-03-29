@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { expect } from 'chai';
 import { shallow, mount } from 'enzyme';
-import { Grid } from '../src/index';
+import { Grid, Column } from '../src/index';
 import { generateRowDataForIndex } from './dataUtils';
 
 describe('<Grid />', () => {
@@ -28,8 +28,6 @@ describe('<Grid />', () => {
         <Column header='Col 2' field='col2' filterable sortDirection='desc' />
       </Grid>);
     });
-
-    
 
   });
 

@@ -26,7 +26,13 @@ export function isDataChange(changeType: GridStateChangeType) {
   return changeType === GridStateChangeType.sort || changeType === GridStateChangeType.filter;
 }
 
+export type RowData = {
+  data: any;
+  rowProps?: React.HTMLProps<HTMLTableRowElement>;
+};
+
 type GridProps = TableBaseProps & {
+  getRow: (rowIndex: number) => RowData;
   onGridStateChanged: (newGridState: GridState, changeType: GridStateChangeType, field?: string) => void;
   gridState?: GridState;
   columnDefaults?: {

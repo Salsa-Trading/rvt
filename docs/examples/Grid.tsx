@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { Grid, Column, GridState, GridStateChangeType, isDataChange } from '../../src/index';
+import { Grid, Column, GridState, GridStateChangeType, isDataChange, RowData } from '../../src/index';
 import { generateData } from '../../test/dataUtils';
 
 import '../../src/styles/grid.scss';
@@ -19,13 +19,14 @@ export default class GridExample extends React.Component<{
       originalData,
       data: originalData
     };
-
   }
 
-  public getRow(index: number) {
+  public getRow(index: number): RowData {
     return {
       data: this.state.data[index],
-      className: index % 2 ? 'even' : 'odd'
+      rowProps: {
+        style: {backgroundColor: index % 2 === 0 ? '' : 'lightgray'}
+      }
     };
   };
 
