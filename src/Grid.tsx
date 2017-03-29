@@ -133,7 +133,16 @@ export default class Grid extends React.Component<GridProps, {
   private onFilterChanged(filter: any, column: Column) {
     const { onGridStateChanged, newGridState } = this.gridStateHelper();
 
-    newGridState.filter[column.field]
+    if(filter === null || filter === undefined) {
+      delete newGridState.filter[column.field];
+    }
+    else if((typeof filter === 'string' || filter instanceof String) && filter.length === 0) {
+      delete newGridState.filter[column.field];
+    }
+    else {
+      newGridState.filter[column.field] = filter;
+    }
+
     onGridStateChanged(newGridState,  GridStateChangeType.filter, column.field);
   }
 
