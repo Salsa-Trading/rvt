@@ -17,7 +17,7 @@ export const GridStateChangeType = strEnum([
   'sort',
   'filter',
   'width',
-  'order'
+  'columnDisplay'
 ]);
 /** Create a Type */
 export type GridStateChangeType = keyof typeof GridStateChangeType;
@@ -158,7 +158,7 @@ export default class Grid extends React.Component<GridProps, {
 
     const oldIndex = newGridState.columnDisplay.findIndex(o => o.field === column.field);
     newGridState.columnDisplay.splice(newIndex, 0, newGridState.columnDisplay.splice(oldIndex, 1)[0]);
-    onGridStateChanged(newGridState,  GridStateChangeType.order, column.field);
+    onGridStateChanged(newGridState,  GridStateChangeType.columnDisplay, column.field);
   }
 
   public render() {
