@@ -95,7 +95,7 @@ const propTypes = {
 const defaultProps = {
   height: '100%',
   width: '100%',
-  scrollWheelRows: 5,
+  scrollWheelRows: 5
 };
 
 export type TableBaseProps = {
@@ -245,7 +245,7 @@ export default class Table extends React.Component<TableProps, {
    */
   public componentDidMount() {
     if (this.state.calculatingHeights) {
-      this.calculateHeights();
+      setTimeout(() => this.calculateHeights(), 250);
     }
   }
 

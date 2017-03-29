@@ -1,25 +1,51 @@
 
-div.gridHeaderCell {
+
+div.grid-header-cell {
+
   display: flex;
 
-  div.name {
+  div.header {
+    padding: 4px;
     flex: 1 100%;
     flex-grow: 1;
     align-self: flex-end;
   }
   
-  div.sortIndicator {
+  div.sort-filter {
     flex: 1 auto;
   }
   
-  div.resizeHandle {
+  div.resize-handle {
     flex: 1 auto;
     width: 10px;
     cursor: col-resize;
   }
 
-  div.filterPane {
+  div.filter-pane {
     position: absolute;
   }
 
+  .sort-icon {
+    opacity: 0;
+  }
+
+  &.sortable {
+    cursor: pointer;
+  }
+
+  &.sortable:hover {
+    .sort-icon {
+      opacity: .4;
+    }
+  }
+
+  &.sorted {
+    cursor: pointer;
+    .sort-icon {
+      opacity: 1;
+    }
+  }
+
 }
+
+

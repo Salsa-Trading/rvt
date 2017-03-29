@@ -1,45 +1,40 @@
 import * as React from 'react';
-import SortDirection, { SortDirections } from './SortDirection';
 
-export type ColumnProps = {
-  name?: string;
-  format?: (data) => any;
+export type SortDirection = 'asc'|'desc';
+
+export type Column = {
   field?: string;
-  cell?: any;
-  header?: any;
+  cell?: (data: any) => JSX.Element
+  header?: JSX.Element|string;
+  filterControl?: JSX.Element|string;
   width?: number|string;
-  index?: number;
-  canSort?: boolean;
-  sortDirection?: SortDirections;
-  canFilter?: boolean;
+  sortable?: boolean;
+  filterable?: boolean;
+  sortDirection?: SortDirection;
   filter?: any;
+  hidden?: boolean;
 };
 
-export default class Column extends React.Component<ColumnProps, {}> {
+export class ColumnDefinition extends React.Component<Column, {}> {
 
   public static propTypes = {
-    name: React.PropTypes.string,
     field: React.PropTypes.string,
     header: React.PropTypes.any,
     cell: React.PropTypes.any,
     width: React.PropTypes.oneOfType([
       React.PropTypes.string,
-      React.PropTypes.number,
+      React.PropTypes.number
     ]),
-    index: React.PropTypes.number,
-    canSort: React.PropTypes.bool,
-    sortDirection: React.PropTypes.oneOf([
-      SortDirection.NONE,
-      SortDirection.ASCENDING,
-      SortDirection.DESCENDING
-    ]),
-    canFilter: React.PropTypes.bool,
-    filter: React.PropTypes.any
+    sortable: React.PropTypes.bool,
+    filterable: React.PropTypes.bool,
+    sortDirection: React.PropTypes.string,
+    filter: React.PropTypes.any,
+    hidden: React.PropTypes.bool
   };
 
   public static defaultProps = {
-    canSort: false,
-    canFilter: false
+    sortable: false,
+    filterable: false
   };
 
   constructor(props, context) {
@@ -50,5 +45,3 @@ export default class Column extends React.Component<ColumnProps, {}> {
     return null;
   }
 }
-
-

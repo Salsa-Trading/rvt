@@ -96,7 +96,7 @@
     "ts-loader": "1.0.0",
     "tslint": "4.4.2",
     "tslint-react": "2.4.0",
-    "typescript": "2.1.4",
+    "typescript": "^2.1.4",
     "url-loader": "0.5.7",
     "webpack": "1.13.3",
     "webpack-dev-server": "1.16.2"
