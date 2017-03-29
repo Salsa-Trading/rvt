@@ -11,7 +11,7 @@
     "postinstall": "./node_modules/.bin/webpack --config config/webpack/webpack.vendor.dev.js",
     "start": "./node_modules/.bin/webpack-dev-server --config config/webpack/webpack.dev.js",
     "clean": "rm -rf build && rm -rf src/public/vendor",
-    "dist": "npm run clean && ./node_modules/.bin/webpack --config config/webpack/webpack.vendor.prod.js && cp -r src/public build && ./node_modules/.bin/webpack --config config/webpack/webpack.prod.js",
+    "dist": "npm run clean && ./node_modules/.bin/webpack --config config/webpack/webpack.vendor.prod.js && cp -r docs/public build && ./node_modules/.bin/webpack --config config/webpack/webpack.prod.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "main": "lib/index.js",
@@ -106,6 +106,20 @@
     "react-addons-shallow-compare": "15.2.1",
     "react-prop-types": "0.4.0"
   },
+  "vendored": [
+    "font-awesome-loader",
+    "bootstrap-loader",
+    "lodash",
+    "react",
+    "react-fa",
+    "react-dom",
+    "react-bootstrap",
+    "react-router",
+    "react-dnd",
+    "react-dnd-html5-backend",
+    "react-hot-loader"
+  ],
+
   "gh-pages-deploy": {
     "staticpath": "docs-built",
     "prep": [

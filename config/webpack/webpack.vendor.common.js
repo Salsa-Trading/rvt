@@ -4,6 +4,7 @@ var path = require('path');
 var webpack = require('webpack');
 var projectRoot = __dirname.split('/').slice(0, -2).join('/');
 var outputPath = path.join(projectRoot, 'docs/public/vendor/');
+var packageFile = require(path.join(projectRoot, 'package.json'));
 
 module.exports = function(env) {
   if (env == 'development' || env == 'test') {
@@ -17,16 +18,7 @@ module.exports = function(env) {
   return {
     context: projectRoot,
     entry: {
-      react: [
-        'font-awesome-loader',
-        'bootstrap-loader',
-        'lodash',
-        'react',
-        'react-fa',
-        'react-dom',
-        'react-bootstrap',
-        'react-router',
-      ]
+      react: packageFile.vendored
     },
     output: {
       filename: '[name].bundle.js',
