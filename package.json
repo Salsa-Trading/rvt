@@ -45,8 +45,6 @@
     "@types/react": "15.0.11",
     "@types/react-addons-shallow-compare": "0.14.19",
     "@types/react-bootstrap": "0.0.45",
-    "@types/react-dnd": "2.0.32",
-    "@types/react-dnd-html5-backend": "2.1.7",
     "@types/react-dom": "0.14.23",
     "@types/react-hot-loader": "3.0.1",
     "@types/react-router": "3.0.3",
@@ -86,8 +84,6 @@
     "react": "15.4.2",
     "react-addons-test-utils": "15.4.1",
     "react-bootstrap": "0.30.7",
-    "react-dnd": "2.2.3",
-    "react-dnd-html5-backend": "2.2.3",
     "react-dom": "15.4.2",
     "react-fa": "4.1.2",
     "react-hot-loader": "3.0.0-beta.5",
@@ -121,8 +117,6 @@
     "react-dom",
     "react-bootstrap",
     "react-router",
-    "react-dnd",
-    "react-dnd-html5-backend",
     "react-hot-loader"
   ]
 }
