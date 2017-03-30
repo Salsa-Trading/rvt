@@ -31,7 +31,7 @@ export type RowData = {
   rowProps?: React.HTMLProps<HTMLTableRowElement>;
 };
 
-type GridProps = TableBaseProps & {
+export type GridProps = TableBaseProps & {
   getRow: (rowIndex: number) => RowData;
   onGridStateChanged: (newGridState: GridState, changeType: GridStateChangeType, field?: string) => void;
   gridState?: GridState;

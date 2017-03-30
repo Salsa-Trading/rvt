@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as shallowCompare from 'react-addons-shallow-compare';
 import Scroller from './Scroller';
 
 const propTypes = {
@@ -125,7 +124,7 @@ export type TableProps = TableBaseProps & {
   getRow: (rowIndex: number) => {data: any, [k: string]: any};
 };
 
-export default class Table extends React.Component<TableProps, {
+export default class Table extends React.PureComponent<TableProps, {
   topRowControlled: boolean;
   topRow: number;
   headerHeight: number;
@@ -237,13 +236,6 @@ export default class Table extends React.Component<TableProps, {
    */
   private visibleRows() {
     return Math.min(this.props.rowCount, this.state.maxVisibleRows);
-  }
-
-  public shouldComponentUpdate(nextProps, nextState) {
-    if (shallowCompare(this, nextProps, nextState)) {
-      return true;
-    }
-    return false;
   }
 
   /**

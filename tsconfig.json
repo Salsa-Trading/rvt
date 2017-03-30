@@ -5,7 +5,9 @@
     "jsx": "react",
     "noImplicitAny": false,
     "sourceMap": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "declaration": true,
+    "outDir": "lib"
   },
   "compileOnSave": false,
   "buildOnSave": false,

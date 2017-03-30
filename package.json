@@ -10,14 +10,14 @@
   "scripts": {
     "postinstall": "./node_modules/.bin/webpack --config config/webpack/webpack.vendor.dev.js",
     "start": "./node_modules/.bin/webpack-dev-server --config config/webpack/webpack.dev.js",
-    "clean": "rm -rf build && rm -rf src/public/vendor",
-    "dist": "npm run clean && ./node_modules/.bin/webpack --config config/webpack/webpack.vendor.prod.js && cp -r docs/public build && ./node_modules/.bin/webpack --config config/webpack/webpack.prod.js",
+    "clean": "rm -rf lib && rm -rf scss && rm -rf css",
+    "deploy": "npm run clean && ./node_modules/.bin/gulp deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "main": "lib/index.js",
   "files": [
     "lib",
-    "dist"
+    "styles"
   ],
   "keywords": [
     "react",
@@ -60,10 +60,14 @@
     "chai": "3.5.0",
     "chai-enzyme": "0.6.1",
     "css-loader": "0.25.0",
+    "del": "2.2.2",
     "enzyme": "2.6.0",
     "file-loader": "0.9.0",
     "font-awesome": "4.7.0",
     "font-awesome-loader": "1.0.0",
+    "gulp": "3.9.1",
+    "gulp-sass": "3.1.0",
+    "gulp-typescript": "3.1.6",
     "imports-loader": "0.6.5",
     "json-loader": "0.5.4",
     "karma": "1.4.1",
@@ -74,6 +78,7 @@
     "karma-webpack": "1.8.0",
     "lint-staged": "3.3.0",
     "lodash": "4.17.4",
+    "merge2": "1.0.3",
     "mocha": "3.2.0",
     "node-sass": "3.11.2",
     "postcss-loader": "1.1.0",
@@ -87,6 +92,7 @@
     "react-hot-loader": "3.0.0-beta.5",
     "react-router": "3.0.2",
     "react-router-bootstrap": "0.23.1",
+    "require-dir": "0.3.1",
     "resolve-url-loader": "1.6.0",
     "sass-lint": "1.10.2",
     "sass-loader": "4.0.2",
@@ -103,7 +109,6 @@
   },
   "dependencies": {
     "lodash.get": "4.4.1",
-    "react-addons-shallow-compare": "15.2.1",
     "react-prop-types": "0.4.0"
   },
   "vendored": [
@@ -118,17 +123,5 @@
     "react-dnd",
     "react-dnd-html5-backend",
     "react-hot-loader"
-  ],
-
-  "gh-pages-deploy": {
-    "staticpath": "docs-built",
-    "prep": [
-      "docs-build",
-      "clean-sources"
-    ],
-    "post": [
-      "clean-sources-post"
-    ],
-    "noprompt": false
-  }
+  ]
 }
