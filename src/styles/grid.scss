@@ -1,66 +1,48 @@
 $hover-highlight-color: lightgray;
 
 thead {
-
   tr {
-
     &.column-moving {
       cursor: move;
     }
 
     th {
-
       &.column-moving-hover {
         background-color: $hover-highlight-color;
       }
 
-      div.grid-header-cell {
+      .grid-header-cell {
         display: flex;
 
-        div.header {
-          padding: 4px;
+        .header {
+          align-self: flex-end;
           flex: 1 100%;
           flex-grow: 1;
-          align-self: flex-end;
-        }
-        
-        div.sort-filter {
-          flex: 1 auto;
-        }
-        
-        div.resize-handle {
-          flex: 1 auto;
-          width: 10px;
-          cursor: col-resize;
+          padding: 4px;
         }
 
-        div.filter-pane {
+        .sort-filter {
+          flex: 1 auto;
+        }
+
+        .resize-handle {
+          cursor: col-resize;
+          flex: 1 auto;
+          width: 10px;
+        }
+
+        .filter-pane {
           position: absolute;
         }
 
-        .sort-icon {
-          opacity: 0;
+        button.sort-asc {
+          &::after { content: '▲'; }
         }
 
-        &.sortable {
+        button.sort-desc {
+          &::after { content: '▼'; }
         }
-
-        &.sortable:hover {
-          .sort-icon {
-            opacity: .4;
-          }
-        }
-
-        &.sorted {
-          .sort-icon {
-            opacity: 1;
-          }
-        }
-
       }
     }
   }
 }
-
-
-

@@ -87,8 +87,8 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
       }
       sortFilterControl = (
         <div>
-          <button onClick={this.onSortClick.bind(this, SortDirection.asc)} className='sort-desc fa fa-sort-desc' />
-          <button onClick={this.onSortClick.bind(this, SortDirection.desc)} className='sort-desc fa fa-sort-desc' />
+          <button onClick={this.onSortClick.bind(this, SortDirection.asc)} className='sort-asc' />
+          <button onClick={this.onSortClick.bind(this, SortDirection.desc)} className='sort-desc' />
         </div>
       );
     }
@@ -107,6 +107,4 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
       </th>
     );
   }
-
 }
-

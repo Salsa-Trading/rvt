@@ -1,0 +1,14 @@
+rules:
+  attribute-quotes:
+    - 1
+    -
+      include: false
+  force-element-nesting: 0
+  indentation: 2
+  no-color-keywords: 0
+  no-color-literals: 2
+  no-qualifying-elements: 0
+  no-vendor-prefixes:
+    - 1
+    -
+      ignore-non-standard: true
