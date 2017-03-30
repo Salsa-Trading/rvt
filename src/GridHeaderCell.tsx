@@ -26,6 +26,8 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     if(e.button !== 0) {
       return;
     }
+    e.stopPropagation();
+
     const { onWidthChanged } = this.props;
 
     if(!onWidthChanged) {
@@ -46,6 +48,17 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     );
   }
 
+  private onSortClick(sortDirection: SortDirection, e: React.MouseEvent<HTMLDivElement>) {
+    e.stopPropagation();
+    const { onSortSelection, column } = this.props;
+    if(onSortSelection) {
+      onSortSelection(sortDirection, column);
+    }
+  }
+
+  private onSortMouseDown(e: React.MouseEvent<HTMLDivElement>) {
+    e.stopPropagation();
+  }
 
   public render() {
     const {
@@ -72,8 +85,8 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     else if(sortable) {
       sortFilterControl = (
         <div>
-          <span className='fa fa-sort-asc' onClick={() => sortSelectionHandler('asc')} />
-          <span className='fa fa-sort-desc' onClick={() => sortSelectionHandler('desc')} />
+          <span className='fa fa-sort-asc' onClick={this.onSortClick.bind(this, 'asc')} onMouseDown={this.onSortMouseDown.bind(this)} />
+          <span className='fa fa-sort-desc' onClick={this.onSortClick.bind(this, 'desc')} onMouseDown={this.onSortMouseDown.bind(this)} />
         </div>
       );
     }

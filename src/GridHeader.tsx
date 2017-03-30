@@ -61,17 +61,19 @@ export class GridHeader extends React.Component<GridHeaderProps, {}> {
         if(currentHover && over !== currentHover) {
           currentHover.classList.remove(hoverClassName);
         }
-        if(over !== target) {
+        if(over && over !== target) {
           over.classList.add(hoverClassName);
           currentHover = over;
         }
       },
       upEvent => {
         if(onMove) {
-          currentHover.classList.remove(hoverClassName);
           tr.classList.remove(movingClassName);
-          const newIndex = this.findColumnIndex(tr, currentHover);
-          onMove(newIndex, column);
+          if(currentHover) {
+            currentHover.classList.remove(hoverClassName);
+            const newIndex = this.findColumnIndex(tr, currentHover);
+            onMove(newIndex, column);
+          }
         }
       }
     );

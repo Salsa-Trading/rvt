@@ -57,6 +57,10 @@ export default class Filter extends React.Component<{
     );
   }
 
+  private onMouseDown(e: React.MouseEvent<HTMLDivElement>) {
+    e.stopPropagation();
+  }
+
   public render() {
     const { showFilter } = this.state;
     let sortArrow;
@@ -69,7 +73,7 @@ export default class Filter extends React.Component<{
     return (
       <div>
         <div>
-          <span className='fa fa-filter' onClick={this.toggleFilterPane.bind(this)}/>
+          <span className='fa fa-filter' onClick={this.toggleFilterPane.bind(this)} onMouseDown={this.onMouseDown.bind(this)}/>
           {sortArrow}
         </div>
         {showFilter && this.renderFilterPane()}

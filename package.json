@@ -43,7 +43,6 @@
     "@types/lodash": "4.14.52",
     "@types/mocha": "2.2.39",
     "@types/react": "15.0.11",
-    "@types/react-addons-shallow-compare": "0.14.19",
     "@types/react-bootstrap": "0.0.45",
     "@types/react-dom": "0.14.23",
     "@types/react-hot-loader": "3.0.1",
