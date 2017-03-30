@@ -103,7 +103,7 @@ export type RowProps = {
   [k: string]: any;
 };
 
-export type TableBaseProps = {
+export type VirtualTableBaseProps = {
   rowCount: number;
   height?: number|string;
   width?: number|string;
@@ -118,13 +118,13 @@ export type TableBaseProps = {
   style?: any;
 };
 
-export type TableProps = TableBaseProps & {
+export type VirtualTableProps = VirtualTableBaseProps & {
   header: React.ComponentClass<any>|React.StatelessComponent<any>|React.ReactElement<any>;
   row: React.ComponentClass<RowProps>|React.StatelessComponent<RowProps>|React.ReactElement<RowProps>;
   getRow: (rowIndex: number) => {data: any, [k: string]: any};
 };
 
-export default class Table extends React.PureComponent<TableProps, {
+export default class VirtualTable extends React.PureComponent<VirtualTableProps, {
   topRowControlled: boolean;
   topRow: number;
   headerHeight: number;

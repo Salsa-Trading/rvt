@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { Column, SortDirection } from './Column';
 import GridRow from './GridRow';
 import GridHeader, { GridHeaderType } from './GridHeader';
-import Table, { TableBaseProps } from './Table';
+import VirtualTable, { VirtualTableBaseProps } from './VirtualTable';
 import strEnum from './utils/strEnum';
 
 export type GridState = {
@@ -30,7 +30,7 @@ export type RowData = {
   rowProps?: React.HTMLProps<HTMLTableRowElement>;
 };
 
-export type GridProps = TableBaseProps & {
+export type GridProps = VirtualTableBaseProps & {
   getRow: (rowIndex: number) => RowData;
   onGridStateChanged: (newGridState: GridState, changeType: GridStateChangeType, field?: string) => void;
   gridState?: GridState;
@@ -59,7 +59,7 @@ export default class Grid extends React.Component<GridProps, {
     } as GridState
   };
 
-  private table: Table;
+  private virtualTable: VirtualTable;
 
   public static getGridState(gridState: GridState):  GridState {
     return {...Grid.defaultProps, ...gridState};
@@ -73,7 +73,7 @@ export default class Grid extends React.Component<GridProps, {
   }
 
   public calculateHeights() {
-    this.table.calculateHeights();
+    this.virtualTable.calculateHeights();
   }
 
   public componentWillReceiveProps(nextProps: React.Props<GridProps> & GridProps) {
@@ -181,11 +181,11 @@ export default class Grid extends React.Component<GridProps, {
     const row = <GridRow columns={columns} />;
 
     return (
-      <Table
+      <VirtualTable
         {...this.props}
         header={header}
         row={row}
-        ref={r => this.table = r } />
+        ref={r => this.virtualTable = r } />
     );
   }
 }

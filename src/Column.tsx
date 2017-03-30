@@ -20,6 +20,10 @@ export type Column = {
   hidden?: boolean;
 };
 
+export type ColumnGroup = {
+  header?: JSX.Element|string;
+};
+
 export class ColumnDefinition extends React.Component<Column, {}> {
 
   public static propTypes = {

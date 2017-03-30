@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Table } from '../../src/index';
+import { VirtualTable } from '../../src/index';
 import { generateData } from '../../test/dataUtils';
 
 const Head = () =>
@@ -42,7 +42,7 @@ export default class Style extends React.Component<{}, {
   public render() {
     const { rows } = this.state;
     return (
-      <Table
+      <VirtualTable
         getRow={this.getRow.bind(this)}
         rowCount={rows.length}
         height={486}

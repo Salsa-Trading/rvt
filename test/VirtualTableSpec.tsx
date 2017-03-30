@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { expect } from 'chai';
 import { shallow, mount } from 'enzyme';
-import { Table } from '../src/index';
+import { VirtualTable } from '../src/index';
 import { generateRowDataForIndex } from './dataUtils';
 
 describe('<Table />', () => {
@@ -27,7 +27,7 @@ describe('<Table />', () => {
         rowHeight: 20
       });
 
-      wrapper = shallow(<Table {...props} />);
+      wrapper = shallow(<VirtualTable {...props} />);
     });
 
     it('should render a root level DIV element', () => {
@@ -57,7 +57,7 @@ describe('<Table />', () => {
         rowHeight: 20
       });
 
-      wrapper = shallow(<Table {...props} />);
+      wrapper = shallow(<VirtualTable {...props} />);
     });
 
     it('should calculate visibleRows after construction', () => {
@@ -76,7 +76,7 @@ describe('<Table />', () => {
         rowHeight: 20
       });
 
-      wrapper = shallow(<Table {...props} />);
+      wrapper = shallow(<VirtualTable {...props} />);
     });
 
     it('should calculate visibleRows after construction', () => {
@@ -94,7 +94,7 @@ describe('<Table />', () => {
           rowCount: 100
         });
 
-        wrapper = shallow(<Table {...props} />);
+        wrapper = shallow(<VirtualTable {...props} />);
       });
 
       it('should set visibleRows equal to 10 after construction', () => {
@@ -114,7 +114,7 @@ describe('<Table />', () => {
           rowCount: 100
         });
 
-        mounted = mount(<Table {...props} />);
+        mounted = mount(<VirtualTable {...props} />);
       });
 
       it('should set visibleRows equal to 10 after construction', () => {
