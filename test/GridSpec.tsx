@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { expect } from 'chai';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import { Grid, Column } from '../src/index';
 import { generateRowDataForIndex } from './dataUtils';
 
