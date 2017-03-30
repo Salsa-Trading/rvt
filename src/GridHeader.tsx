@@ -3,6 +3,7 @@ import { Column, SortDirection } from './Column';
 import GridHeaderCell from './GridHeaderCell';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import safeMouseMove from './utils/saveMouseMove';
 
 export type GridHeaderType = React.ComponentClass<GridHeaderProps>|React.StatelessComponent<GridHeaderProps>;
 
@@ -28,8 +29,56 @@ export class GridHeader extends React.Component<GridHeaderProps, {}> {
     super(props, context);
   }
 
+  private columAtIndex(index: number) {
+    const { columns } = this.props;
+    return columns[index];
+  }
+
+  private findColumnIndex(tableRow: HTMLTableRowElement, tableHeader: HTMLTableHeaderCellElement) {
+    for(let i = 0; i < tableRow.children.length; i++) {
+      if(tableRow.children.item(i) === tableHeader) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  private onColumnMouseDown(e: React.MouseEvent<HTMLTableHeaderCellElement>) {
+    const hoverClassName = 'column-moving-hover';
+    const movingClassName = 'column-moving';
+    const { onMove } = this.props;
+    e.persist();
+    const target = e.currentTarget;
+    const tr = e.currentTarget.closest('tr') as HTMLTableRowElement;
+    const column = this.columAtIndex(this.findColumnIndex(tr, target.closest('th') as HTMLTableHeaderCellElement));
+
+    tr.classList.add(movingClassName);
+    let currentHover: HTMLTableHeaderCellElement;
+
+    safeMouseMove<HTMLTableHeaderCellElement>(e,
+      moveEvent => {
+        const over = (moveEvent.target as any).closest('th') as HTMLTableHeaderCellElement;
+        if(currentHover && over !== currentHover) {
+          currentHover.classList.remove(hoverClassName);
+        }
+        if(over !== target) {
+          over.classList.add(hoverClassName);
+          currentHover = over;
+        }
+      },
+      upEvent => {
+        if(onMove) {
+          currentHover.classList.remove(hoverClassName);
+          tr.classList.remove(movingClassName);
+          const newIndex = this.findColumnIndex(tr, currentHover);
+          onMove(newIndex, column);
+        }
+      }
+    );
+  }
+
   public render() {
-    const { onSortSelection, onFilterChanged, onWidthChanged, onMove } = this.props;
+    const { onSortSelection, onFilterChanged, onWidthChanged } = this.props;
     const { columns } = this.props;
 
     return (
@@ -43,7 +92,7 @@ export class GridHeader extends React.Component<GridHeaderProps, {}> {
               onSortSelection={onSortSelection}
               onFilterChanged={onFilterChanged}
               onWidthChanged={onWidthChanged}
-              onMove={onMove} />;
+              onMouseDown={this.onColumnMouseDown.bind(this)} />;
             })}
         </tr>
       </thead>

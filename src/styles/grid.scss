@@ -1,51 +1,67 @@
+thead {
 
+  tr {
 
-div.grid-header-cell {
+    &.column-moving {
+      cursor: move;
+    }
 
-  display: flex;
+    th {
 
-  div.header {
-    padding: 4px;
-    flex: 1 100%;
-    flex-grow: 1;
-    align-self: flex-end;
-  }
-  
-  div.sort-filter {
-    flex: 1 auto;
-  }
-  
-  div.resize-handle {
-    flex: 1 auto;
-    width: 10px;
-    cursor: col-resize;
-  }
+      &.column-moving-hover {
+        background-color: lightgray;
+      }
 
-  div.filter-pane {
-    position: absolute;
-  }
+      div.grid-header-cell {
 
-  .sort-icon {
-    opacity: 0;
-  }
+        display: flex;
 
-  &.sortable {
-    cursor: pointer;
-  }
+        div.header {
+          padding: 4px;
+          flex: 1 100%;
+          flex-grow: 1;
+          align-self: flex-end;
+        }
+        
+        div.sort-filter {
+          flex: 1 auto;
+        }
+        
+        div.resize-handle {
+          flex: 1 auto;
+          width: 10px;
+          cursor: col-resize;
+        }
 
-  &.sortable:hover {
-    .sort-icon {
-      opacity: .4;
+        div.filter-pane {
+          position: absolute;
+        }
+
+        .sort-icon {
+          opacity: 0;
+        }
+
+        &.sortable {
+          cursor: pointer;
+        }
+
+        &.sortable:hover {
+          .sort-icon {
+            opacity: .4;
+          }
+        }
+
+        &.sorted {
+          cursor: pointer;
+          .sort-icon {
+            opacity: 1;
+          }
+        }
+
+      }
     }
   }
-
-  &.sorted {
-    cursor: pointer;
-    .sort-icon {
-      opacity: 1;
-    }
-  }
-
 }
+
 
 
