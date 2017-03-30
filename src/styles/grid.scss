@@ -1,4 +1,5 @@
 $hover-highlight-color: lightgray;
+$sort-direction-color: royalblue;
 
 thead {
   tr {
@@ -33,6 +34,11 @@ thead {
 
         .filter-pane {
           position: absolute;
+        }
+
+        button.sort-active {
+          color: $sort-direction-color;
+          text-shadow: 0 0 2px $sort-direction-color;
         }
 
         button.sort-asc {

@@ -56,6 +56,16 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     }
   }
 
+  private sortBtn(sortDirection: SortDirection): React.ReactElement<any> {
+    const { column } = this.props;
+    const classNames = `sort-${sortDirection} ${column.sortDirection === sortDirection ? 'sort-active' : null}`;
+
+    return <button
+      onClick={this.onSortClick.bind(this, sortDirection)}
+      className={classNames}
+    />;
+  }
+
   public render() {
     const {
       column,
@@ -87,8 +97,8 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
       }
       sortFilterControl = (
         <div>
-          <button onClick={this.onSortClick.bind(this, SortDirection.asc)} className='sort-asc' />
-          <button onClick={this.onSortClick.bind(this, SortDirection.desc)} className='sort-desc' />
+          {this.sortBtn(SortDirection.asc)}
+          {this.sortBtn(SortDirection.desc)}
         </div>
       );
     }
