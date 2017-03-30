@@ -47,40 +47,19 @@ thead {
           position: absolute;
         }
 
-        &:hover {
-          button.sort:not(.sort-active) {
-            &.sort-asc {
-              display: inline;
-              opacity: .4;
-            }
-          }
+        button.sort-asc::after { content: '▲'; }
+        button.sort-desc::after { content: '▼'; }
+        button.sort {
+          display: none;
         }
 
-        button.sort {
-          @extend %button;
-          opacity: 0;
+        &:not(:hover) .sort-active {
+          display: inline;
+        }
 
-          &.sort-active {
-            display: inline;
-            opacity: 1;
-          }
-
-          &.hover {
-            &:not(.sort-active) {
-              display: inline;
-              opacity: .4;
-            }
-          }
-
-          &.sort-asc {
-            display: inline;
-            &::after { content: '▲'; }
-          }
-
-          &.sort-desc {
-            display: none;
-            &::after { content: '▼'; }
-          }
+        &:hover button.sort-inactive {
+          display: inline;
+          opacity: .5;
         }
       }
     }
