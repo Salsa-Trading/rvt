@@ -7,12 +7,14 @@ var outputPath = path.join(projectRoot, 'docs/public/vendor/');
 var packageFile = require(path.join(projectRoot, 'package.json'));
 
 module.exports = function(env) {
+  var cssLoaders, scssLoaders;
+
   if (env == 'development' || env == 'test') {
-    var scssLoaders = ['style', 'css?sourceMap', 'postcss?sourceMap', 'sass?sourceMap'];
-    var cssLoaders =  ['style', 'css?sourceMap', 'postcss?sourceMap'];
+    scssLoaders = ['style', 'css?sourceMap', 'postcss?sourceMap', 'sass?sourceMap'];
+    cssLoaders =  ['style', 'css?sourceMap', 'postcss?sourceMap'];
   } else {
-    var scssLoaders = ['style', 'css', 'postcss', 'sass'];
-    var cssLoaders =  ['style', 'css', 'postcss'];
+    scssLoaders = ['style', 'css', 'postcss', 'sass'];
+    cssLoaders =  ['style', 'css', 'postcss'];
   }
 
   return {
@@ -31,7 +33,7 @@ module.exports = function(env) {
       loaders: [
         {
           test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-          loader: "url?limit=10000"
+          loader: 'url?limit=10000'
         },
         {
           test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
@@ -45,7 +47,7 @@ module.exports = function(env) {
       ]
     },
     postcss: function () {
-      return [require('autoprefixer')]
+      return [require('autoprefixer')];
     },
     plugins: [
       new webpack.DllPlugin({
@@ -53,5 +55,5 @@ module.exports = function(env) {
         name: '[name]_lib'
       })
     ]
-  }
-}
+  };
+};

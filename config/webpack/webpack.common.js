@@ -18,30 +18,32 @@ module.exports = function(_env) {
     externals: externals(),
     plugins: plugins(),
     devServer: devServer()
-  }
+  };
 };
 
 function resolve() {
   return {
     extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js', '.jsx', '.json']
-  }
-};
+  };
+}
 
 function moduleObj() {
+  var cssLoaders, scssLoaders, tsLoaders;
+
   if (env == 'development' || env == 'test') {
-    var scssLoaders = ['style', 'css?sourceMap', 'postcss?sourceMap', 'sass?sourceMap'];
-    var cssLoaders =  ['style', 'css?sourceMap', 'postcss?sourceMap'];
+    scssLoaders = ['style', 'css?sourceMap', 'postcss?sourceMap', 'sass?sourceMap'];
+    cssLoaders =  ['style', 'css?sourceMap', 'postcss?sourceMap'];
   }
   else {
-    var scssLoaders = ['style', 'css', 'postcss', 'sass'];
-    var cssLoaders =  ['style', 'css', 'postcss'];
+    scssLoaders = ['style', 'css', 'postcss', 'sass'];
+    cssLoaders =  ['style', 'css', 'postcss'];
   }
 
   if (env == 'development') {
-    var tsLoaders = ['react-hot-loader/webpack', 'ts-loader?configFileName=./tsconfig.json'];
+    tsLoaders = ['react-hot-loader/webpack', 'ts-loader?configFileName=./tsconfig.json'];
   }
   else {
-    var tsLoaders = ['ts-loader?configFileName=./tsconfig.json'];
+    tsLoaders = ['ts-loader?configFileName=./tsconfig.json'];
   }
 
   return {
@@ -51,7 +53,7 @@ function moduleObj() {
         exclude: /node_modules/,
         loaders: tsLoaders
       },
-      { test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url?limit=10000" },
+      { test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url?limit=10000' },
       { test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/, loader: 'file' },
       { test: /\.html$/, loader: 'file-loader?name=[name].[ext]' },
       { test: /\.scss$/, loaders: scssLoaders },
@@ -60,16 +62,16 @@ function moduleObj() {
       { test: /\.jpg$/, loader: 'file-loader' },
       { test: /\.json$/, loader: 'json-loader' }
     ]
-  }
-};
+  };
+}
 
 function postcss() {
   return {
     postcss: function () {
-      return [require('autoprefixer')]
+      return [require('autoprefixer')];
     }
-  }
-};
+  };
+}
 
 function entry() {
   if (env == 'development') {
@@ -82,7 +84,7 @@ function entry() {
         'font-awesome-loader',
         path.join(projectRoot, 'docs/index.tsx')
       ]
-    }
+    };
   }
   else if (env == 'production') {
     return {
@@ -90,9 +92,9 @@ function entry() {
         'bootstrap-loader',
         path.join(projectRoot, 'docs/index.tsx')
       ],
-    }
+    };
   }
-};
+}
 
 function output() {
   var outputPath = path.join(projectRoot, 'build/app/');
@@ -101,13 +103,13 @@ function output() {
     filename: '[name].js',
     publicPath: '/app/'
   };
-};
+}
 
 function devtool() {
   if (env == 'development' || env == 'test') {
     return 'eval-cheap-module-source-map';
   }
-};
+}
 
 function externals() {
   if (env == 'development' || env == 'test') {
@@ -115,9 +117,9 @@ function externals() {
       'react/addons': true,
       'react/lib/ExecutionEnvironment': true,
       'react/lib/ReactContext': 'window'
-    }
+    };
   }
-};
+}
 
 function plugins() {
   var plugins = [
@@ -134,13 +136,13 @@ function plugins() {
 
   if (env == 'production') {
     plugins.push(new webpack.optimize.OccurenceOrderPlugin());
-		plugins.push(new webpack.optimize.DedupePlugin());
+    plugins.push(new webpack.optimize.DedupePlugin());
     plugins.push(new webpack.NoErrorsPlugin());
   }
   else if (env == 'development') {
-		plugins.push(new webpack.HotModuleReplacementPlugin());
+    plugins.push(new webpack.HotModuleReplacementPlugin());
     plugins.push(new webpack.NoErrorsPlugin());
-	}
+  }
 
   return plugins;
 }
@@ -155,6 +157,6 @@ function devServer() {
       contentBase: 'docs/public/',
       historyApiFallback: true,
       port: 4000,
-    }
-	}
+    };
+  }
 }

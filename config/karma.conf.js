@@ -1,7 +1,5 @@
 // Karma configuration
-// Generated on Thu Oct 20 2016 15:50:42 GMT-0500 (CDT)
 
-var webpack = require('webpack');
 var projectRoot = __dirname.split('/').slice(0, -1).join('/');
 var webpackConfig = require(projectRoot + '/config/webpack/webpack.karma.js');
 
@@ -64,5 +62,5 @@ module.exports = function(config) {
     // Concurrency level
     // how many browser should be started simultaneous
     concurrency: Infinity
-  })
-}
+  });
+};

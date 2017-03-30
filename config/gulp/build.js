@@ -5,10 +5,6 @@ const ts = require('gulp-typescript');
 const sass = require('gulp-sass');
 const merge2 = require('merge2');
 
-function logError(err) {
-  console.error(err);
-}
-
 gulp.task('clean', (done) => {
   del(['./lib/**', './scss/**', './css/**']).then(() => done());
 });
@@ -23,7 +19,6 @@ gulp.task('build', () => {
     tsResult.dts.pipe(gulp.dest('lib')),
     tsResult.js.pipe(gulp.dest('lib'))
   );
-  return 
 });
 
 gulp.task('sass', function () {

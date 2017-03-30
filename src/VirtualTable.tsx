@@ -376,9 +376,10 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
    * @private
    */
   private renderCalculator(header, rows, containerClassName, containerStyle, tableClassName, tableStyle) {
+    const refFn = (ref) => this.containerRef = ref;
     return (
       <div className={`${containerClassName} calculator`}
-           ref={(ref) => this.containerRef = ref }
+           ref={refFn}
            style={Object.assign({}, containerStyle, {visibility: 'hidden'})}>
         <div style={{overflowX: 'auto', overflowY: 'hidden'}}>
           <table className={tableClassName} style={tableStyle}>
