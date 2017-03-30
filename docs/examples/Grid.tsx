@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { Grid, Column, GridState, GridStateChangeType, isDataChange, RowData } from '../../src/index';
+import { Grid, Column, ColumnGroup, GridState, GridStateChangeType, isDataChange, RowData } from '../../src/index';
 import { generateData } from '../../test/dataUtils';
 
 import '../../src/styles/grid.scss';

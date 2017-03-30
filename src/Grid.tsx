@@ -84,11 +84,15 @@ export default class Grid extends React.Component<GridProps, {
     }
   }
 
+
+
   private createColumns(props: React.Props<GridProps> & GridProps): Column[] {
     const { columnDefaults } = props;
     const { sort, columnDisplay, filter, width } = Grid.getGridState(props.gridState);
 
-    let columns = _.map<any, Column>(React.Children.toArray(props.children), 'props').map(c => {
+    const children = _.map(React.Children.toArray(props.children), (c: any) => new Column(c.props));
+
+    let columns = children.map(c => {
       const colSort = _.find(sort, s => s.field === c.field);
       const colDisplay = _.find(columnDisplay, s => s.field === c.field);
 
