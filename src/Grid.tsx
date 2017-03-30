@@ -19,7 +19,6 @@ export const GridStateChangeType = strEnum([
   'width',
   'columnDisplay'
 ]);
-/** Create a Type */
 export type GridStateChangeType = keyof typeof GridStateChangeType;
 
 export function isDataChange(changeType: GridStateChangeType) {

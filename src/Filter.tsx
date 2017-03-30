@@ -43,38 +43,36 @@ export default class Filter extends React.Component<{
     return (
       <div className='filter-pane'>
         <div>
-          <button type='button' onClick={() => onSortSelection('asc')}>Ascending</button>
-          <button type='button' onClick={() => onSortSelection('desc')}>Descending</button>
+          <button onClick={() => onSortSelection(SortDirection.asc)}>Ascending</button>
+          <button onClick={() => onSortSelection(SortDirection.desc)}>Descending</button>
         </div>
         <div>
           <input type='text' value={filter} onChange={this.handleFilterChanged.bind(this)} />
         </div>
         <div>
-          <button type='button' onClick={this.handleCancel.bind(this)}>Cancel</button>
-          <button type='button' onClick={this.handleOk.bind(this)}>Ok</button>
+          <button onClick={this.handleCancel.bind(this)}>Cancel</button>
+          <button onClick={this.handleOk.bind(this)}>Ok</button>
         </div>
       </div>
     );
   }
 
-  private onMouseDown(e: React.MouseEvent<HTMLDivElement>) {
-    e.stopPropagation();
-  }
-
   public render() {
     const { showFilter } = this.state;
     let sortArrow;
-    if(this.props.column.sortDirection === 'asc') {
+    if(this.props.column.sortDirection === SortDirection.asc) {
       sortArrow = <span className='fa fa-long-arrow-down' />;
     }
-    else if(this.props.column.sortDirection === 'desc') {
+    else if(this.props.column.sortDirection === SortDirection.desc) {
       sortArrow = <span className='fa fa-long-arrow-up' />;
     }
     return (
       <div>
         <div>
-          <span className='fa fa-filter' onClick={this.toggleFilterPane.bind(this)} onMouseDown={this.onMouseDown.bind(this)}/>
-          {sortArrow}
+          <button onClick={this.toggleFilterPane.bind(this)}>
+            <span className='fa fa-filter' />
+            {sortArrow}
+          </button>
         </div>
         {showFilter && this.renderFilterPane()}
       </div>

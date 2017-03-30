@@ -1,6 +1,11 @@
 import * as React from 'react';
+import strEnum from './utils/strEnum';
 
-export type SortDirection = 'asc'|'desc';
+export const SortDirection = strEnum([
+  'asc',
+  'desc'
+]);
+export type SortDirection = keyof typeof SortDirection;
 
 export type Column = {
   field?: string;

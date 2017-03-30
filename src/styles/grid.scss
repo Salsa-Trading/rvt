@@ -1,3 +1,5 @@
+$hover-highlight-color: lightgray;
+
 thead {
 
   tr {
@@ -9,11 +11,10 @@ thead {
     th {
 
       &.column-moving-hover {
-        background-color: lightgray;
+        background-color: $hover-highlight-color;
       }
 
       div.grid-header-cell {
-
         display: flex;
 
         div.header {
@@ -42,7 +43,6 @@ thead {
         }
 
         &.sortable {
-          cursor: pointer;
         }
 
         &.sortable:hover {
@@ -52,7 +52,6 @@ thead {
         }
 
         &.sorted {
-          cursor: pointer;
           .sort-icon {
             opacity: 1;
           }

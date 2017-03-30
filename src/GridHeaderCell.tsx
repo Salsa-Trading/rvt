@@ -56,10 +56,6 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     }
   }
 
-  private onSortMouseDown(e: React.MouseEvent<HTMLDivElement>) {
-    e.stopPropagation();
-  }
-
   public render() {
     const {
       column,
@@ -67,6 +63,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
         header,
         field,
         width,
+        sortDirection,
         sortable,
         filterable
       },
@@ -78,30 +75,27 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     const sortSelectionHandler = d => onSortSelection ? onSortSelection(d, column) : null;
     const filterChangedHandler = f => onFilterChanged ? onFilterChanged(f, column) : null;
 
+    let headerClassName = 'grid-header-cell';
     let sortFilterControl;
     if(filterable) {
       sortFilterControl = <Filter column={column} onSortSelection={sortSelectionHandler} onFilterChanged={filterChangedHandler} />;
     }
     else if(sortable) {
+      headerClassName += ' sortable';
+      if(sortDirection) {
+        headerClassName += ` sorted-${column.sortDirection}`;
+      }
       sortFilterControl = (
         <div>
-          <span className='fa fa-sort-asc' onClick={this.onSortClick.bind(this, 'asc')} onMouseDown={this.onSortMouseDown.bind(this)} />
-          <span className='fa fa-sort-desc' onClick={this.onSortClick.bind(this, 'desc')} onMouseDown={this.onSortMouseDown.bind(this)} />
+          <button onClick={this.onSortClick.bind(this, SortDirection.asc)} className='sort-desc fa fa-sort-desc' />
+          <button onClick={this.onSortClick.bind(this, SortDirection.desc)} className='sort-desc fa fa-sort-desc' />
         </div>
       );
     }
 
-    let headerClassName;
-    if(column.sortDirection) {
-      headerClassName = `sorted-${column.sortDirection}`;
-    }
-    else if(column.sortable) {
-      headerClassName = 'sortable';
-    }
-
     return (
       <th key={field} style={{width, padding: 0}} onMouseDown={onMouseDown}>
-        <div className={`grid-header-cell ${headerClassName}`}>
+        <div className={`${headerClassName}`}>
           <div className='header'>
             {header}
           </div>
