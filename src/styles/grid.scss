@@ -1,6 +1,16 @@
 $hover-highlight-color: lightgray;
 $sort-direction-color: royalblue;
 
+%button {
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  border: 0;
+  cursor: pointer;
+  outline: none;
+  overflow: hidden;
+}
+
+
 thead {
   tr {
     &.column-moving {
@@ -23,6 +33,7 @@ thead {
         }
 
         .sort-filter {
+          align-self: center;
           flex: 1 auto;
         }
 
@@ -36,17 +47,40 @@ thead {
           position: absolute;
         }
 
-        button.sort-active {
-          color: $sort-direction-color;
-          text-shadow: 0 0 2px $sort-direction-color;
+        &:hover {
+          button.sort:not(.sort-active) {
+            &.sort-asc {
+              display: inline;
+              opacity: .4;
+            }
+          }
         }
 
-        button.sort-asc {
-          &::after { content: '▲'; }
-        }
+        button.sort {
+          @extend %button;
+          opacity: 0;
 
-        button.sort-desc {
-          &::after { content: '▼'; }
+          &.sort-active {
+            display: inline;
+            opacity: 1;
+          }
+
+          &.hover {
+            &:not(.sort-active) {
+              display: inline;
+              opacity: .4;
+            }
+          }
+
+          &.sort-asc {
+            display: inline;
+            &::after { content: '▲'; }
+          }
+
+          &.sort-desc {
+            display: none;
+            &::after { content: '▼'; }
+          }
         }
       }
     }
