@@ -89,21 +89,25 @@ export default class Scroller extends React.Component<{
 
   public render() {
     const { top, height, visible, viewPortHeight } = this.props;
+    const style = {
+      position: 'absolute',
+      right: '0px',
+      top: `${top}px`,
+      height: `${height}px`,
+      overflowY: 'scroll',
+      overflowX: 'hidden',
+      width: '15px',
+      display: visible ? 'block' : 'none'
+    };
+    const refFn = ref => this.scrollerRef = ref;
     return (
-      <div className='virtual-table-scroller'
-           onScroll={this.onScroll.bind(this)}
-           ref={ref => this.scrollerRef = ref}
-           style={{
-             position: 'absolute',
-             right: '0px',
-             top: `${top}px`,
-             height: `${height}px`,
-             overflowY: 'scroll',
-             overflowX: 'hidden',
-             width: '15px',
-             display: visible ? 'block' : 'none'
-           }}>
-        <div style={{width: '1px', height: `${viewPortHeight}px`}}></div>
+      <div
+        className='virtual-table-scroller'
+        onScroll={this.onScroll.bind(this)}
+        ref={refFn}
+        style={style}
+      >
+        <div style={{width: '1px', height: `${viewPortHeight}px`}}/>
       </div>
     );
   }

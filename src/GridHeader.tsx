@@ -56,7 +56,7 @@ export class GridHeader extends React.Component<GridHeaderProps, {}> {
     let currentHover: HTMLTableHeaderCellElement;
 
     safeMouseMove<HTMLTableHeaderCellElement>(e,
-      moveEvent => {
+      (moveEvent) => {
         const over = (moveEvent.target as any).closest('th') as HTMLTableHeaderCellElement;
         if(currentHover && over !== currentHover) {
           currentHover.classList.remove(hoverClassName);
@@ -66,7 +66,7 @@ export class GridHeader extends React.Component<GridHeaderProps, {}> {
           currentHover = over;
         }
       },
-      upEvent => {
+      () => {
         if(onMove) {
           tr.classList.remove(movingClassName);
           if(currentHover) {
@@ -94,8 +94,9 @@ export class GridHeader extends React.Component<GridHeaderProps, {}> {
               onSortSelection={onSortSelection}
               onFilterChanged={onFilterChanged}
               onWidthChanged={onWidthChanged}
-              onMouseDown={this.onColumnMouseDown.bind(this)} />;
-            })}
+              onMouseDown={this.onColumnMouseDown.bind(this)}
+            />;
+          })}
         </tr>
       </thead>
     );

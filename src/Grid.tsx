@@ -179,13 +179,15 @@ export default class Grid extends React.Component<GridProps, {
     });
 
     const row = <GridRow columns={columns} />;
+    const refFn = r => this.virtualTable = r;
 
     return (
       <VirtualTable
         {...this.props}
         header={header}
         row={row}
-        ref={r => this.virtualTable = r } />
+        ref={refFn}
+      />
     );
   }
 }

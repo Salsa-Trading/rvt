@@ -346,12 +346,15 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
     const { rowCount } = this.props;
     const { headerHeight, rowHeight } = this.state;
     const topRow = this.getTopRow();
+    const refFn = (ref) => this.containerRef = ref;
 
     return (
-      <div onWheel={this.onWheel.bind(this)}
-           ref={(ref) => this.containerRef = ref}
-           className={containerClassName}
-           style={containerStyle}>
+      <div
+        onWheel={this.onWheel.bind(this)}
+        ref={refFn}
+        className={containerClassName}
+        style={containerStyle}
+      >
         <div style={{overflowX: 'auto', overflowY: 'hidden'}}>
           <table className={tableClassName} style={tableStyle}>
             {header}
@@ -361,12 +364,13 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
           </table>
         </div>
         <Scroller
-           onScroll={this.onScroll.bind(this)}
-           scrollTop={topRow * rowHeight}
-           top={(headerHeight || 0)}
-           height={this.visibleRows() * rowHeight}
-           visible={rowCount > this.state.maxVisibleRows}
-           viewPortHeight={rowHeight * rowCount} />
+          onScroll={this.onScroll.bind(this)}
+          scrollTop={topRow * rowHeight}
+          top={(headerHeight || 0)}
+          height={this.visibleRows() * rowHeight}
+          visible={rowCount > this.state.maxVisibleRows}
+          viewPortHeight={rowHeight * rowCount}
+        />
       </div>
     );
   }
@@ -378,9 +382,11 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
   private renderCalculator(header, rows, containerClassName, containerStyle, tableClassName, tableStyle) {
     const refFn = (ref) => this.containerRef = ref;
     return (
-      <div className={`${containerClassName} calculator`}
-           ref={refFn}
-           style={Object.assign({}, containerStyle, {visibility: 'hidden'})}>
+      <div
+        className={`${containerClassName} calculator`}
+        ref={refFn}
+        style={Object.assign({}, containerStyle, {visibility: 'hidden'})}
+      >
         <div style={{overflowX: 'auto', overflowY: 'hidden'}}>
           <table className={tableClassName} style={tableStyle}>
             {header}

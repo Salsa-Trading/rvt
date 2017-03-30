@@ -40,11 +40,13 @@ export default class Filter extends React.Component<{
   private renderFilterPane() {
     const { onSortSelection } = this.props;
     const { filter } = this.state;
+    const sortAscFn = () => onSortSelection(SortDirection.asc);
+    const sortDescFn = () => onSortSelection(SortDirection.desc);
     return (
       <div className='filter-pane'>
         <div>
-          <button onClick={() => onSortSelection(SortDirection.asc)}>Ascending</button>
-          <button onClick={() => onSortSelection(SortDirection.desc)}>Descending</button>
+          <button onClick={sortAscFn}>Ascending</button>
+          <button onClick={sortDescFn}>Descending</button>
         </div>
         <div>
           <input type='text' value={filter} onChange={this.handleFilterChanged.bind(this)} />
