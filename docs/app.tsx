@@ -5,7 +5,7 @@ import Home from './home';
 
 import Grid from './examples/Grid';
 import Style from './examples/Style';
-import Table from './examples/Table';
+import VirtualTable from './examples/VirtualTable';
 
 export default class App extends React.Component<{}, {}> {
 
@@ -20,7 +20,7 @@ export default class App extends React.Component<{}, {}> {
         <Router history={browserHistory}>
           <Route path='/home' component={Home} />
           <Route path='/examples/'>
-            <Route path='table' component={Table} />
+            <Route path='virtualTable' component={VirtualTable} />
             <Route path='style' component={Style} />
             <Route path='grid' component={Grid} />
           </Route>
