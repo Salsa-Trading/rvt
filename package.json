@@ -14,6 +14,13 @@
     "deploy": "npm run clean && ./node_modules/.bin/gulp deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "lint-staged": {
+    "*.ts": "tslint",
+    "*.tsx": "tslint",
+    "*.scss": "sass-lint",
+    "*.json": "jsonlint",
+    "*.js": "eslint"
+  },
   "main": "lib/index.js",
   "files": [
     "lib",
