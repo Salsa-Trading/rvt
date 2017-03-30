@@ -50,6 +50,7 @@ thead {
         button.sort-asc::after { content: '▲'; }
         button.sort-desc::after { content: '▼'; }
         button.sort {
+          @extend %button;
           display: none;
         }
 
@@ -60,6 +61,14 @@ thead {
         &:hover button.sort-inactive {
           display: inline;
           opacity: .5;
+        }
+
+        &:not(:hover) .sort-inactive ~ .sort-inactive {
+          display: inline;
+          opacity: 0;
+        }
+        &:hover .sort-inactive ~ .sort-inactive {
+          display: none;
         }
       }
     }
