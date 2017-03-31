@@ -108,9 +108,9 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     }
 
     return (
-      <th key={field} style={{width, padding: 0}} onMouseDown={onMouseDown}>
+      <th key={field} style={{width, padding: 0}}>
         <div className={`${headerClassName}`}>
-          <div className='header'>
+          <div className='header' onMouseDown={onMouseDown}>
             {header}
           </div>
           <div className='sort-filter'>
