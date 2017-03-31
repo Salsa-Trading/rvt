@@ -7,12 +7,10 @@ thead {
 
     .edit-filters::after { content: '☔'; }
 
-    .filterable .edit-filters {
-      opacity: .4;
-    }
+    // Icon is grayed out when no active filters
+    .filterable .edit-filters { opacity: .4; }
 
-    .filtered .edit-filters {
-      opacity: 1;
-    }
+    // Icon is dark when active filters
+    .filtered .edit-filters { opacity: 1; }
   }
 }

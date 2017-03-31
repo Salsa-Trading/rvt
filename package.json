@@ -15,8 +15,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "lint-staged": {
-    "*.ts": "tslint --type-check --project tsconfig.json",
-    "*.tsx": "tslint --type-check --project tsconfig.json",
+    "*.ts": "tslint --type-check --project tsconfig.json -t verbose",
+    "*.tsx": "tslint --type-check --project tsconfig.json -t verbose",
     "*.scss": "sass-lint",
     "*.json": "jsonlint",
     "*.js": "eslint"

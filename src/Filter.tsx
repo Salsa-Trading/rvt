@@ -26,14 +26,16 @@ export default class Filter extends React.Component<{
     this.setState({showFilter: !this.state.showFilter });
   }
 
-  private handleOk() {
+  private handleOk(e) {
+    e.preventDefault();
     const { onFilterChanged } = this.props;
     const { filter } = this.state;
     onFilterChanged(filter);
     this.setState({showFilter: false});
   }
 
-  private handleCancel() {
+  private handleCancel(e) {
+    e.preventDefault();
     this.setState({showFilter: false});
   }
 
@@ -45,16 +47,27 @@ export default class Filter extends React.Component<{
     return (
       <div className='filter-pane'>
         <div>
-          <button onClick={sortAscFn}>Ascending</button>
-          <button onClick={sortDescFn}>Descending</button>
+          <button onClick={sortAscFn}>
+            Ascending
+          </button>
+          <button onClick={sortDescFn}>
+            Descending
+          </button>
         </div>
-        <div>
-          <input type='text' value={filter} onChange={this.handleFilterChanged.bind(this)} />
-        </div>
-        <div>
-          <button onClick={this.handleCancel.bind(this)}>Cancel</button>
-          <button onClick={this.handleOk.bind(this)}>Ok</button>
-        </div>
+        <form onSubmit={this.handleOk.bind(this)}>
+          <div>
+            <input
+              type='search'
+              value={filter}
+              onChange={this.handleFilterChanged.bind(this)}
+              autoFocus={true}
+            />
+          </div>
+          <div className='form-actions'>
+            <button type='reset' onClick={this.handleCancel.bind(this)}>Cancel</button>
+            <button type='submit'>Ok</button>
+          </div>
+        </form>
       </div>
     );
   }
