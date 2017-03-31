@@ -287,7 +287,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
    */
   public calculateHeights() {
     const div = this.containerRef;
-    const height = this.props.height ? div.clientHeight : (div.parentElement.clientHeight - 4);
+    const height = this.props.height ? div.clientHeight : (div.parentElement.clientHeight) - 6;
     const header = div.querySelector('table > thead');
     const headerHeight = header ? header.scrollHeight : 0;
     const scrollHeights = Array.prototype.slice.call(div.querySelectorAll('table > tbody > tr')).map(e => e.scrollHeight);

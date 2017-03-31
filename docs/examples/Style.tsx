@@ -46,11 +46,9 @@ export default class Style extends React.Component<{}, {
       <VirtualTable
         getRow={this.getRow.bind(this)}
         rowCount={rows.length}
-        rowHeight={37}
-        headerHeight={38}
-        height={486}
         header={Head}
         row={Row}
+        autoResize={true}
         className='table table-bordered'
       />
     );
