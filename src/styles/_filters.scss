@@ -1,8 +1,11 @@
+$filter-pane-bg-color: transparentize(white, 0.2);
+$filter-pane-border: 1px solid lightgray;
+
 thead {
   th {
     button.filter-btn {
-      white-space: nowrap;
       @extend %button;
+      white-space: nowrap;
     }
 
     .edit-filters::after { content: '☔'; }
@@ -18,5 +21,20 @@ thead {
 .filter-pane {
   position: absolute;
 
+  padding: 1rem;
+  border-radius: 1rem;
+  border: $filter-pane-border;
+  background-color: $filter-pane-bg-color;
+
+  input {
+    width: 100%;
+  }
+
   .checked::after { content: '✓'; }
+
+  .form-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
 }

@@ -59,14 +59,12 @@ export default class Filter extends React.Component<{
           </button>
         </div>
         <form onSubmit={this.handleOk.bind(this)}>
-          <div>
-            <input
-              type='search'
-              value={filter}
-              onChange={this.handleFilterChanged.bind(this)}
-              autoFocus={true}
-            />
-          </div>
+          <input
+            type='search'
+            value={filter}
+            onChange={this.handleFilterChanged.bind(this)}
+            autoFocus={true}
+          />
           <div className='form-actions'>
             <button type='reset' onClick={this.handleCancel.bind(this)}>Cancel</button>
             <button type='submit'>Ok</button>
