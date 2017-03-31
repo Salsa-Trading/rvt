@@ -4,6 +4,7 @@ import Navbar from './navbar';
 import Home from './home';
 
 import Grid from './examples/Grid';
+import Layout from './examples/Layout';
 import Style from './examples/Style';
 import VirtualTable from './examples/VirtualTable';
 
@@ -23,6 +24,7 @@ export default class App extends React.Component<{}, {}> {
             <Route path='/examples/'>
               <Route path='virtualTable' component={VirtualTable} />
               <Route path='style' component={Style} />
+              <Route path='layout' component={Layout} />
               <Route path='grid' component={Grid} />
             </Route>
           </Router>

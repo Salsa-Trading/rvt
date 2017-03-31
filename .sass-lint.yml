@@ -14,3 +14,4 @@ rules:
     - 1
     -
       ignore-non-standard: true
+  property-sort-order: 0
