@@ -15,8 +15,9 @@ $sort-direction-color: royalblue;
 
 thead {
   tr {
-    &.column-moving {
-      cursor: move;
+    &.column-moving th .grid-header-cell .header {
+      cursor: grabbing;
+      cursor: -webkit-grabbing;
     }
 
     th {
@@ -28,6 +29,8 @@ thead {
         display: flex;
 
         .header {
+          cursor: grab;
+          cursor: -webkit-grab;
           align-self: flex-end;
           flex: 1 100%;
           flex-grow: 1;
