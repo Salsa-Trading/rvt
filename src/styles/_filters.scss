@@ -14,3 +14,9 @@ thead {
     .filtered .edit-filters { opacity: 1; }
   }
 }
+
+.filter-pane {
+  position: absolute;
+
+  .checked::after { content: '✓'; }
+}

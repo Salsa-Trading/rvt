@@ -40,7 +40,9 @@ export default class Filter extends React.Component<{
   }
 
   private renderFilterPane() {
-    const { onSortSelection } = this.props;
+    const { column, onSortSelection } = this.props;
+    const { sortDirection } = column;
+
     const { filter } = this.state;
     const sortAscFn = () => onSortSelection(SortDirection.asc);
     const sortDescFn = () => onSortSelection(SortDirection.desc);
@@ -48,9 +50,11 @@ export default class Filter extends React.Component<{
       <div className='filter-pane'>
         <div>
           <button onClick={sortAscFn}>
+            {sortDirection === SortDirection.asc ? <span className='checked'/> : null}
             Ascending
           </button>
           <button onClick={sortDescFn}>
+            {sortDirection === SortDirection.desc ? <span className='checked'/> : null}
             Descending
           </button>
         </div>
