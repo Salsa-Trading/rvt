@@ -81,6 +81,8 @@ export default class GridHeader extends React.Component<GridHeaderProps, {}> {
     const { onSortSelection, onFilterChanged, onWidthChanged } = this.props;
     const { columns } = this.props;
 
+    console.log(columns);
+
     return (
       <thead>
         <tr>

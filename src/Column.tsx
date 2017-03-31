@@ -7,8 +7,20 @@ export const SortDirection = strEnum([
 ]);
 export type SortDirection = keyof typeof SortDirection;
 
-export interface ColumnProps {
-  field?: string;
+export type ColumnDefaults = {
+  sortable?: boolean;
+  filterable?: boolean;
+};
+
+export interface ColumnDisplay {
+  field: string;
+  width?: number|string;
+  hidden?: boolean;
+  children?: ColumnDisplay[];
+}
+
+export interface ColumnProps extends React.Props<ColumnProps> {
+  field: string;
   cell?: (data: any) => JSX.Element;
   header?: JSX.Element|string;
   filterControl?: JSX.Element|string;
@@ -22,7 +34,7 @@ export interface ColumnProps {
 
 export class Column implements ColumnProps {
 
-  public field?: string;
+  public field: string;
   public cell?: (data: any) => JSX.Element;
   public header?: JSX.Element|string;
   public filterControl?: JSX.Element|string;
@@ -42,6 +54,14 @@ export class Column implements ColumnProps {
       return [];
     }
     return [this];
+  }
+
+  public getColumnDisplay(): ColumnDisplay {
+    return {
+      field: this.field,
+      width: this.width,
+      hidden: this.hidden
+    };
   }
 
 }
@@ -77,7 +97,7 @@ export class ColumnDefinition extends React.Component<ColumnProps, {}> {
   }
 }
 
-export interface ColumnGroupProps {
+export interface ColumnGroupProps extends React.Props<ColumnGroupProps> {
   field?: string;
   header?: JSX.Element|string;
   hidden?: boolean;
@@ -85,29 +105,74 @@ export interface ColumnGroupProps {
 
 export class ColumnGroup {
 
-  public field?: string;
-  public header?: JSX.Element|string;
+  public field: string;
+  public header: JSX.Element|string;
   public hidden?: boolean;
-  public children: Column[];
+  public width?: number|string;
+  public children: (Column|ColumnGroup)[];
 
-  constructor(props: ColumnProps) {
-    Object.assign(this, props);
+  constructor(props: ColumnProps, columnDefaults: ColumnDefaults, columnDisplay: ColumnDisplay) {
+    this.field = props.field;
+    this.header = props.header;
+    this.hidden = props.hidden;
+    this.width = props.width;
+
+    console.log(columnDisplay, props);
+    const children = React.Children.map(props.children, (c: any) => {
+      let colDisplay = null;
+      if(columnDisplay) {
+        colDisplay = columnDisplay.children.find(cd => cd.field === c.field);
+      }
+      return new Column({...columnDefaults, ...colDisplay, ...c.props});
+    });
+    if(!columnDisplay || columnDisplay.children || columnDisplay.children.length === 0) {
+      columnDisplay.children = children.map(c => ({field: c.field, hidden: false}));
+    }
+    this.children = columnDisplay.children.map(cd => children.find(c => cd.field === c.field));
+    console.log(children, columnDisplay, this.children);
   }
 
   public getColumns(): Column[] {
     if(this.hidden) {
       return [];
     }
-    const columns: Column[] = [];
-    for(let i = 0; i < this.children.length; i++) {
-      columns.concat(this.children[i].getColumns());
+    let columns: Column[] = [];
+    for(let column of this.children ) {
+      columns = columns.concat(column.getColumns());
     }
     return columns;
   }
+
+  public moveColumn(newIndex: number, column: Column) {
+    const oldIndex = this.children.indexOf(column);
+    if(oldIndex) {
+      this.children.splice(newIndex, 0, this.children.splice(oldIndex, 1)[0]);
+      return true;
+    }
+    else {
+      for(let column of this.children) {
+        if(column instanceof ColumnGroup) {
+          let moved = column.moveColumn(newIndex, column);
+          if(moved) {
+            return moved;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  public getColumnDisplay(): ColumnDisplay {
+    return {
+      field: this.field,
+      width: this.width,
+      hidden: this.hidden,
+      children: this.children.map(c => c.getColumnDisplay())
+    };
+  }
 }
 
-
-export class ColumnGroupDefinition extends React.Component<ColumnGroup, {}> {
+export class ColumnGroupDefinition extends React.Component<ColumnGroupProps, {}> {
 
   public static propTypes = {
     header: React.PropTypes.any
