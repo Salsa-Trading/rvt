@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { Column, SortDirection } from './Column';
 import GridHeaderCell from './GridHeaderCell';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 import safeMouseMove from './utils/saveMouseMove';
 
 export type GridHeaderType = React.ComponentClass<GridHeaderProps>|React.StatelessComponent<GridHeaderProps>;
@@ -15,7 +13,7 @@ export type GridHeaderProps = {
   onMove?: (newIndex: number, column: Column) => void;
 };
 
-export class GridHeader extends React.Component<GridHeaderProps, {}> {
+export default class GridHeader extends React.Component<GridHeaderProps, {}> {
 
   public static propTypes = {
     columns: React.PropTypes.any,
@@ -102,5 +100,3 @@ export class GridHeader extends React.Component<GridHeaderProps, {}> {
     );
   }
 }
-
-export default DragDropContext(HTML5Backend)(GridHeader) as GridHeaderType;

@@ -47,6 +47,7 @@ thead {
           position: absolute;
         }
 
+        // Sort icons
         button.sort-asc::after { content: '▲'; }
         button.sort-desc::after { content: '▼'; }
         button.sort {
