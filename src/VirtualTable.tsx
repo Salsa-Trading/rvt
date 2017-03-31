@@ -92,7 +92,6 @@ const propTypes = {
 };
 
 const defaultProps = {
-  height: '100%',
   width: '100%',
   scrollWheelRows: 5
 };
@@ -271,11 +270,12 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
    */
   public calculateHeights() {
     const div = this.containerRef;
-    const height = div.clientHeight;
+    const height = this.props.height ? div.clientHeight : div.parentElement.clientHeight;
     const header = div.querySelector('table > thead');
     const headerHeight = header ? header.scrollHeight : 0;
     const scrollHeights = Array.prototype.slice.call(div.querySelectorAll('table > tbody > tr')).map(e => e.scrollHeight);
     const rowHeight = Math.max.apply(Math, scrollHeights);
+
     this.setState(Object.assign({}, this.state, this.calculateHeightStateValues(height, headerHeight, rowHeight)));
   }
 

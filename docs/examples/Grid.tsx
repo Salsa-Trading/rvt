@@ -53,24 +53,22 @@ export default class GridExample extends React.Component<{
   public render() {
     const { gridState } = this.state;
     return (
-      <div style={{height: '100%'}}>
-        <Grid
-          getRow={this.getRow.bind(this)}
-          rowCount={this.state.data.length}
-          gridState={gridState}
-          onGridStateChanged={this.onGridStateChanged.bind(this)}
-          className='table table-bordered table-condensed'
-          columnDefaults={{sortable: true, filterable: true}}
-        >
+      <Grid
+        getRow={this.getRow.bind(this)}
+        rowCount={this.state.data.length}
+        gridState={gridState}
+        onGridStateChanged={this.onGridStateChanged.bind(this)}
+        className='table table-bordered table-condensed'
+        columnDefaults={{sortable: true, filterable: true}}
+      >
 
-          <Column header='Col 1' field='col1' sortable />
-          <Column header='Col 2' field='col2' sortable sortDirection='desc' />
-          <Column header='Col 3' field='col3' cell={d => <input type='checkbox' checked={d.col3} /> } />
-          <Column header='Col 4' field='col4' cell={(d) => d.col4.toString()} />
-          <Column header='Col 5' field='col5' />
+        <Column header='Col 1' field='col1' sortable />
+        <Column header='Col 2' field='col2' sortable sortDirection='desc' />
+        <Column header='Col 3' field='col3' cell={d => <input type='checkbox' defaultChecked={d.col3} />} />
+        <Column header='Col 4' field='col4' cell={(d) => d.col4.toString()} />
+        <Column header='Col 5' field='col5' />
 
-        </Grid>
-      </div>
+      </Grid>
     );
   }
 }
