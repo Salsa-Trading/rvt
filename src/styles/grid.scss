@@ -1,6 +1,9 @@
 $hover-highlight-color: lightgray;
 $sort-direction-color: royalblue;
 
+@import 'filters';
+@import 'sort_icons';
+
 %button {
   background-color: Transparent;
   background-repeat: no-repeat;
@@ -9,7 +12,6 @@ $sort-direction-color: royalblue;
   outline: none;
   overflow: hidden;
 }
-
 
 thead {
   tr {
@@ -46,38 +48,6 @@ thead {
         .filter-pane {
           position: absolute;
         }
-
-        // Sort icons
-        button.sort-asc::after { content: '▲'; }
-        button.sort-desc::after { content: '▼'; }
-        button.sort {
-          @extend %button;
-          display: none;
-        }
-
-        &:not(:hover) {
-          // When not hovering, only show active by default
-          .sort-active { display: inline; }
-
-          // If no active, make the second inactive button inline, but transparent for spacing
-          .sort-inactive + .sort-inactive {
-            display: inline;
-            opacity: 0;
-          }
-        }
-
-        &:hover {
-          // When hovering, show first inactive button
-          .sort-inactive {
-            display: inline;
-            opacity: .5;
-          }
-
-          .sort-inactive + .sort-inactive {
-            display: none;
-          }
-        }
-
       }
     }
   }

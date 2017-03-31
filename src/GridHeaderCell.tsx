@@ -89,16 +89,16 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     const sortSelectionHandler = d => onSortSelection ? onSortSelection(d, column) : null;
     const filterChangedHandler = f => onFilterChanged ? onFilterChanged(f, column) : null;
 
-    let headerClassName = 'grid-header-cell';
+    const headerClassName = [
+      'grid-header-cell',
+      sortable ? 'sortable' : null,
+      sortable && sortDirection ? `sorted sorted-${column.sortDirection}` : null
+    ].join(' ');
     let sortFilterControl;
     if(filterable) {
       sortFilterControl = <Filter column={column} onSortSelection={sortSelectionHandler} onFilterChanged={filterChangedHandler} />;
     }
     else if(sortable) {
-      headerClassName += ' sortable';
-      if(sortDirection) {
-        headerClassName += ` sorted sorted-${column.sortDirection}`;
-      }
       sortFilterControl = (
         <div>
           {this.sortBtn(SortDirection.asc)}

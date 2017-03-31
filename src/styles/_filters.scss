@@ -1,0 +1,8 @@
+thead {
+  th {
+    button.filter-btn {
+      white-space: nowrap;
+      @extend %button;
+    }
+  }
+}
