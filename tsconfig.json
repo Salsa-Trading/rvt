@@ -7,9 +7,7 @@
     "sourceMap": true,
     "experimentalDecorators": true,
     "declaration": true,
-    "outDir": "lib",
-    "noUnusedParameters": true,
-    "noUnusedLocals": true
+    "outDir": "lib"
   },
   "compileOnSave": false,
   "buildOnSave": false,
