@@ -105,6 +105,7 @@ export type RowProps = {
 export type VirtualTableBaseProps = {
   rowCount: number;
   height?: number|string;
+  autoResize?: boolean;
   width?: number|string;
   topRow?: number;
   onTopRowChanged?: (topRow: number) => void;
@@ -138,6 +139,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
 
   private containerRef: any;
   private headerRef: any;
+  private calculateHeightsBound: any;
 
   constructor(props, context) {
     super(props, context);
@@ -239,10 +241,25 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
 
   /**
    * If the calculator is rendered on mount, calculate heights
+   * Listen for window resize if 'autoResize' is enabled
    */
   public componentDidMount() {
     if (this.state.calculatingHeights) {
       setTimeout(() => this.calculateHeights(), 250);
+    }
+
+    if (this.props.autoResize) {
+      this.calculateHeightsBound = this.calculateHeights.bind(this);
+      window.addEventListener('resize', this.calculateHeightsBound);
+    }
+  }
+
+  /**
+   * Remove window listener if 'autoResize' is enabled
+   */
+  public componentWillUnmount() {
+    if (this.props.autoResize) {
+      window.removeEventListener('resize', this.calculateHeightsBound);
     }
   }
 
@@ -270,7 +287,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
    */
   public calculateHeights() {
     const div = this.containerRef;
-    const height = this.props.height ? div.clientHeight : div.parentElement.clientHeight;
+    const height = this.props.height ? div.clientHeight : (div.parentElement.clientHeight - 4);
     const header = div.querySelector('table > thead');
     const headerHeight = header ? header.scrollHeight : 0;
     const scrollHeights = Array.prototype.slice.call(div.querySelectorAll('table > tbody > tr')).map(e => e.scrollHeight);

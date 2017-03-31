@@ -60,6 +60,7 @@ export default class GridExample extends React.Component<{
         onGridStateChanged={this.onGridStateChanged.bind(this)}
         className='table table-bordered table-condensed'
         columnDefaults={{sortable: true, filterable: true}}
+        autoResize={true}
       >
 
         <Column header='Col 1' field='col1' sortable />
