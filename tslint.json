@@ -43,7 +43,7 @@
       "check-finally",
       "check-whitespace"
     ],
-    "quotemark": [true, "single", "avoid-escape"],
+    "quotemark": false,
     "radix": false,
     "semicolon": [true, "always"],
     "trailing-comma": [true, {
@@ -65,6 +65,7 @@
       "check-separator",
       "check-type"
     ],
-    "jsx-no-multiline-js": false
+    "jsx-no-multiline-js": false,
+    "jsx-wrap-multiline": false
   }
 }

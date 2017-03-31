@@ -1,5 +1,6 @@
 const gulp = require('gulp');
-const tslint = require('gulp-tslint');
+const tslint = require('tslint');
+const gulpTslint = require('gulp-tslint');
 const jsonlint = require('gulp-jsonlint');
 const sasslint = require('gulp-sass-lint');
 const eslint = require('gulp-eslint');
@@ -36,17 +37,20 @@ gulp.task('jsonlint', () =>
   .pipe(jsonlint.reporter())
 );
 
-gulp.task('tslint', () =>
-  gulp
-  .src([
-    'src/**/*.ts',
-    'src/**/*.tsx',
-    '!node_modules/**/*'
-  ])
-  .pipe(tslint({
-    formatter: 'verbose'
-  }))
-  .pipe(tslint.report({
-    summarizeFailureOutput: true
-  }))
-);
+gulp.task('tslint', () => {
+  const program = tslint.Linter.createProgram('./tsconfig.json');
+
+  return gulp
+    .src([
+      'src/**/*.ts',
+      'src/**/*.tsx',
+      '!node_modules/**/*'
+    ])
+    .pipe(gulpTslint({
+      program: program,
+      formatter: 'verbose'
+    }))
+    .pipe(gulpTslint.report({
+      summarizeFailureOutput: true
+    }));
+});
