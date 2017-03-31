@@ -82,6 +82,7 @@ function entry() {
         'react-hot-loader/patch',
         'bootstrap-loader',
         'font-awesome-loader',
+        path.join(projectRoot, 'docs/demo.scss'),
         path.join(projectRoot, 'docs/index.tsx')
       ]
     };

@@ -15,16 +15,18 @@ export default class App extends React.Component<{}, {}> {
 
   public render() {
     return (
-      <div>
+      <div id='rvt-demo'>
         <Navbar />
-        <Router history={browserHistory}>
-          <Route path='/home' component={Home} />
-          <Route path='/examples/'>
-            <Route path='virtualTable' component={VirtualTable} />
-            <Route path='style' component={Style} />
-            <Route path='grid' component={Grid} />
-          </Route>
-        </Router>
+        <main>
+          <Router history={browserHistory}>
+            <Route path='/home' component={Home} />
+            <Route path='/examples/'>
+              <Route path='virtualTable' component={VirtualTable} />
+              <Route path='style' component={Style} />
+              <Route path='grid' component={Grid} />
+            </Route>
+          </Router>
+        </main>
       </div>
     );
   }
