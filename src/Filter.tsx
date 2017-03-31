@@ -71,7 +71,7 @@ export default class Filter extends React.Component<{
     return (
       <div>
         <button className='filter-btn' onClick={this.toggleFilterPane.bind(this)}>
-          <span className='fa fa-filter' />
+          <span className='edit-filters' />
           {sortArrow}
         </button>
         {showFilter && this.renderFilterPane()}

@@ -344,8 +344,6 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
     const tableStyle = Object.assign({ width: '100%' }, this.props.style);
     const containerStyle = Object.assign({
       position: 'relative',
-      overflowX: 'auto',
-      overflowY: 'hidden',
       display: 'inline-block',
       height,
       width

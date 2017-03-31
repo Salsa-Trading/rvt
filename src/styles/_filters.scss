@@ -4,5 +4,15 @@ thead {
       white-space: nowrap;
       @extend %button;
     }
+
+    .edit-filters::after { content: '☔'; }
+
+    .filterable .edit-filters {
+      opacity: .4;
+    }
+
+    .filtered .edit-filters {
+      opacity: 1;
+    }
   }
 }

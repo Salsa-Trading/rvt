@@ -79,7 +79,8 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
         width,
         sortDirection,
         sortable,
-        filterable
+        filterable,
+        filter
       },
       onSortSelection,
       onFilterChanged,
@@ -92,7 +93,9 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     const headerClassName = [
       'grid-header-cell',
       sortable ? 'sortable' : null,
-      sortable && sortDirection ? `sorted sorted-${column.sortDirection}` : null
+      sortable && sortDirection ? `sorted sorted-${column.sortDirection}` : null,
+      filterable ? 'filterable' : null,
+      filterable && filter ? 'filtered' : null
     ].join(' ');
     let sortFilterControl;
     if(filterable) {
