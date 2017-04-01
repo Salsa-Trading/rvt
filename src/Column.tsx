@@ -117,19 +117,26 @@ export class ColumnGroup {
     this.hidden = props.hidden;
     this.width = props.width;
 
-    console.log(columnDisplay, props);
     const children = React.Children.map(props.children, (c: any) => {
       let colDisplay = null;
       if(columnDisplay) {
-        colDisplay = columnDisplay.children.find(cd => cd.field === c.field);
+        colDisplay = columnDisplay.children.find(cd => cd.field === c.props.field);
       }
-      return new Column({...columnDefaults, ...colDisplay, ...c.props});
+      if(c.type.name === 'ColumnGroupDefinition') {
+        return new ColumnGroup(c.props, columnDefaults, colDisplay);
+      }
+      if(c.type.name === 'ColumnDefinition') {
+        return new Column({...columnDefaults, ...c.props, ...colDisplay});
+      }
     });
-    if(!columnDisplay || columnDisplay.children || columnDisplay.children.length === 0) {
-      columnDisplay.children = children.map(c => ({field: c.field, hidden: false}));
+    if(!columnDisplay || !columnDisplay.children || columnDisplay.children.length === 0) {
+      columnDisplay = {
+        field: this.field,
+        hidden: false,
+        children: children.map(c => ({field: c.field, hidden: false}))
+      };
     }
     this.children = columnDisplay.children.map(cd => children.find(c => cd.field === c.field));
-    console.log(children, columnDisplay, this.children);
   }
 
   public getColumns(): Column[] {
@@ -144,15 +151,18 @@ export class ColumnGroup {
   }
 
   public moveColumn(newIndex: number, column: Column) {
+    console.log('move', newIndex, column);
     const oldIndex = this.children.indexOf(column);
-    if(oldIndex) {
+    if(oldIndex >= 0) {
+      console.log('moving col', oldIndex, newIndex, column);
       this.children.splice(newIndex, 0, this.children.splice(oldIndex, 1)[0]);
       return true;
     }
     else {
-      for(let column of this.children) {
-        if(column instanceof ColumnGroup) {
-          let moved = column.moveColumn(newIndex, column);
+      for(let child of this.children) {
+        if(child instanceof ColumnGroup) {
+          console.log('columngroup', child);
+          let moved = child.moveColumn(newIndex, column);
           if(moved) {
             return moved;
           }

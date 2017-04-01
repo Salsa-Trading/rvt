@@ -52,7 +52,7 @@ export default class Grid extends React.Component<GridProps, {
   public static defaultProps = {
     gridState: {
       sort: [],
-      filter: {},
+      filter: {}
     } as GridState
   };
 
@@ -65,7 +65,7 @@ export default class Grid extends React.Component<GridProps, {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      columnGroup : this.createColumns(props)
+      columnGroup: this.createColumns(props)
     };
   }
 
@@ -98,14 +98,17 @@ export default class Grid extends React.Component<GridProps, {
   private gridStateHelper() {
     const { onGridStateChanged } = this.props;
     const gridState = Grid.getGridState(this.props.gridState);
-    const filter = _.cloneDeep(gridState.filter);
-    const sort = _.cloneDeep(gridState.sort);
+    const newGridState = {
+      sort: gridState.sort,
+      filter: gridState.filter,
+      columnDisplay: gridState.columnDisplay
+    };
+
     const onGridState = (gridStateChange: GridStateChangeType, change: any, field: string) => {
       if(!onGridStateChanged) {
         return;
       }
 
-      const newGridState = gridState;
       if(gridStateChange === GridStateChangeType.filter) {
         newGridState.filter = change;
       }
@@ -115,8 +118,12 @@ export default class Grid extends React.Component<GridProps, {
       else if(gridStateChange === GridStateChangeType.columnDisplay) {
         newGridState.columnDisplay = change;
       }
+
       onGridStateChanged(newGridState, gridStateChange, field);
     };
+
+    const filter = _.cloneDeep(gridState.filter);
+    const sort = _.cloneDeep(gridState.sort);
     return { filter, sort, onGridStateChanged: onGridState };
   }
 

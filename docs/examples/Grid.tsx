@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { Grid, Column, GridState, GridStateChangeType, isDataChange, RowData } from '../../src/index';
+import { Grid, Column, ColumnGroup, GridState, GridStateChangeType, isDataChange, RowData } from '../../src/index';
 import { generateData } from '../../test/dataUtils';
 
 import '../../src/styles/grid.scss';
@@ -62,10 +62,12 @@ export default class GridExample extends React.Component<{
         columnDefaults={{sortable: true, filterable: true}}
         autoResize={true}
       >
-
-        <Column header='Col 1' field='col1' sortable />
-        <Column header='Col 2' field='col2' filterable sortable sortDirection='desc' />
-        <Column header='Col 3' field='col3' cell={d => <input type='checkbox' defaultChecked={d.col3} />} />
+      
+        <ColumnGroup>
+          <Column header='Col 1' field='col1' sortable />
+          <Column header='Col 2' field='col2' filterable sortable sortDirection='desc' />
+          <Column header='Col 3' field='col3' cell={d => <input type='checkbox' defaultChecked={d.col3} />} />
+        </ColumnGroup>
         <Column header='Col 4' field='col4' cell={(d) => d.col4.toString()} />
         <Column header='Col 5' field='col5' />
 
