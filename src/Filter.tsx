@@ -78,10 +78,10 @@ export default class Filter extends React.Component<{
     const { showFilter } = this.state;
     let sortArrow;
     if(this.props.column.sortDirection === SortDirection.asc) {
-      sortArrow = <span className='sort-asc' />;
+      sortArrow = <span className='sort-asc-narrow' />;
     }
     else if(this.props.column.sortDirection === SortDirection.desc) {
-      sortArrow = <span className='sort-desc' />;
+      sortArrow = <span className='sort-desc-narrow' />;
     }
     return (
       <div>

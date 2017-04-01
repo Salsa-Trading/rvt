@@ -64,6 +64,10 @@ export class Column implements ColumnProps {
     };
   }
 
+  public getCount() {
+    return 1;
+  }
+
 }
 
 export class ColumnDefinition extends React.Component<ColumnProps, {}> {
@@ -172,6 +176,14 @@ export class ColumnGroup {
     return false;
   }
 
+  public findColumnIndex(column: Column|ColumnGroup) {
+    return this.children.findIndex(column as any);
+  }
+
+  public getColumnIndex(index: number) {
+    return this.children[index];
+  }
+
   public getColumnDisplay(): ColumnDisplay {
     return {
       field: this.field,
@@ -179,6 +191,34 @@ export class ColumnGroup {
       hidden: this.hidden,
       children: this.children.map(c => c.getColumnDisplay())
     };
+  }
+
+  public getLevelCount(): number {
+    let levels = 0;
+    for(let child of this.children) {
+      if(child instanceof ColumnGroup) {
+        levels = Math.max(levels, child.getLevelCount());
+      }
+    }
+    return levels + 1;
+  }
+
+  public getLevels() {
+    let levels = [];
+    for(let child of this.children) {
+      if(child instanceof ColumnGroup) {
+        let subLevels = child.getLevels();
+        for(let i = 0; i < subLevels.length; i++) {
+          levels[i] = (levels[i] || []).concat(subLevels[i]);
+        }
+      }
+    }
+    const retVal = [this.children, ...levels];
+    return retVal;
+  }
+
+  public getCount() {
+    return this.children.reduce((r, c) =>  r + c.getCount(), 0);
   }
 }
 

@@ -5,7 +5,7 @@ import safeMouseMove from './utils/saveMouseMove';
 
 export type GridHeaderCellProps = {
   column: Column;
-  index: number;
+  rowSpan?: number;
   onSortSelection?: (sortDirection: SortDirection, column: Column) => void;
   onFilterChanged?: (filter: any, column: Column) => void;
   onWidthChanged?: (width: number, column: Column) => void;
@@ -16,7 +16,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
 
   public static propTypes = {
     column: React.PropTypes.any,
-    index: React.PropTypes.number,
+    rowSpan: React.PropTypes.number,
     onSortSelection: React.PropTypes.func,
     onWidthChanged: React.PropTypes.func,
     onFilterChanged: React.PropTypes.func
@@ -82,6 +82,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
         filterable,
         filter
       },
+      rowSpan,
       onSortSelection,
       onFilterChanged,
       onMouseDown
@@ -111,7 +112,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     }
 
     return (
-      <th key={field} style={{width, padding: 0}}>
+      <th key={field} style={{width, padding: 0}} rowSpan={rowSpan}>
         <div className={`${headerClassName}`}>
           <div className='header' onMouseDown={onMouseDown}>
             {header}

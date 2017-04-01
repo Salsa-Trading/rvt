@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Column, SortDirection } from './Column';
+import { Column, SortDirection, ColumnGroup } from './Column';
 import GridHeaderCell from './GridHeaderCell';
 import safeMouseMove from './utils/saveMouseMove';
 
 export type GridHeaderType = React.ComponentClass<GridHeaderProps>|React.StatelessComponent<GridHeaderProps>;
 
 export type GridHeaderProps = {
-  columns: Column[];
+  columnGroup: ColumnGroup,
   onSortSelection?: (sortDirection: SortDirection, column: Column) => void;
   onFilterChanged?: (filter: any, column: Column) => void;
   onWidthChanged?: (width: number, column: Column) => void;
@@ -28,8 +28,8 @@ export default class GridHeader extends React.Component<GridHeaderProps, {}> {
   }
 
   private columAtIndex(index: number) {
-    const { columns } = this.props;
-    return columns[index];
+    const { columnGroup } = this.props;
+    return columnGroup.getColumnIndex(index);
   }
 
   private findColumnIndex(tableRow: HTMLTableRowElement, tableHeader: HTMLTableHeaderCellElement) {
@@ -77,27 +77,41 @@ export default class GridHeader extends React.Component<GridHeaderProps, {}> {
     );
   }
 
-  public render() {
+  private renderHeaderRow(rowSpan: number, column: Column|ColumnGroup, c: number) {
     const { onSortSelection, onFilterChanged, onWidthChanged } = this.props;
-    const { columns } = this.props;
+    if(column instanceof ColumnGroup) {
+      return <th
+        key={column.field}
+        colSpan={column.getCount()}
+        rowSpan={rowSpan - column.getCount()}
+        >{column.header}</th>;
+    }
+    else if(column instanceof Column) {
+      return <GridHeaderCell
+        key={column.field}
+        column={column}
+        rowSpan={rowSpan}
+        onSortSelection={onSortSelection}
+        onFilterChanged={onFilterChanged}
+        onWidthChanged={onWidthChanged}
+        onMouseDown={this.onColumnMouseDown.bind(this)}
+      />;
+    }
+  }
 
-    console.log(columns);
 
+  public render() {
+    const { columnGroup } = this.props;
+    const rows = columnGroup.getLevels();
     return (
       <thead>
-        <tr>
-          {columns.map((column, i) => {
-            return <GridHeaderCell
-              key={column.field}
-              column={column}
-              index={i}
-              onSortSelection={onSortSelection}
-              onFilterChanged={onFilterChanged}
-              onWidthChanged={onWidthChanged}
-              onMouseDown={this.onColumnMouseDown.bind(this)}
-            />;
-          })}
-        </tr>
+        {rows.map((row, r) => {
+          return (
+            <tr key={r}>
+              {row.map(this.renderHeaderRow.bind(this, rows.length - r))}
+            </tr>
+          );
+        })}
       </thead>
     );
   }

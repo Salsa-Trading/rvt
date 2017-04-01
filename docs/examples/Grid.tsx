@@ -36,15 +36,15 @@ export default class GridExample extends React.Component<{
     }
 
     let { data } = this.state;
-    if(changeType === GridStateChangeType.filter) {
+    if(changeType === GridStateChangeType.filters) {
       data = this.state.originalData;
-      for(let field of Object.keys(gridState.filter)) {
-        data = data.filter(d => _.some(gridState.filter[field], (filter) => filter ===  (_.get(d, field) as string || '')));
+      for(let field of Object.keys(gridState.filters)) {
+        data = data.filter(d => (_.get(d, field).toString() || '').indexOf(gridState.filters[field]) >= 0);
       }
     }
 
-    if(gridState.sort && gridState.sort.length > 0) {
-      data = _.orderBy(data, [gridState.sort[0].field], [gridState.sort[0].direction]);
+    if(gridState.sorts && gridState.sorts.length > 0) {
+      data = _.orderBy(data, [gridState.sorts[0].field], [gridState.sorts[0].direction]);
     }
 
     this.setState({gridState, data});
@@ -63,14 +63,19 @@ export default class GridExample extends React.Component<{
         autoResize={true}
       >
       
-        <ColumnGroup>
+        <ColumnGroup header='Group 1' field='group1'>
           <Column header='Col 1' field='col1' sortable />
-          <Column header='Col 2' field='col2' filterable sortable sortDirection='desc' />
-          <Column header='Col 3' field='col3' cell={d => <input type='checkbox' defaultChecked={d.col3} />} />
+          <ColumnGroup header='Sub Group 1' field='subGroup1'>
+            <Column header='Col 2' field='col2' filterable sortable sortDirection='desc' />
+            <Column header='Col 3' field='col3' cell={d => <input type='checkbox' defaultChecked={d.col3} />} />
+          </ColumnGroup>
         </ColumnGroup>
-        <Column header='Col 4' field='col4' cell={(d) => d.col4.toString()} />
-        <Column header='Col 5' field='col5' />
-
+        <ColumnGroup header='Group 2' field='group2'>
+          <ColumnGroup header='Sub Group 2' field='subGroup2'>
+            <Column header='Col 4' field='col4' cell={(d) => d.col4.toString()} />
+          </ColumnGroup>
+          <Column header='Col 5' field='col5' />
+        </ColumnGroup>
       </Grid>
     );
   }
