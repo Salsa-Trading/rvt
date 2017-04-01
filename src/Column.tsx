@@ -68,6 +68,10 @@ export class Column implements ColumnProps {
     return 1;
   }
 
+  public resize(width: number) {
+    this.width = width;
+  }
+
 }
 
 export class ColumnDefinition extends React.Component<ColumnProps, {}> {
@@ -219,6 +223,12 @@ export class ColumnGroup {
   public getCount() {
     return this.children.reduce((r, c) =>  r + c.getCount(), 0);
   }
+
+  public resize(width: number) {
+    // TODO: Add resize logic for column group
+    this.width = width;
+  }
+
 }
 
 export class ColumnGroupDefinition extends React.Component<ColumnGroupProps, {}> {

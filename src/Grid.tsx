@@ -154,7 +154,7 @@ export default class Grid extends React.Component<GridProps, {
   private onWidthChanged(width: number, column: Column) {
     const { onGridStateChanged } = this.gridStateHelper();
     const { columnGroup } = this.state;
-    column.width = width;
+    column.resize(width);
     onGridStateChanged(GridStateChangeType.columnDisplay, columnGroup.getColumnDisplay(), column.field);
   }
 
