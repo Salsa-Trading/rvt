@@ -118,8 +118,8 @@ export class ColumnGroup {
   constructor(props: ColumnProps, columnDefaults: ColumnDefaults, columnDisplay: ColumnDisplay) {
     this.field = props.field;
     this.header = props.header;
-    this.hidden = props.hidden;
-    this.width = props.width;
+    this.hidden = (columnDisplay && columnDisplay.hidden) || props.hidden;
+    this.width = (columnDisplay && columnDisplay.width) || props.width;
 
     const children = React.Children.map(props.children, (c: any) => {
       let colDisplay = null;
@@ -165,7 +165,6 @@ export class ColumnGroup {
     else {
       for(let child of this.children) {
         if(child instanceof ColumnGroup) {
-          console.log('columngroup', child);
           let moved = child.moveColumn(newIndex, column);
           if(moved) {
             return moved;

@@ -79,24 +79,21 @@ export default class GridHeader extends React.Component<GridHeaderProps, {}> {
 
   private renderHeaderRow(rowSpan: number, column: Column|ColumnGroup, c: number) {
     const { onSortSelection, onFilterChanged, onWidthChanged } = this.props;
+    let colSpan = 1;
     if(column instanceof ColumnGroup) {
-      return <th
-        key={column.field}
-        colSpan={column.getCount()}
-        rowSpan={rowSpan - column.getCount()}
-        >{column.header}</th>;
+      colSpan = column.getCount();
+      rowSpan = rowSpan - column.getCount();
     }
-    else if(column instanceof Column) {
-      return <GridHeaderCell
-        key={column.field}
-        column={column}
-        rowSpan={rowSpan}
-        onSortSelection={onSortSelection}
-        onFilterChanged={onFilterChanged}
-        onWidthChanged={onWidthChanged}
-        onMouseDown={this.onColumnMouseDown.bind(this)}
-      />;
-    }
+    return <GridHeaderCell
+      key={column.field}
+      column={column}
+      colSpan={colSpan}
+      rowSpan={rowSpan}
+      onSortSelection={onSortSelection}
+      onFilterChanged={onFilterChanged}
+      onWidthChanged={onWidthChanged}
+      onMouseDown={this.onColumnMouseDown.bind(this)}
+    />;
   }
 
 
