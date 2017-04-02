@@ -13,6 +13,9 @@ export type GridHeaderProps = {
   onMove?: (newIndex: number, column: Column) => void;
 };
 
+const hoverClassName = 'column-moving-hover';
+const movingClassName = 'column-moving';
+
 export default class GridHeader extends React.Component<GridHeaderProps, {}> {
 
   public static propTypes = {
@@ -27,35 +30,38 @@ export default class GridHeader extends React.Component<GridHeaderProps, {}> {
     super(props, context);
   }
 
-  private columAtIndex(index: number) {
-    const { columnGroup } = this.props;
-    return columnGroup.getColumnIndex(index);
-  }
-
-  private findColumnIndex(tableRow: HTMLTableRowElement, tableHeader: HTMLTableHeaderCellElement) {
+  private findColumnIndex(tableRow: HTMLTableRowElement, tableHeader: HTMLTableHeaderCellElement, group: string) {
+    let index = 0;
     for(let i = 0; i < tableRow.children.length; i++) {
-      if(tableRow.children.item(i) === tableHeader) {
-        return i;
+      let item = tableRow.children.item(i) as any;
+      if(item.dataset['group'] === group) {
+        if(item === tableHeader) {
+          return index;
+        }
+        index++;
       }
     }
     return -1;
   }
 
   private onColumnMouseDown(e: React.MouseEvent<HTMLTableHeaderCellElement>) {
-    const hoverClassName = 'column-moving-hover';
-    const movingClassName = 'column-moving';
-    const { onMove } = this.props;
+    const { onMove, columnGroup } = this.props;
+
     e.persist();
     const target = e.currentTarget;
     const tr = e.currentTarget.closest('tr') as HTMLTableRowElement;
-    const column = this.columAtIndex(this.findColumnIndex(tr, target.closest('th') as HTMLTableHeaderCellElement));
+    const th = target.closest('th') as HTMLTableHeaderCellElement;
+    const group = th.dataset['group'];
+
+    const parentGroup = columnGroup.findColumnGroupByField(group);
+    const column = parentGroup.getColumnIndex(this.findColumnIndex(tr, th, group));
 
     tr.classList.add(movingClassName);
     let currentHover: HTMLTableHeaderCellElement;
 
     safeMouseMove<HTMLTableHeaderCellElement>(e,
       (moveEvent) => {
-        const over = (moveEvent.target as any).closest('th') as HTMLTableHeaderCellElement;
+        const over = (moveEvent.target as any).closest(`th[data-group=${group}]`) as HTMLTableHeaderCellElement;
         if(currentHover && over !== currentHover) {
           currentHover.classList.remove(hoverClassName);
         }
@@ -69,7 +75,7 @@ export default class GridHeader extends React.Component<GridHeaderProps, {}> {
           tr.classList.remove(movingClassName);
           if(currentHover) {
             currentHover.classList.remove(hoverClassName);
-            const newIndex = this.findColumnIndex(tr, currentHover);
+            const newIndex = this.findColumnIndex(tr, currentHover, group);
             onMove(newIndex, column);
           }
         }
@@ -78,6 +84,7 @@ export default class GridHeader extends React.Component<GridHeaderProps, {}> {
   }
 
   private renderHeaderRow(rowSpan: number, column: Column|ColumnGroup, c: number) {
+    const { columnGroup } = this.props;
     const { onSortSelection, onFilterChanged, onWidthChanged } = this.props;
     let colSpan = 1;
     if(column instanceof ColumnGroup) {
@@ -87,6 +94,7 @@ export default class GridHeader extends React.Component<GridHeaderProps, {}> {
     return <GridHeaderCell
       key={column.field}
       column={column}
+      columnGroup={columnGroup.findColumnGroup(column)}
       colSpan={colSpan}
       rowSpan={rowSpan}
       onSortSelection={onSortSelection}
@@ -95,7 +103,6 @@ export default class GridHeader extends React.Component<GridHeaderProps, {}> {
       onMouseDown={this.onColumnMouseDown.bind(this)}
     />;
   }
-
 
   public render() {
     const { columnGroup } = this.props;

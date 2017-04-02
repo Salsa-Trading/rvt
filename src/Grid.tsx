@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { Column, SortDirection, ColumnDefaults, ColumnGroup, ColumnDisplay } from './Column';
+import { Column, SortDirection, ColumnDefaults, ColumnGroup, ColumnDisplay, RootColumnGroup } from './Column';
 import GridRow from './GridRow';
 import GridHeader, { GridHeaderType } from './GridHeader';
 import VirtualTable, { VirtualTableBaseProps } from './VirtualTable';
@@ -38,7 +38,6 @@ export type GridProps = VirtualTableBaseProps & {
   header?: GridHeaderType;
 };
 
-const RootColumnGroup = '_root_';
 
 export default class Grid extends React.Component<GridProps, {
   columnGroup: ColumnGroup

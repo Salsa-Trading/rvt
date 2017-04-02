@@ -1,10 +1,11 @@
 import * as React from 'react';
 import Filter from './Filter';
-import { Column, SortDirection } from './Column';
+import { Column, SortDirection, ColumnGroup } from './Column';
 import safeMouseMove from './utils/saveMouseMove';
 
 export type GridHeaderCellProps = {
   column: Column;
+  columnGroup: ColumnGroup;
   rowSpan?: number;
   colSpan?: number;
   onSortSelection?: (sortDirection: SortDirection, column: Column) => void;
@@ -17,6 +18,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
 
   public static propTypes = {
     column: React.PropTypes.any,
+    columnGroup: React.PropTypes.any,
     rowSpan: React.PropTypes.number,
     onSortSelection: React.PropTypes.func,
     onWidthChanged: React.PropTypes.func,
@@ -74,6 +76,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
   public render() {
     const {
       column,
+      columnGroup,
       column: {
         header,
         field,
@@ -112,9 +115,10 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
         </div>
       );
     }
+    const dataSet = {'data-group': columnGroup.field};
 
     return (
-      <th key={field} style={{width, padding: 0}} rowSpan={rowSpan} colSpan={colSpan}>
+      <th key={field} style={{width, padding: 0}} rowSpan={rowSpan} colSpan={colSpan} {...dataSet}>
         <div className={`${headerClassName}`}>
           <div className='header' onMouseDown={onMouseDown}>
             {header}

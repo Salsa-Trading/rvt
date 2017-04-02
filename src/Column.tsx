@@ -7,6 +7,8 @@ export const SortDirection = strEnum([
 ]);
 export type SortDirection = keyof typeof SortDirection;
 
+export const RootColumnGroup = '_root_';
+
 export type ColumnDefaults = {
   sortable?: boolean;
   filterable?: boolean;
@@ -159,10 +161,8 @@ export class ColumnGroup {
   }
 
   public moveColumn(newIndex: number, column: Column) {
-    console.log('move', newIndex, column);
     const oldIndex = this.children.indexOf(column);
     if(oldIndex >= 0) {
-      console.log('moving col', oldIndex, newIndex, column);
       this.children.splice(newIndex, 0, this.children.splice(oldIndex, 1)[0]);
       return true;
     }
@@ -179,8 +179,41 @@ export class ColumnGroup {
     return false;
   }
 
+  public findColumnGroupByField(field: string) {
+    if(field === RootColumnGroup) {
+      return this;
+    }
+    for(let child of this.children) {
+      if(child instanceof ColumnGroup) {
+        if(child.field === field) {
+          return child;
+        }
+        let found = child.findColumnGroupByField(field);
+        if(found) {
+          return found;
+        }
+      }
+    }
+    return null;
+  }
+
+  public findColumnGroup(column: Column|ColumnGroup) {
+    if(this.findColumnIndex(column) >= 0) {
+      return this;
+    }
+    for(let child of this.children) {
+      if(child instanceof ColumnGroup) {
+        let found = child.findColumnGroup(column);
+        if(found) {
+          return found;
+        }
+      }
+    }
+    return null;
+  }
+
   public findColumnIndex(column: Column|ColumnGroup) {
-    return this.children.findIndex(column as any);
+    return this.children.findIndex(c => c === column);
   }
 
   public getColumnIndex(index: number) {
