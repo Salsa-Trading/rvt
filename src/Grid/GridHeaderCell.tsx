@@ -1,24 +1,25 @@
 import * as React from 'react';
-import Filter from './Filter';
-import { Column, SortDirection, ColumnGroup } from './Column';
-import safeMouseMove from './utils/saveMouseMove';
+import Filter from '../Filter';
+import { Field, SortDirection } from '../List/Field';
+import { FieldSet } from '../List/FieldSet';
+import safeMouseMove from '../utils/saveMouseMove';
 
 export type GridHeaderCellProps = {
-  column: Column;
-  columnGroup: ColumnGroup;
+  field: Field;
+  fieldSet: FieldSet;
   rowSpan?: number;
   colSpan?: number;
-  onSortSelection?: (sortDirection: SortDirection, column: Column) => void;
-  onFilterChanged?: (filter: any, column: Column) => void;
-  onWidthChanged?: (width: number, column: Column) => void;
+  onSortSelection?: (sortDirection: SortDirection, field: Field) => void;
+  onFilterChanged?: (filter: any, field: Field) => void;
+  onWidthChanged?: (width: number, field: Field) => void;
   onMouseDown(e: React.MouseEvent<HTMLTableHeaderCellElement>);
 };
 
 export default class GridHeaderCell extends React.Component<GridHeaderCellProps, {}> {
 
   public static propTypes = {
-    column: React.PropTypes.any,
-    columnGroup: React.PropTypes.any,
+    field: React.PropTypes.any,
+    fieldSet: React.PropTypes.any,
     rowSpan: React.PropTypes.number,
     onSortSelection: React.PropTypes.func,
     onWidthChanged: React.PropTypes.func,
@@ -38,8 +39,8 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     }
 
     let startingWidth;
-    if(typeof this.props.column.width === 'number') {
-      startingWidth = this.props.column.width;
+    if(typeof this.props.field.width === 'number') {
+      startingWidth = this.props.field.width;
     }
     else {
       startingWidth = e.currentTarget.closest('th').clientWidth;
@@ -47,24 +48,24 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
 
     let startingX = e.pageX;
     safeMouseMove<HTMLDivElement>(e,
-      moveEvent => onWidthChanged(startingWidth + (moveEvent.pageX - startingX), this.props.column)
+      moveEvent => onWidthChanged(startingWidth + (moveEvent.pageX - startingX), this.props.field)
     );
   }
 
   private onSortClick(sortDirection: SortDirection, e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation();
-    const { onSortSelection, column } = this.props;
+    const { onSortSelection, field } = this.props;
     if(onSortSelection) {
-      onSortSelection(sortDirection, column);
+      onSortSelection(sortDirection, field);
     }
   }
 
   private sortBtn(sortDirection: SortDirection): React.ReactElement<any> {
-    const { column } = this.props;
+    const { field } = this.props;
     const classNames = [
       'sort',
       `sort-${sortDirection}`,
-      column.sortDirection === sortDirection ? 'sort-active' : 'sort-inactive'
+      field.sortDirection === sortDirection ? 'sort-active' : 'sort-inactive'
     ].join(' ');
 
     return <button
@@ -75,9 +76,8 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
 
   public render() {
     const {
-      column,
-      columnGroup,
-      column: {
+      fieldSet,
+      field: {
         header,
         field,
         width,
@@ -93,19 +93,19 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
       onMouseDown
     } = this.props as any;
 
-    const sortSelectionHandler = d => onSortSelection ? onSortSelection(d, column) : null;
-    const filterChangedHandler = f => onFilterChanged ? onFilterChanged(f, column) : null;
+    const sortSelectionHandler = d => onSortSelection ? onSortSelection(d, field) : null;
+    const filterChangedHandler = f => onFilterChanged ? onFilterChanged(f, field) : null;
 
     const headerClassName = [
       'grid-header-cell',
       sortable ? 'sortable' : null,
-      sortable && sortDirection ? `sorted sorted-${column.sortDirection}` : null,
+      sortable && sortDirection ? `sorted sorted-${field.sortDirection}` : null,
       filterable ? 'filterable' : null,
       filterable && filter ? 'filtered' : null
     ].join(' ');
     let sortFilterControl;
     if(filterable) {
-      sortFilterControl = <Filter column={column} onSortSelection={sortSelectionHandler} onFilterChanged={filterChangedHandler} />;
+      sortFilterControl = <Filter field={this.props.field} onSortSelection={sortSelectionHandler} onFilterChanged={filterChangedHandler} />;
     }
     else if(sortable) {
       sortFilterControl = (
@@ -115,7 +115,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
         </div>
       );
     }
-    const dataSet = {'data-group': columnGroup.field};
+    const dataSet = {'data-group': fieldSet.field};
 
     return (
       <th key={field} style={{width, padding: 0}} rowSpan={rowSpan} colSpan={colSpan} {...dataSet}>

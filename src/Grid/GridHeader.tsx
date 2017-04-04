@@ -1,25 +1,17 @@
 import * as React from 'react';
-import { Column, SortDirection, ColumnGroup } from './Column';
+import { Field } from '../List/Field';
+import { FieldSet } from '../List/FieldSet';
+import { ListViewProps } from '../List';
 import GridHeaderCell from './GridHeaderCell';
-import safeMouseMove from './utils/saveMouseMove';
+import safeMouseMove from '../utils/saveMouseMove';
 
-export type GridHeaderType = React.ComponentClass<GridHeaderProps>|React.StatelessComponent<GridHeaderProps>;
+const hoverClassName = 'field-moving-hover';
+const movingClassName = 'field-moving';
 
-export type GridHeaderProps = {
-  columnGroup: ColumnGroup,
-  onSortSelection?: (sortDirection: SortDirection, column: Column) => void;
-  onFilterChanged?: (filter: any, column: Column) => void;
-  onWidthChanged?: (width: number, column: Column) => void;
-  onMove?: (newIndex: number, column: Column) => void;
-};
-
-const hoverClassName = 'column-moving-hover';
-const movingClassName = 'column-moving';
-
-export default class GridHeader extends React.Component<GridHeaderProps, {}> {
+export default class GridHeader extends React.Component<ListViewProps, {}> {
 
   public static propTypes = {
-    columns: React.PropTypes.any,
+    fieldSet: React.PropTypes.any,
     onSortSelection: React.PropTypes.func,
     onFilterChanged: React.PropTypes.func,
     onWidthChanged: React.PropTypes.func,
@@ -30,7 +22,7 @@ export default class GridHeader extends React.Component<GridHeaderProps, {}> {
     super(props, context);
   }
 
-  private findColumnIndex(tableRow: HTMLTableRowElement, tableHeader: HTMLTableHeaderCellElement, group: string) {
+  private findFieldIndex(tableRow: HTMLTableRowElement, tableHeader: HTMLTableHeaderCellElement, group: string) {
     let index = 0;
     for(let i = 0; i < tableRow.children.length; i++) {
       let item = tableRow.children.item(i) as any;
@@ -44,8 +36,8 @@ export default class GridHeader extends React.Component<GridHeaderProps, {}> {
     return -1;
   }
 
-  private onColumnMouseDown(e: React.MouseEvent<HTMLTableHeaderCellElement>) {
-    const { onMove, columnGroup } = this.props;
+  private onFieldMouseDown(e: React.MouseEvent<HTMLTableHeaderCellElement>) {
+    const { onMove, fieldSet } = this.props;
 
     e.persist();
     const target = e.currentTarget;
@@ -53,8 +45,8 @@ export default class GridHeader extends React.Component<GridHeaderProps, {}> {
     const th = target.closest('th') as HTMLTableHeaderCellElement;
     const group = th.dataset['group'];
 
-    const parentGroup = columnGroup.findColumnGroupByField(group);
-    const column = parentGroup.getColumnIndex(this.findColumnIndex(tr, th, group));
+    const parentGroup = fieldSet.findFieldSetByField(group);
+    const field = parentGroup.getFieldIndex(this.findFieldIndex(tr, th, group));
 
     tr.classList.add(movingClassName);
     let currentHover: HTMLTableHeaderCellElement;
@@ -75,38 +67,38 @@ export default class GridHeader extends React.Component<GridHeaderProps, {}> {
           tr.classList.remove(movingClassName);
           if(currentHover) {
             currentHover.classList.remove(hoverClassName);
-            const newIndex = this.findColumnIndex(tr, currentHover, group);
-            onMove(newIndex, column);
+            const newIndex = this.findFieldIndex(tr, currentHover, group);
+            onMove(newIndex, field);
           }
         }
       }
     );
   }
 
-  private renderHeaderRow(rowSpan: number, column: Column|ColumnGroup, c: number) {
-    const { columnGroup } = this.props;
+  private renderHeaderRow(rowSpan: number, field: Field|FieldSet, c: number) {
+    const { fieldSet } = this.props;
     const { onSortSelection, onFilterChanged, onWidthChanged } = this.props;
     let colSpan = 1;
-    if(column instanceof ColumnGroup) {
-      colSpan = column.getCount();
-      rowSpan = rowSpan - column.getCount();
+    if(field instanceof FieldSet) {
+      colSpan = field.getCount();
+      rowSpan = rowSpan - field.getCount();
     }
     return <GridHeaderCell
-      key={column.field}
-      column={column}
-      columnGroup={columnGroup.findColumnGroup(column)}
+      key={field.field}
+      field={field}
+      fieldSet={fieldSet.findFieldSet(field)}
       colSpan={colSpan}
       rowSpan={rowSpan}
       onSortSelection={onSortSelection}
       onFilterChanged={onFilterChanged}
       onWidthChanged={onWidthChanged}
-      onMouseDown={this.onColumnMouseDown.bind(this)}
+      onMouseDown={this.onFieldMouseDown.bind(this)}
     />;
   }
 
   public render() {
-    const { columnGroup } = this.props;
-    const rows = columnGroup.getLevels();
+    const { fieldSet } = this.props;
+    const rows = fieldSet.getLevels();
     return (
       <thead>
         {rows.map((row, r) => {
