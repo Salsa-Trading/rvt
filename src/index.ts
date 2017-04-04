@@ -5,12 +5,15 @@ export {
   FieldSetDefinition as FieldSet
 } from './List/FieldSet';
 export {
-  default as Grid,
+  default as List,
   ListState,
   ListStateChangeType,
   isDataChange,
-  RowData
 } from './List';
+export {
+  default as VirtualGrid,
+  RowData
+} from './Grid/VirtualGrid';
 export {
   default as VirtualTable
 } from './VirtualTable';

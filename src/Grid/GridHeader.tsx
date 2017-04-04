@@ -1,23 +1,14 @@
 import * as React from 'react';
-import { Field, SortDirection } from './List/Field';
-import { FieldSet } from './List/FieldSet';
+import { Field } from '../List/Field';
+import { FieldSet } from '../List/FieldSet';
+import { ListViewProps } from '../List';
 import GridHeaderCell from './GridHeaderCell';
-import safeMouseMove from './utils/saveMouseMove';
-
-export type GridHeaderType = React.ComponentClass<GridHeaderProps>|React.StatelessComponent<GridHeaderProps>;
-
-export type GridHeaderProps = {
-  fieldSet: FieldSet,
-  onSortSelection?: (sortDirection: SortDirection, field: Field) => void;
-  onFilterChanged?: (filter: any, field: Field) => void;
-  onWidthChanged?: (width: number, field: Field) => void;
-  onMove?: (newIndex: number, field: Field) => void;
-};
+import safeMouseMove from '../utils/saveMouseMove';
 
 const hoverClassName = 'field-moving-hover';
 const movingClassName = 'field-moving';
 
-export default class GridHeader extends React.Component<GridHeaderProps, {}> {
+export default class GridHeader extends React.Component<ListViewProps, {}> {
 
   public static propTypes = {
     fieldSet: React.PropTypes.any,

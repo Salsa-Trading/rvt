@@ -1,8 +1,8 @@
 import * as React from 'react';
-import Filter from './Filter';
-import { Field, SortDirection } from './List/Field';
-import { FieldSet } from './List/FieldSet';
-import safeMouseMove from './utils/saveMouseMove';
+import Filter from '../Filter';
+import { Field, SortDirection } from '../List/Field';
+import { FieldSet } from '../List/FieldSet';
+import safeMouseMove from '../utils/saveMouseMove';
 
 export type GridHeaderCellProps = {
   field: Field;

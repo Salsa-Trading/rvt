@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Field } from './List/Field';
+import { Field } from '../List/Field';
 import { get } from 'lodash';
 
 export default class GridRow extends React.Component<{

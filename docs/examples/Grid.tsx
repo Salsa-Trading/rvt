@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { Grid, Field, FieldSet, ListState, ListStateChangeType, isDataChange, RowData } from '../../src/index';
+import { VirtualGrid, Field, FieldSet, ListState, ListStateChangeType, isDataChange, RowData } from '../../src/index';
 import { generateData } from '../../test/dataUtils';
 
 import '../../src/styles/grid.scss';
@@ -53,7 +53,7 @@ export default class GridExample extends React.Component<{
   public render() {
     const { listState } = this.state;
     return (
-      <Grid
+      <VirtualGrid
         getRow={this.getRow.bind(this)}
         rowCount={this.state.data.length}
         listState={listState}
@@ -62,7 +62,6 @@ export default class GridExample extends React.Component<{
         fieldDefaults={{sortable: true, filterable: true}}
         autoResize={true}
       >
-      
         <FieldSet header='Group 1' field='group1'>
           <Field header='Col 1' field='col1' sortable />
           <FieldSet header='Sub Group 1' field='subGroup1'>
@@ -76,7 +75,7 @@ export default class GridExample extends React.Component<{
           </FieldSet>
           <Field header='Col 5' field='col5' />
         </FieldSet>
-      </Grid>
+      </VirtualGrid>
     );
   }
 }
