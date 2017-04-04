@@ -1,5 +1,6 @@
 import * as React from 'react';
 import strEnum from '../utils/strEnum';
+import { FilterControlProps } from '../Filter';
 
 export const SortDirection = strEnum([
   'asc',
@@ -23,7 +24,7 @@ export interface FieldProps extends React.Props<FieldProps> {
   name: string;
   cell?: (data: any) => JSX.Element;
   header?: JSX.Element|string;
-  filterControl?: JSX.Element|string;
+  filterControl?: React.ComponentClass<FilterControlProps>|React.StatelessComponent<FilterControlProps>;
   width?: number|string;
   sortable?: boolean;
   filterable?: boolean;
@@ -37,7 +38,7 @@ export class Field implements FieldProps {
   public name: string;
   public cell?: (data: any) => JSX.Element;
   public header?: JSX.Element|string;
-  public filterControl?: JSX.Element|string;
+  public filterControl?: React.ComponentClass<FilterControlProps>|React.StatelessComponent<FilterControlProps>;
   public width?: number|string;
   public sortable?: boolean;
   public filterable?: boolean;

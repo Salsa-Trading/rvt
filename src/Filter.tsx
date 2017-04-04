@@ -1,6 +1,31 @@
 import * as React from 'react';
 import { Field, SortDirection } from './List/Field';
 
+export type FilterControlProps = {
+  filter: any;
+  onFilterChange: (filter: any) => void;
+};
+
+class DefaultFilter extends React.Component<FilterControlProps, {}> {
+
+  private handleFilterChanged(e: React.ChangeEvent<HTMLInputElement>) {
+    const { onFilterChange } = this.props;
+    onFilterChange(e.target.value);
+  }
+
+  public render() {
+    const { filter } = this.props;
+    return (
+      <input
+        type='search'
+        value={filter}
+        onChange={this.handleFilterChanged.bind(this)}
+        autoFocus={true}
+      />
+    );
+  }
+}
+
 export default class Filter extends React.Component<{
   field: Field
   onSortSelection?: (sortDirection: SortDirection) => void;
@@ -18,8 +43,8 @@ export default class Filter extends React.Component<{
     };
   }
 
-  private handleFilterChanged(e: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({filter: e.target.value});
+  private handleFilterChanged(filter: any) {
+    this.setState({filter});
   }
 
   private toggleFilterPane() {
@@ -46,6 +71,12 @@ export default class Filter extends React.Component<{
     const { filter } = this.state;
     const sortAscFn = () => onSortSelection(SortDirection.asc);
     const sortDescFn = () => onSortSelection(SortDirection.desc);
+
+    const filterElement = React.createElement((field.filterControl || DefaultFilter as any), {
+      filter,
+      onFilterChange: this.handleFilterChanged.bind(this)
+    });
+
     return (
       <div className='filter-pane'>
         <div>
@@ -59,12 +90,7 @@ export default class Filter extends React.Component<{
           </button>
         </div>
         <form onSubmit={this.handleOk.bind(this)}>
-          <input
-            type='search'
-            value={filter}
-            onChange={this.handleFilterChanged.bind(this)}
-            autoFocus={true}
-          />
+          {filterElement}
           <div className='form-actions'>
             <button type='reset' onClick={this.handleCancel.bind(this)}>Cancel</button>
             <button type='submit'>Ok</button>

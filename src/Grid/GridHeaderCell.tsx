@@ -94,8 +94,8 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
       onMouseDown
     } = this.props as any;
 
-    const sortSelectionHandler = d => onSortSelection ? onSortSelection(d, name) : null;
-    const filterChangedHandler = f => onFilterChanged ? onFilterChanged(f, name) : null;
+    const sortSelectionHandler = d => onSortSelection ? onSortSelection(d, field) : null;
+    const filterChangedHandler = f => onFilterChanged ? onFilterChanged(f, field) : null;
 
     const headerClassName = [
       'grid-header-cell',
