@@ -15,13 +15,13 @@ $sort-direction-color: royalblue;
 
 thead {
   tr {
-    &.column-moving th .grid-header-cell .header {
+    &.field-moving th .grid-header-cell .header {
       cursor: grabbing;
       cursor: -webkit-grabbing;
     }
 
     th {
-      &.column-moving-hover {
+      &.field-moving-hover {
         background-color: $hover-highlight-color;
       }
 

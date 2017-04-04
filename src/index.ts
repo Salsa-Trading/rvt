@@ -1,7 +1,9 @@
 export {
-  ColumnDefinition as Column,
-  ColumnGroupDefinition as ColumnGroup
-} from './List/Column';
+  FieldDefinition as Field
+} from './List/Field';
+export {
+  FieldSetDefinition as FieldSet
+} from './List/FieldSet';
 export {
   default as Grid,
   GridState,

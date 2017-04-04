@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
-import { Grid, Column } from '../src/index';
+import { Grid, Field } from '../src/index';
 import { generateRowDataForIndex } from './dataUtils';
 
 describe('<Grid />', () => {
@@ -23,8 +23,8 @@ describe('<Grid />', () => {
       });
 
       wrapper = shallow(<Grid {...props}>
-        <Column header='Col 1' field='col1' sortable />
-        <Column header='Col 2' field='col2' filterable sortDirection='desc' />
+        <Field header='Col 1' field='col1' sortable />
+        <Field header='Col 2' field='col2' filterable sortDirection='desc' />
       </Grid>);
     });
 

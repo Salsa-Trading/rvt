@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { Grid, Column, ColumnGroup, GridState, GridStateChangeType, isDataChange, RowData } from '../../src/index';
+import { Grid, Field, FieldSet, GridState, GridStateChangeType, isDataChange, RowData } from '../../src/index';
 import { generateData } from '../../test/dataUtils';
 
 import '../../src/styles/grid.scss';
@@ -59,23 +59,23 @@ export default class GridExample extends React.Component<{
         gridState={gridState}
         onGridStateChanged={this.onGridStateChanged.bind(this)}
         className='table table-bordered table-condensed'
-        columnDefaults={{sortable: true, filterable: true}}
+        fieldDefaults={{sortable: true, filterable: true}}
         autoResize={true}
       >
       
-        <ColumnGroup header='Group 1' field='group1'>
-          <Column header='Col 1' field='col1' sortable />
-          <ColumnGroup header='Sub Group 1' field='subGroup1'>
-            <Column header='Col 2' field='col2' filterable sortable sortDirection='desc' />
-            <Column header='Col 3' field='col3' cell={d => <input type='checkbox' defaultChecked={d.col3} />} />
-          </ColumnGroup>
-        </ColumnGroup>
-        <ColumnGroup header='Group 2' field='group2'>
-          <ColumnGroup header='Sub Group 2' field='subGroup2'>
-            <Column header='Col 4' field='col4' cell={(d) => d.col4.toString()} />
-          </ColumnGroup>
-          <Column header='Col 5' field='col5' />
-        </ColumnGroup>
+        <FieldSet header='Group 1' field='group1'>
+          <Field header='Col 1' field='col1' sortable />
+          <FieldSet header='Sub Group 1' field='subGroup1'>
+            <Field header='Col 2' field='col2' filterable sortable sortDirection='desc' />
+            <Field header='Col 3' field='col3' cell={d => <input type='checkbox' defaultChecked={d.col3} />} />
+          </FieldSet>
+        </FieldSet>
+        <FieldSet header='Group 2' field='group2'>
+          <FieldSet header='Sub Group 2' field='subGroup2'>
+            <Field header='Col 4' field='col4' cell={(d) => d.col4.toString()} />
+          </FieldSet>
+          <Field header='Col 5' field='col5' />
+        </FieldSet>
       </Grid>
     );
   }

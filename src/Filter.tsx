@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Column, SortDirection } from './List/Column';
+import { Field, SortDirection } from './List/Field';
 
 export default class Filter extends React.Component<{
-  column: Column
+  field: Field
   onSortSelection?: (sortDirection: SortDirection) => void;
   onFilterChanged: (filter: any) => void;
 }, {
@@ -40,8 +40,8 @@ export default class Filter extends React.Component<{
   }
 
   private renderFilterPane() {
-    const { column, onSortSelection } = this.props;
-    const { sortDirection } = column;
+    const { field, onSortSelection } = this.props;
+    const { sortDirection } = field;
 
     const { filter } = this.state;
     const sortAscFn = () => onSortSelection(SortDirection.asc);
@@ -77,10 +77,10 @@ export default class Filter extends React.Component<{
   public render() {
     const { showFilter } = this.state;
     let sortArrow;
-    if(this.props.column.sortDirection === SortDirection.asc) {
+    if(this.props.field.sortDirection === SortDirection.asc) {
       sortArrow = <span className='sort-asc-narrow' />;
     }
-    else if(this.props.column.sortDirection === SortDirection.desc) {
+    else if(this.props.field.sortDirection === SortDirection.desc) {
       sortArrow = <span className='sort-desc-narrow' />;
     }
     return (

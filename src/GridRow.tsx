@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { Column } from './List/Column';
+import { Field } from './List/Field';
 import { get } from 'lodash';
 
 export default class GridRow extends React.Component<{
-  columns: Column[];
+  fields: Field[];
   data?: any;
   rowProps?: React.HTMLProps<HTMLTableRowElement>;
 }, {}> {
 
   public static propTypes = {
-    columns: React.PropTypes.any,
+    fields: React.PropTypes.any,
     data: React.PropTypes.any,
     className: React.PropTypes.string
   };
@@ -18,22 +18,22 @@ export default class GridRow extends React.Component<{
     super(props, context);
   }
 
-  private renderTableCell(column: Column, data: any) {
-    if(column.cell) {
-      return column.cell(data);
+  private renderTableCell(field: Field, data: any) {
+    if(field.cell) {
+      return field.cell(data);
     }
     else {
-      return get(data, column.field);
+      return get(data, field.field);
     }
   }
 
   public render() {
-    const { data, columns, rowProps } = this.props;
+    const { data, fields, rowProps } = this.props;
     return (
       <tr {...rowProps} >
-        {(columns || []).map((column) => (
-          <td key={column.field} style={{width: column.width}}>
-            {this.renderTableCell(column, data)}
+        {(fields || []).map((field) => (
+          <td key={field.field} style={{width: field.width}}>
+            {this.renderTableCell(field, data)}
           </td>
         ))}
       </tr>

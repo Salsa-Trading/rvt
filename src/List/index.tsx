@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { Column, SortDirection, ColumnDefaults, ColumnGroup, ColumnDisplay, RootColumnGroup } from './Column';
+import { FieldSet, RootFieldSet } from './FieldSet';
+import { Field, SortDirection, FieldDefaults, FieldDisplay } from './Field';
 import GridRow from '../GridRow';
 import GridHeader, { GridHeaderType } from '../GridHeader';
 import VirtualTable, { VirtualTableBaseProps } from '../VirtualTable';
@@ -12,7 +13,7 @@ export type FilterState = {[field: string]: any };
 export type GridState = {
   sorts?: SortState;
   filters?: FilterState;
-  fields?: ColumnDisplay;
+  fields?: FieldDisplay;
 };
 
 export const GridStateChangeType = strEnum([
@@ -35,12 +36,12 @@ export type GridProps = VirtualTableBaseProps & {
   getRow: (rowIndex: number) => RowData;
   onGridStateChanged: (newGridState: GridState, changeType: GridStateChangeType, field?: string) => void;
   gridState?: GridState;
-  columnDefaults?: ColumnDefaults;
+  fieldDefaults?: FieldDefaults;
   header?: GridHeaderType;
 };
 
 export default class Grid extends React.Component<GridProps, {
-  columnGroup: ColumnGroup
+  fieldSet: FieldSet
 }> {
 
   public static propTypes = {
@@ -64,7 +65,7 @@ export default class Grid extends React.Component<GridProps, {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      columnGroup: this.createColumns(props)
+      fieldSet: this.createFields(props)
     };
   }
 
@@ -73,25 +74,24 @@ export default class Grid extends React.Component<GridProps, {
   }
 
   public componentWillReceiveProps(nextProps: React.Props<GridProps> & GridProps) {
-    if(this.props.children !== nextProps.children || this.props.gridState !== nextProps.gridState) {
+    if(this.props.children !== nextProps.children || this.props.gridState.fields !== nextProps.gridState.fields) {
       this.setState({
-        columnGroup: this.createColumns(nextProps)
+        fieldSet: this.createFields(nextProps)
       });
     }
   }
 
-  private createColumns(props: React.Props<GridProps> & GridProps) {
-    const { columnDefaults, children } = props;
+  private createFields(props: React.Props<GridProps> & GridProps) {
+    const { fieldDefaults, children } = props;
     const { sorts, filters, fields } = Grid.getGridState(props.gridState);
 
-    const columnGroup = new ColumnGroup({field: RootColumnGroup, children}, columnDefaults, fields);
-    const columns =  columnGroup.getColumns();
-    columns.forEach(c => {
+    const fieldSet = new FieldSet({field: RootFieldSet, children}, fieldDefaults, fields);
+    fieldSet.getFields().forEach(c => {
       const sortDirection = _.find(sorts, s => s.field === c.field);
       c.sortDirection = sortDirection ? sortDirection.direction : null;
       c.filter = _.find(filters, s => s.field === c.field);
     });
-    return columnGroup;
+    return fieldSet;
   }
 
   private gridStateHelper() {
@@ -126,58 +126,58 @@ export default class Grid extends React.Component<GridProps, {
     return { filters, sorts, onGridStateChanged: onGridState };
   }
 
-  private onSortSelection(direction: SortDirection, column: Column) {
+  private onSortSelection(direction: SortDirection, field: Field) {
     const { onGridStateChanged, sorts } = this.gridStateHelper();
 
-    _.remove(sorts, s => s.field === column.field);
-    sorts.unshift({field: column.field, direction});
-    onGridStateChanged(GridStateChangeType.sorts, sorts, column.field);
+    _.remove(sorts, s => s.field === field.field);
+    sorts.unshift({field: field.field, direction});
+    onGridStateChanged(GridStateChangeType.sorts, sorts, field.field);
   }
 
-  private onFilterChanged(filter: any, column: Column) {
+  private onFilterChanged(filter: any, field: Field) {
     const { onGridStateChanged, filters } = this.gridStateHelper();
 
     if(filter === null || filter === undefined) {
-      delete filters[column.field];
+      delete filters[field.field];
     }
     else if((typeof filter === 'string' || filter instanceof String) && filter.length === 0) {
-      delete filters[column.field];
+      delete filters[field.field];
     }
     else {
-      filters[column.field] = filter;
+      filters[field.field] = filter;
     }
 
-    onGridStateChanged(GridStateChangeType.filters, filters, column.field);
+    onGridStateChanged(GridStateChangeType.filters, filters, field.field);
   }
 
-  private onWidthChanged(width: number, column: Column) {
+  private onWidthChanged(width: number, field: Field) {
     const { onGridStateChanged } = this.gridStateHelper();
-    const { columnGroup } = this.state;
-    column.resize(width);
-    onGridStateChanged(GridStateChangeType.fields, columnGroup.getColumnDisplay(), column.field);
+    const { fieldSet } = this.state;
+    field.resize(width);
+    onGridStateChanged(GridStateChangeType.fields, fieldSet.getFieldDisplay(), field.field);
   }
 
-  private onMove(newIndex: number, column: Column) {
+  private onMove(newIndex: number, field: Field) {
     const { onGridStateChanged } = this.gridStateHelper();
-    const { columnGroup } = this.state;
-    columnGroup.moveColumn(newIndex, column);
-    onGridStateChanged(GridStateChangeType.fields, columnGroup.getColumnDisplay(), column.field);
+    const { fieldSet } = this.state;
+    fieldSet.moveField(newIndex, field);
+    onGridStateChanged(GridStateChangeType.fields, fieldSet.getFieldDisplay(), field.field);
   }
 
   public render() {
-    const { columnGroup } = this.state;
+    const { fieldSet } = this.state;
     const headerClass = this.props.header || GridHeader;
 
     const header = React.createElement(headerClass as any, {
-      columnGroup,
+      fieldSet,
       onSortSelection: this.onSortSelection.bind(this),
       onFilterChanged: this.onFilterChanged.bind(this),
       onWidthChanged: this.onWidthChanged.bind(this),
       onMove: this.onMove.bind(this)
     });
 
-    const columns = columnGroup.getColumns();
-    const row = <GridRow columns={columns} />;
+    const fields = fieldSet.getFields();
+    const row = <GridRow fields={fields} />;
     const refFn = r => this.virtualTable = r;
 
     return (
