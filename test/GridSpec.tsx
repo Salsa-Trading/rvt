@@ -14,12 +14,12 @@ describe('<Grid />', () => {
 
   describe('root element', () => {
 
-    let onGridStateChanged;
+    let onListStateChanged;
 
     beforeEach(() => {
       const props = Object.assign({}, defaultProps, {
-        onGridStateChanged,
-        gridState: {}
+        onListStateChanged,
+        listState: {}
       });
 
       wrapper = shallow(<Grid {...props}>

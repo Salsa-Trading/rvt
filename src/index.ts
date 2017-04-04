@@ -6,8 +6,8 @@ export {
 } from './List/FieldSet';
 export {
   default as Grid,
-  GridState,
-  GridStateChangeType,
+  ListState,
+  ListStateChangeType,
   isDataChange,
   RowData
 } from './List';

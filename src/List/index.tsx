@@ -10,21 +10,21 @@ import strEnum from '../utils/strEnum';
 export type SortState = {field: string, direction: SortDirection}[];
 export type FilterState = {[field: string]: any };
 
-export type GridState = {
+export type ListState = {
   sorts?: SortState;
   filters?: FilterState;
   fields?: FieldDisplay;
 };
 
-export const GridStateChangeType = strEnum([
+export const ListStateChangeType = strEnum([
   'sorts',
   'filters',
   'fields'
 ]);
-export type GridStateChangeType = keyof typeof GridStateChangeType;
+export type ListStateChangeType = keyof typeof ListStateChangeType;
 
-export function isDataChange(changeType: GridStateChangeType) {
-  return changeType === GridStateChangeType.sorts || changeType === GridStateChangeType.filters;
+export function isDataChange(changeType: ListStateChangeType) {
+  return changeType === ListStateChangeType.sorts || changeType === ListStateChangeType.filters;
 }
 
 export type RowData = {
@@ -32,34 +32,34 @@ export type RowData = {
   rowProps?: React.HTMLProps<HTMLTableRowElement>;
 };
 
-export type GridProps = VirtualTableBaseProps & {
+export type ListProps = VirtualTableBaseProps & {
   getRow: (rowIndex: number) => RowData;
-  onGridStateChanged: (newGridState: GridState, changeType: GridStateChangeType, field?: string) => void;
-  gridState?: GridState;
+  onListStateChanged: (newListState: ListState, changeType: ListStateChangeType, field?: string) => void;
+  listState?: ListState;
   fieldDefaults?: FieldDefaults;
   header?: GridHeaderType;
 };
 
-export default class Grid extends React.Component<GridProps, {
+export default class List extends React.Component<ListProps, {
   fieldSet: FieldSet
 }> {
 
   public static propTypes = {
-    onGridStateChanged: React.PropTypes.func.isRequired,
-    gridState: React.PropTypes.any
+    onListStateChanged: React.PropTypes.func.isRequired,
+    listState: React.PropTypes.any
   };
 
   public static defaultProps = {
-    gridState: {
+    listState: {
       sorts: [],
       filters: {}
-    } as GridState
+    } as ListState
   };
 
   private virtualTable: VirtualTable;
 
-  public static getGridState(gridState: GridState):  GridState {
-    return {...Grid.defaultProps, ...gridState};
+  public static getListState(listState: ListState):  ListState {
+    return {...List.defaultProps, ...listState};
   }
 
   constructor(props, context) {
@@ -73,17 +73,17 @@ export default class Grid extends React.Component<GridProps, {
     this.virtualTable.calculateHeights();
   }
 
-  public componentWillReceiveProps(nextProps: React.Props<GridProps> & GridProps) {
-    if(this.props.children !== nextProps.children || this.props.gridState.fields !== nextProps.gridState.fields) {
+  public componentWillReceiveProps(nextProps: React.Props<ListProps> & ListProps) {
+    if(this.props.children !== nextProps.children || this.props.listState.fields !== nextProps.listState.fields) {
       this.setState({
         fieldSet: this.createFields(nextProps)
       });
     }
   }
 
-  private createFields(props: React.Props<GridProps> & GridProps) {
+  private createFields(props: React.Props<ListProps> & ListProps) {
     const { fieldDefaults, children } = props;
-    const { sorts, filters, fields } = Grid.getGridState(props.gridState);
+    const { sorts, filters, fields } = List.getListState(props.listState);
 
     const fieldSet = new FieldSet({field: RootFieldSet, children}, fieldDefaults, fields);
     fieldSet.getFields().forEach(c => {
@@ -94,48 +94,48 @@ export default class Grid extends React.Component<GridProps, {
     return fieldSet;
   }
 
-  private gridStateHelper() {
-    const { onGridStateChanged } = this.props;
-    const gridState = Grid.getGridState(this.props.gridState);
-    const newGridState = {
-      sorts: gridState.sorts,
-      filters: gridState.filters,
-      fields: gridState.fields
+  private listStateHelper() {
+    const { onListStateChanged } = this.props;
+    const listState = List.getListState(this.props.listState);
+    const newListState = {
+      sorts: listState.sorts,
+      filters: listState.filters,
+      fields: listState.fields
     };
 
-    const onGridState = (gridStateChange: GridStateChangeType, change: any, field: string) => {
-      if(!onGridStateChanged) {
+    const onListState = (listStateChange: ListStateChangeType, change: any, field: string) => {
+      if(!onListStateChanged) {
         return;
       }
 
-      if(gridStateChange === GridStateChangeType.filters) {
-        newGridState.filters = change;
+      if(listStateChange === ListStateChangeType.filters) {
+        newListState.filters = change;
       }
-      else if(gridStateChange === GridStateChangeType.sorts) {
-        newGridState.sorts = change;
+      else if(listStateChange === ListStateChangeType.sorts) {
+        newListState.sorts = change;
       }
-      else if(gridStateChange === GridStateChangeType.fields) {
-        newGridState.fields = change;
+      else if(listStateChange === ListStateChangeType.fields) {
+        newListState.fields = change;
       }
 
-      onGridStateChanged(newGridState, gridStateChange, field);
+      onListStateChanged(newListState, listStateChange, field);
     };
 
-    const filters = _.cloneDeep(gridState.filters);
-    const sorts = _.cloneDeep(gridState.sorts);
-    return { filters, sorts, onGridStateChanged: onGridState };
+    const filters = _.cloneDeep(listState.filters);
+    const sorts = _.cloneDeep(listState.sorts);
+    return { filters, sorts, onListStateChanged: onListState };
   }
 
   private onSortSelection(direction: SortDirection, field: Field) {
-    const { onGridStateChanged, sorts } = this.gridStateHelper();
+    const { onListStateChanged, sorts } = this.listStateHelper();
 
     _.remove(sorts, s => s.field === field.field);
     sorts.unshift({field: field.field, direction});
-    onGridStateChanged(GridStateChangeType.sorts, sorts, field.field);
+    onListStateChanged(ListStateChangeType.sorts, sorts, field.field);
   }
 
   private onFilterChanged(filter: any, field: Field) {
-    const { onGridStateChanged, filters } = this.gridStateHelper();
+    const { onListStateChanged, filters } = this.listStateHelper();
 
     if(filter === null || filter === undefined) {
       delete filters[field.field];
@@ -147,21 +147,21 @@ export default class Grid extends React.Component<GridProps, {
       filters[field.field] = filter;
     }
 
-    onGridStateChanged(GridStateChangeType.filters, filters, field.field);
+    onListStateChanged(ListStateChangeType.filters, filters, field.field);
   }
 
   private onWidthChanged(width: number, field: Field) {
-    const { onGridStateChanged } = this.gridStateHelper();
+    const { onListStateChanged } = this.listStateHelper();
     const { fieldSet } = this.state;
     field.resize(width);
-    onGridStateChanged(GridStateChangeType.fields, fieldSet.getFieldDisplay(), field.field);
+    onListStateChanged(ListStateChangeType.fields, fieldSet.getFieldDisplay(), field.field);
   }
 
   private onMove(newIndex: number, field: Field) {
-    const { onGridStateChanged } = this.gridStateHelper();
+    const { onListStateChanged } = this.listStateHelper();
     const { fieldSet } = this.state;
     fieldSet.moveField(newIndex, field);
-    onGridStateChanged(GridStateChangeType.fields, fieldSet.getFieldDisplay(), field.field);
+    onListStateChanged(ListStateChangeType.fields, fieldSet.getFieldDisplay(), field.field);
   }
 
   public render() {

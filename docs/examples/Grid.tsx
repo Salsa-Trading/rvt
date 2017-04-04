@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { Grid, Field, FieldSet, GridState, GridStateChangeType, isDataChange, RowData } from '../../src/index';
+import { Grid, Field, FieldSet, ListState, ListStateChangeType, isDataChange, RowData } from '../../src/index';
 import { generateData } from '../../test/dataUtils';
 
 import '../../src/styles/grid.scss';
@@ -9,7 +9,7 @@ export default class GridExample extends React.Component<{
 }, {
   originalData?: any[];
   data?: any[]
-  gridState?: GridState
+  listState?: ListState
 }> {
 
   constructor(props, context) {
@@ -30,34 +30,34 @@ export default class GridExample extends React.Component<{
     };
   };
 
-  private onGridStateChanged(gridState: GridState, changeType: GridStateChangeType) {
+  private onListStateChanged(listState: ListState, changeType: ListStateChangeType) {
     if(!isDataChange(changeType)) {
-      return this.setState({gridState});
+      return this.setState({listState});
     }
 
     let { data } = this.state;
-    if(changeType === GridStateChangeType.filters) {
+    if(changeType === ListStateChangeType.filters) {
       data = this.state.originalData;
-      for(let field of Object.keys(gridState.filters)) {
-        data = data.filter(d => (_.get(d, field).toString() || '').indexOf(gridState.filters[field]) >= 0);
+      for(let field of Object.keys(listState.filters)) {
+        data = data.filter(d => (_.get(d, field).toString() || '').indexOf(listState.filters[field]) >= 0);
       }
     }
 
-    if(gridState.sorts && gridState.sorts.length > 0) {
-      data = _.orderBy(data, [gridState.sorts[0].field], [gridState.sorts[0].direction]);
+    if(listState.sorts && listState.sorts.length > 0) {
+      data = _.orderBy(data, [listState.sorts[0].field], [listState.sorts[0].direction]);
     }
 
-    this.setState({gridState, data});
+    this.setState({listState, data});
   }
 
   public render() {
-    const { gridState } = this.state;
+    const { listState } = this.state;
     return (
       <Grid
         getRow={this.getRow.bind(this)}
         rowCount={this.state.data.length}
-        gridState={gridState}
-        onGridStateChanged={this.onGridStateChanged.bind(this)}
+        listState={listState}
+        onListStateChanged={this.onListStateChanged.bind(this)}
         className='table table-bordered table-condensed'
         fieldDefaults={{sortable: true, filterable: true}}
         autoResize={true}
