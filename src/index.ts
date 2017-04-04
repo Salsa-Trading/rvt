@@ -1,9 +1,11 @@
 export {
-  FieldDefinition as Field
+  FieldDefinition as Field,
+  FieldProps
 } from './List/Field';
 
 export {
-  FieldSetDefinition as FieldSet
+  FieldSetDefinition as FieldSet,
+  FieldSetProps
 } from './List/FieldSet';
 
 export {

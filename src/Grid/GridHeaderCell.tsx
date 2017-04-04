@@ -77,9 +77,10 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
   public render() {
     const {
       fieldSet,
+      field,
       field: {
+        name,
         header,
-        field,
         width,
         sortDirection,
         sortable,
@@ -93,19 +94,19 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
       onMouseDown
     } = this.props as any;
 
-    const sortSelectionHandler = d => onSortSelection ? onSortSelection(d, field) : null;
-    const filterChangedHandler = f => onFilterChanged ? onFilterChanged(f, field) : null;
+    const sortSelectionHandler = d => onSortSelection ? onSortSelection(d, name) : null;
+    const filterChangedHandler = f => onFilterChanged ? onFilterChanged(f, name) : null;
 
     const headerClassName = [
       'grid-header-cell',
       sortable ? 'sortable' : null,
-      sortable && sortDirection ? `sorted sorted-${field.sortDirection}` : null,
+      sortable && sortDirection ? `sorted sorted-${name.sortDirection}` : null,
       filterable ? 'filterable' : null,
       filterable && filter ? 'filtered' : null
     ].join(' ');
     let sortFilterControl;
     if(filterable) {
-      sortFilterControl = <Filter field={this.props.field} onSortSelection={sortSelectionHandler} onFilterChanged={filterChangedHandler} />;
+      sortFilterControl = <Filter field={field} onSortSelection={sortSelectionHandler} onFilterChanged={filterChangedHandler} />;
     }
     else if(sortable) {
       sortFilterControl = (
@@ -115,13 +116,13 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
         </div>
       );
     }
-    const dataSet = {'data-group': fieldSet.field};
+    const dataSet = {'data-group': fieldSet.name};
 
     return (
-      <th key={field} style={{width, padding: 0}} rowSpan={rowSpan} colSpan={colSpan} {...dataSet}>
+      <th key={name} style={{width, padding: 0}} rowSpan={rowSpan} colSpan={colSpan} {...dataSet}>
         <div className={`${headerClassName}`}>
           <div className='header' onMouseDown={onMouseDown}>
-            {header}
+            {header || name}
           </div>
           <div className='sort-filter'>
             {sortFilterControl}

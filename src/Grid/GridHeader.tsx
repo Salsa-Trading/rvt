@@ -45,7 +45,7 @@ export default class GridHeader extends React.Component<ListViewProps, {}> {
     const th = target.closest('th') as HTMLTableHeaderCellElement;
     const group = th.dataset['group'];
 
-    const parentGroup = fieldSet.findFieldSetByField(group);
+    const parentGroup = fieldSet.findFieldSetByName(group);
     const field = parentGroup.getFieldIndex(this.findFieldIndex(tr, th, group));
 
     tr.classList.add(movingClassName);
@@ -84,9 +84,9 @@ export default class GridHeader extends React.Component<ListViewProps, {}> {
       rowSpan = rowSpan - field.getCount();
     }
     return <GridHeaderCell
-      key={field.field}
+      key={field.name}
       field={field}
-      fieldSet={fieldSet.findFieldSet(field)}
+      fieldSet={fieldSet.findParent(field)}
       colSpan={colSpan}
       rowSpan={rowSpan}
       onSortSelection={onSortSelection}

@@ -1,13 +1,13 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { CustomGrid, Field, FieldSet, ListState, ListStateChangeType, isDataChange, RowData } from '../../src/index';
+import { CustomGrid, Field, FieldSet, FieldProps, ListState, ListStateChangeType, isDataChange, RowData } from '../../src/index';
 import { generateData } from '../../test/dataUtils';
 
 import '../../src/styles/grid.scss';
 
 class Body extends React.Component<{
-  data: any[]
-  fields?: any;
+  data: any[];
+  fields?: FieldProps[];
 }, {}> {
 
   public render() {
@@ -15,7 +15,7 @@ class Body extends React.Component<{
     return <tbody>
       {data.map((d, i) => <tr key={i}>
         {fields.map((f, c) => <td key={c}>
-          {_.get(d, f.field).toString()}
+          {_.get(d, f.name).toString()}
         </td>
         )}
         </tr>
@@ -64,7 +64,7 @@ export default class VirtualGridExample extends React.Component<{
     }
 
     if(listState.sorts && listState.sorts.length > 0) {
-      data = _.orderBy(data, [listState.sorts[0].field], [listState.sorts[0].direction]);
+      data = _.orderBy(data, [listState.sorts[0].fieldName], [listState.sorts[0].direction]);
     }
 
     this.setState({listState, data});
@@ -81,18 +81,18 @@ export default class VirtualGridExample extends React.Component<{
         data={data}
         body={Body}
       >
-        <FieldSet header='Group 1' field='group1'>
-          <Field header='Col 1' field='col1' sortable />
-          <FieldSet header='Sub Group 1' field='subGroup1'>
-            <Field header='Col 2' field='col2' filterable sortable sortDirection='desc' />
-            <Field header='Col 3' field='col3' cell={d => <input type='checkbox' defaultChecked={d.col3} />} />
+        <FieldSet header='Group 1' name='group1'>
+          <Field header='Col 1' name='col1' sortable />
+          <FieldSet header='Sub Group 1' name='subGroup1'>
+            <Field header='Col 2' name='col2' filterable sortable sortDirection='desc' />
+            <Field header='Col 3' name='col3' />
           </FieldSet>
         </FieldSet>
-        <FieldSet header='Group 2' field='group2'>
-          <FieldSet header='Sub Group 2' field='subGroup2'>
-            <Field header='Col 4' field='col4' cell={(d) => d.col4.toString()} />
+        <FieldSet header='Group 2' name='group2'>
+          <FieldSet header='Sub Group 2' name='subGroup2'>
+            <Field header='Col 4' name='col4' />
           </FieldSet>
-          <Field header='Col 5' field='col5' />
+          <Field header='Col 5' name='col5' />
         </FieldSet>
       </CustomGrid>
     );

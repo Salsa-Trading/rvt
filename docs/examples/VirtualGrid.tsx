@@ -44,7 +44,7 @@ export default class VirtualGridExample extends React.Component<{
     }
 
     if(listState.sorts && listState.sorts.length > 0) {
-      data = _.orderBy(data, [listState.sorts[0].field], [listState.sorts[0].direction]);
+      data = _.orderBy(data, [listState.sorts[0].fieldName], [listState.sorts[0].direction]);
     }
 
     this.setState({listState, data});
@@ -62,18 +62,18 @@ export default class VirtualGridExample extends React.Component<{
         fieldDefaults={{sortable: true, filterable: true}}
         autoResize={true}
       >
-        <FieldSet header='Group 1' field='group1'>
-          <Field header='Col 1' field='col1' sortable />
-          <FieldSet header='Sub Group 1' field='subGroup1'>
-            <Field header='Col 2' field='col2' filterable sortable sortDirection='desc' />
-            <Field header='Col 3' field='col3' cell={d => <input type='checkbox' defaultChecked={d.col3} />} />
+        <FieldSet header='Group 1' name='group1'>
+          <Field header='Col 1' name='col1' />
+          <FieldSet header='Sub Group 1' name='subGroup1'>
+            <Field header='Col 2' name='col2' sortDirection='desc' />
+            <Field header='Col 3' name='col3' cell={d => <input type='checkbox' defaultChecked={d.col3} />} />
           </FieldSet>
         </FieldSet>
-        <FieldSet header='Group 2' field='group2'>
-          <FieldSet header='Sub Group 2' field='subGroup2'>
-            <Field header='Col 4' field='col4' cell={(d) => d.col4.toString()} />
+        <FieldSet header='Group 2' name='group2'>
+          <FieldSet header='Sub Group 2' name='subGroup2'>
+            <Field header='Col 4' name='col4' cell={(d) => d.col4.toString()} />
           </FieldSet>
-          <Field header='Col 5' field='col5' />
+          <Field header='Col 5' name='col5' />
         </FieldSet>
       </VirtualGrid>
     );

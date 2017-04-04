@@ -4,21 +4,21 @@ import { Field, FieldProps, FieldDefaults, FieldDisplay } from './Field';
 export const RootFieldSet = '_root_';
 
 export interface FieldSetProps extends React.Props<FieldSetProps> {
-  field?: string;
+  name?: string;
   header?: JSX.Element|string;
   hidden?: boolean;
 }
 
 export class FieldSet {
 
-  public field: string;
+  public name: string;
   public header: JSX.Element|string;
   public hidden?: boolean;
   public width?: number|string;
   public children: (Field|FieldSet)[];
 
   constructor(props: FieldProps, fieldDefaults: FieldDefaults, fields: FieldDisplay) {
-    this.field = props.field;
+    this.name = props.name;
     this.header = props.header;
     this.hidden = (fields && fields.hidden) || props.hidden;
     this.width = (fields && fields.width) || props.width;
@@ -26,7 +26,7 @@ export class FieldSet {
     const children = React.Children.map(props.children, (c: any) => {
       let colDisplay = null;
       if(fields) {
-        colDisplay = fields.children.find(cd => cd.field === c.props.field);
+        colDisplay = fields.children.find(cd => cd.name === c.props.name);
       }
       if(c.type.name === 'FieldSetDefinition') {
         return new FieldSet(c.props, fieldDefaults, colDisplay);
@@ -37,12 +37,12 @@ export class FieldSet {
     });
     if(!fields || !fields.children || fields.children.length === 0) {
       fields = {
-        field: this.field,
+        name: this.name,
         hidden: false,
-        children: children.map(c => ({field: c.field, hidden: false}))
+        children: children.map(c => ({name: c.name, hidden: false}))
       };
     }
-    this.children = fields.children.map(cd => children.find(c => cd.field === c.field));
+    this.children = fields.children.map(cd => children.find(c => cd.name === c.name));
   }
 
   public getFields(): Field[] {
@@ -75,16 +75,16 @@ export class FieldSet {
     return false;
   }
 
-  public findFieldSetByField(field: string) {
+  public findFieldSetByName(field: string) {
     if(field === RootFieldSet) {
       return this;
     }
     for(let child of this.children) {
       if(child instanceof FieldSet) {
-        if(child.field === field) {
+        if(child.name === field) {
           return child;
         }
-        let found = child.findFieldSetByField(field);
+        let found = child.findFieldSetByName(field);
         if(found) {
           return found;
         }
@@ -93,13 +93,13 @@ export class FieldSet {
     return null;
   }
 
-  public findFieldSet(field: Field|FieldSet) {
+  public findParent(field: Field|FieldSet) {
     if(this.findFieldIndex(field) >= 0) {
       return this;
     }
     for(let child of this.children) {
       if(child instanceof FieldSet) {
-        let found = child.findFieldSet(field);
+        let found = child.findParent(field);
         if(found) {
           return found;
         }
@@ -118,7 +118,7 @@ export class FieldSet {
 
   public getFieldDisplay(): FieldDisplay {
     return {
-      field: this.field,
+      name: this.name,
       width: this.width,
       hidden: this.hidden,
       children: this.children.map(c => c.getFieldDisplay())

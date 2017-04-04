@@ -12,13 +12,13 @@ describe('<FieldSet />', () => {
     beforeEach(() => {
 
       let defs = (
-        <FieldSetDefinition field='_root_'>
-          <FieldSetDefinition header='Group 1' field='group 1'>
-            <FieldDefinition header='Col 1' field='col1' />
-            <FieldDefinition header='Col 2' field='col2' />
+        <FieldSetDefinition name='_root_'>
+          <FieldSetDefinition header='Group 1' name='group 1'>
+            <FieldDefinition header='Col 1' name='col1' />
+            <FieldDefinition header='Col 2' name='col2' />
           </FieldSetDefinition>
-          <FieldDefinition header='Col 1' field='col1' />
-          <FieldDefinition header='Col 2' field='col2' />
+          <FieldDefinition header='Col 1' name='col1' />
+          <FieldDefinition header='Col 2' name='col2' />
         </FieldSetDefinition>
       );
 

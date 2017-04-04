@@ -23,7 +23,7 @@ export default class GridRow extends React.Component<{
       return field.cell(data);
     }
     else {
-      return get(data, field.field);
+      return get(data, field.name);
     }
   }
 
@@ -32,7 +32,7 @@ export default class GridRow extends React.Component<{
     return (
       <tr {...rowProps} >
         {(fields || []).map((field) => (
-          <td key={field.field} style={{width: field.width}}>
+          <td key={field.name} style={{width: field.width}}>
             {this.renderTableCell(field, data)}
           </td>
         ))}

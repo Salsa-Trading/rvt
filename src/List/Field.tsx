@@ -13,14 +13,14 @@ export type FieldDefaults = {
 };
 
 export interface FieldDisplay {
-  field: string;
+  name: string;
   width?: number|string;
   hidden?: boolean;
   children?: FieldDisplay[];
 }
 
 export interface FieldProps extends React.Props<FieldProps> {
-  field: string;
+  name: string;
   cell?: (data: any) => JSX.Element;
   header?: JSX.Element|string;
   filterControl?: JSX.Element|string;
@@ -34,7 +34,7 @@ export interface FieldProps extends React.Props<FieldProps> {
 
 export class Field implements FieldProps {
 
-  public field: string;
+  public name: string;
   public cell?: (data: any) => JSX.Element;
   public header?: JSX.Element|string;
   public filterControl?: JSX.Element|string;
@@ -58,7 +58,7 @@ export class Field implements FieldProps {
 
   public getFieldDisplay(): FieldDisplay {
     return {
-      field: this.field,
+      name: this.name,
       width: this.width,
       hidden: this.hidden
     };
@@ -77,7 +77,7 @@ export class Field implements FieldProps {
 export class FieldDefinition extends React.Component<FieldProps, {}> {
 
   public static propTypes = {
-    field: React.PropTypes.string,
+    name: React.PropTypes.string,
     header: React.PropTypes.any,
     cell: React.PropTypes.any,
     width: React.PropTypes.oneOfType([
@@ -89,11 +89,6 @@ export class FieldDefinition extends React.Component<FieldProps, {}> {
     sortDirection: React.PropTypes.string,
     filter: React.PropTypes.any,
     hidden: React.PropTypes.bool
-  };
-
-  public static defaultProps = {
-    sortable: false,
-    filterable: false
   };
 
   constructor(props, context) {
