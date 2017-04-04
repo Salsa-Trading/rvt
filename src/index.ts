@@ -19,5 +19,9 @@ export {
 } from './Grid/VirtualGrid';
 
 export {
+  default as CustomGrid
+} from './Grid/CustomGrid';
+
+export {
   default as VirtualTable
 } from './VirtualTable';

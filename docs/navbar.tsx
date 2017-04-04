@@ -21,6 +21,7 @@ export default class NavBar extends React.Component<{
               <MenuItem href='/examples/grid'>Grid</MenuItem>
               <MenuItem href='/examples/style'>Style</MenuItem>
               <MenuItem href='/examples/virtualTable'>Virtual Table</MenuItem>
+              <MenuItem href='/examples/customGrid'>Custom Grid</MenuItem>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
