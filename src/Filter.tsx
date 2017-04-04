@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Column, SortDirection } from './Column';
+import { Column, SortDirection } from './List/Column';
 
 export default class Filter extends React.Component<{
   column: Column

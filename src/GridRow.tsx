@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Column } from './Column';
+import { Column } from './List/Column';
 import { get } from 'lodash';
 
 export default class GridRow extends React.Component<{

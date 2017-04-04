@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Column, SortDirection, ColumnGroup } from './Column';
+import { Column, SortDirection, ColumnGroup } from './List/Column';
 import GridHeaderCell from './GridHeaderCell';
 import safeMouseMove from './utils/saveMouseMove';
 

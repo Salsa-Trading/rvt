@@ -1,23 +1,24 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import { Column, SortDirection, ColumnDefaults, ColumnGroup, ColumnDisplay, RootColumnGroup } from './Column';
-import GridRow from './GridRow';
-import GridHeader, { GridHeaderType } from './GridHeader';
-import VirtualTable, { VirtualTableBaseProps } from './VirtualTable';
-import strEnum from './utils/strEnum';
+import GridRow from '../GridRow';
+import GridHeader, { GridHeaderType } from '../GridHeader';
+import VirtualTable, { VirtualTableBaseProps } from '../VirtualTable';
+import strEnum from '../utils/strEnum';
 
 export type SortState = {field: string, direction: SortDirection}[];
 export type FilterState = {[field: string]: any };
+
 export type GridState = {
   sorts?: SortState;
   filters?: FilterState;
-  columnDisplay?: ColumnDisplay;
+  fields?: ColumnDisplay;
 };
 
 export const GridStateChangeType = strEnum([
   'sorts',
   'filters',
-  'columnDisplay'
+  'fields'
 ]);
 export type GridStateChangeType = keyof typeof GridStateChangeType;
 
@@ -37,7 +38,6 @@ export type GridProps = VirtualTableBaseProps & {
   columnDefaults?: ColumnDefaults;
   header?: GridHeaderType;
 };
-
 
 export default class Grid extends React.Component<GridProps, {
   columnGroup: ColumnGroup
@@ -82,9 +82,9 @@ export default class Grid extends React.Component<GridProps, {
 
   private createColumns(props: React.Props<GridProps> & GridProps) {
     const { columnDefaults, children } = props;
-    const { sorts, filters, columnDisplay } = Grid.getGridState(props.gridState);
+    const { sorts, filters, fields } = Grid.getGridState(props.gridState);
 
-    const columnGroup = new ColumnGroup({field: RootColumnGroup, children}, columnDefaults, columnDisplay);
+    const columnGroup = new ColumnGroup({field: RootColumnGroup, children}, columnDefaults, fields);
     const columns =  columnGroup.getColumns();
     columns.forEach(c => {
       const sortDirection = _.find(sorts, s => s.field === c.field);
@@ -100,7 +100,7 @@ export default class Grid extends React.Component<GridProps, {
     const newGridState = {
       sorts: gridState.sorts,
       filters: gridState.filters,
-      columnDisplay: gridState.columnDisplay
+      fields: gridState.fields
     };
 
     const onGridState = (gridStateChange: GridStateChangeType, change: any, field: string) => {
@@ -114,8 +114,8 @@ export default class Grid extends React.Component<GridProps, {
       else if(gridStateChange === GridStateChangeType.sorts) {
         newGridState.sorts = change;
       }
-      else if(gridStateChange === GridStateChangeType.columnDisplay) {
-        newGridState.columnDisplay = change;
+      else if(gridStateChange === GridStateChangeType.fields) {
+        newGridState.fields = change;
       }
 
       onGridStateChanged(newGridState, gridStateChange, field);
@@ -154,14 +154,14 @@ export default class Grid extends React.Component<GridProps, {
     const { onGridStateChanged } = this.gridStateHelper();
     const { columnGroup } = this.state;
     column.resize(width);
-    onGridStateChanged(GridStateChangeType.columnDisplay, columnGroup.getColumnDisplay(), column.field);
+    onGridStateChanged(GridStateChangeType.fields, columnGroup.getColumnDisplay(), column.field);
   }
 
   private onMove(newIndex: number, column: Column) {
     const { onGridStateChanged } = this.gridStateHelper();
     const { columnGroup } = this.state;
     columnGroup.moveColumn(newIndex, column);
-    onGridStateChanged(GridStateChangeType.columnDisplay, columnGroup.getColumnDisplay(), column.field);
+    onGridStateChanged(GridStateChangeType.fields, columnGroup.getColumnDisplay(), column.field);
   }
 
   public render() {
@@ -190,3 +190,4 @@ export default class Grid extends React.Component<GridProps, {
     );
   }
 }
+

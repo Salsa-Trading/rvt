@@ -1,14 +1,14 @@
 export {
   ColumnDefinition as Column,
   ColumnGroupDefinition as ColumnGroup
-} from './Column';
+} from './List/Column';
 export {
   default as Grid,
   GridState,
   GridStateChangeType,
   isDataChange,
   RowData
-} from './Grid';
+} from './List';
 export {
   default as VirtualTable
 } from './VirtualTable';

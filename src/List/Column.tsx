@@ -1,5 +1,5 @@
 import * as React from 'react';
-import strEnum from './utils/strEnum';
+import strEnum from '../utils/strEnum';
 
 export const SortDirection = strEnum([
   'asc',
@@ -121,16 +121,16 @@ export class ColumnGroup {
   public width?: number|string;
   public children: (Column|ColumnGroup)[];
 
-  constructor(props: ColumnProps, columnDefaults: ColumnDefaults, columnDisplay: ColumnDisplay) {
+  constructor(props: ColumnProps, columnDefaults: ColumnDefaults, fields: ColumnDisplay) {
     this.field = props.field;
     this.header = props.header;
-    this.hidden = (columnDisplay && columnDisplay.hidden) || props.hidden;
-    this.width = (columnDisplay && columnDisplay.width) || props.width;
+    this.hidden = (fields && fields.hidden) || props.hidden;
+    this.width = (fields && fields.width) || props.width;
 
     const children = React.Children.map(props.children, (c: any) => {
       let colDisplay = null;
-      if(columnDisplay) {
-        colDisplay = columnDisplay.children.find(cd => cd.field === c.props.field);
+      if(fields) {
+        colDisplay = fields.children.find(cd => cd.field === c.props.field);
       }
       if(c.type.name === 'ColumnGroupDefinition') {
         return new ColumnGroup(c.props, columnDefaults, colDisplay);
@@ -139,14 +139,14 @@ export class ColumnGroup {
         return new Column({...columnDefaults, ...c.props, ...colDisplay});
       }
     });
-    if(!columnDisplay || !columnDisplay.children || columnDisplay.children.length === 0) {
-      columnDisplay = {
+    if(!fields || !fields.children || fields.children.length === 0) {
+      fields = {
         field: this.field,
         hidden: false,
         children: children.map(c => ({field: c.field, hidden: false}))
       };
     }
-    this.children = columnDisplay.children.map(cd => children.find(c => cd.field === c.field));
+    this.children = fields.children.map(cd => children.find(c => cd.field === c.field));
   }
 
   public getColumns(): Column[] {

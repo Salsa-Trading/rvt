@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Filter from './Filter';
-import { Column, SortDirection, ColumnGroup } from './Column';
+import { Column, SortDirection, ColumnGroup } from './List/Column';
 import safeMouseMove from './utils/saveMouseMove';
 
 export type GridHeaderCellProps = {

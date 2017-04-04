@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { expect } from 'chai';
-import { ColumnDefinition, ColumnGroupDefinition, ColumnGroup } from '../src/Column';
+import { ColumnDefinition, ColumnGroupDefinition, ColumnGroup } from '../src/List/Column';
 
 describe('<ColumnGroup />', () => {
 
