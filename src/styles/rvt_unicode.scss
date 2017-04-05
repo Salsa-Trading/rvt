@@ -2,7 +2,7 @@
 @import 'filters';
 @import 'sort_icons';
 
-thead th {
+.rvt thead th {
   .edit-filters::after {
     content: '☔';
   }

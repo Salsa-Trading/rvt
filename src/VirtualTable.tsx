@@ -368,7 +368,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
       <div
         onWheel={this.onWheel.bind(this)}
         ref={refFn}
-        className={containerClassName}
+        className={`rvt ${containerClassName ? containerClassName : ''}`}
         style={containerStyle}
       >
         <div style={{overflowX: 'auto', overflowY: 'hidden'}}>
