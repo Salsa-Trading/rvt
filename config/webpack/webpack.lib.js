@@ -38,11 +38,7 @@ function moduleObj() {
 }
 
 function entry() {
-  return {
-    index: [
-      path.join(projectRoot, 'src/index.ts')
-    ],
-  };
+  return path.join(projectRoot, 'src/index.ts');
 }
 
 function output() {
@@ -61,13 +57,11 @@ function devtool() {
 }
 
 function externals() {
-  if (env == 'development' || env == 'test') {
-    return {
-      'react/addons': true,
-      'react/lib/ExecutionEnvironment': true,
-      'react/lib/ReactContext': 'window'
-    };
-  }
+  return {
+    'react': 'react',
+    'react-dom': 'react-dom',
+    'lodash': 'lodash'
+  };
 }
 
 function plugins() {

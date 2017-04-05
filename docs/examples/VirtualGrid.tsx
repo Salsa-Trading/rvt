@@ -5,8 +5,7 @@ import { generateData } from '../../test/dataUtils';
 
 import '../../src/styles/grid.scss';
 
-export default class VirtualGridExample extends React.Component<{
-}, {
+export default class VirtualGridExample extends React.Component<void, {
   originalData?: any[];
   data?: any[]
   listState?: ListState

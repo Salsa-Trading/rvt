@@ -22,7 +22,7 @@ const Row = ({data}) =>
     <td style={{whiteSpace: 'nowrap'}}>{data.col5.toFixed(5)}</td>
   </tr>;
 
-export default class Style extends React.Component<{}, {
+export default class Style extends React.Component<void, {
   rows: any[];
 }> {
 

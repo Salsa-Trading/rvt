@@ -25,8 +25,7 @@ class Body extends React.Component<{
 
 }
 
-export default class VirtualGridExample extends React.Component<{
-}, {
+export default class VirtualGridExample extends React.Component<void, {
   originalData?: any[];
   data?: any[]
   listState?: ListState

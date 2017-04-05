@@ -1,7 +1,6 @@
 import * as React from 'react';
 
-export default class LayoutTest extends React.Component<{
-}, {}> {
+export default class LayoutTest extends React.Component<void, {}> {
   public render() {
     const rows = (Array(1000).fill(undefined)).map(() => {
       return <tr>

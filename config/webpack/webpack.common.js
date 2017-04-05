@@ -11,7 +11,6 @@ module.exports = function(_env) {
     context: projectRoot,
     resolve: resolve(),
     module: moduleObj(),
-    postcss: postcss(),
     entry: entry(),
     output: output(),
     devtool: devtool(),
@@ -23,44 +22,77 @@ module.exports = function(_env) {
 
 function resolve() {
   return {
-    extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js', '.jsx', '.json']
+    extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js', '.jsx', '.json']
   };
 }
 
 function moduleObj() {
-  var cssLoaders, scssLoaders, tsLoaders;
+  const scssLoaders = [{
+    loader: 'style-loader',
+  }, {
+    loader: 'css-loader',
+    options: {
+      sourceMap: env === 'development'
+    }
+  }, {
+    loader: 'postcss-loader',
+    options: {
+      plugins: postcss(),
+      sourceMap: env === 'development'
+    }
+  }, {
+    loader: 'sass-loader',
+    options: {
+      sourceMap: env === 'development'
+    }
+  }];
 
-  if (env == 'development' || env == 'test') {
-    scssLoaders = ['style', 'css?sourceMap', 'postcss?sourceMap', 'sass?sourceMap'];
-    cssLoaders =  ['style', 'css?sourceMap', 'postcss?sourceMap'];
-  }
-  else {
-    scssLoaders = ['style', 'css', 'postcss', 'sass'];
-    cssLoaders =  ['style', 'css', 'postcss'];
-  }
+  const cssLoaders = [{
+    loader: 'style-loader'
+  }, {
+    loader: 'css-loader',
+    options: {
+      sourceMap: env === 'development'
+    }
+  }, {
+    loader: 'postcss-loader',
+    options: {
+      sourceMap: env === 'development',
+      plugins: postcss()
+    }
+  }];
 
+  let tsLoaders;
   if (env == 'development') {
-    tsLoaders = ['react-hot-loader/webpack', 'ts-loader?configFileName=./tsconfig.json'];
-  }
-  else {
-    tsLoaders = ['ts-loader?configFileName=./tsconfig.json'];
+    tsLoaders = [{
+      loader: 'react-hot-loader/webpack'
+    }, {
+      loader: 'ts-loader',
+      options: {
+        configFileName: './tsconfig.json'
+      }
+    }];
+  } else {
+    tsLoaders = [{
+      loader: 'ts-loader',
+      options: {
+        configFileName: './tsconfig.json'
+      }
+    }];
   }
 
   return {
-    loaders: [
+    rules: [
       {
         test: /\.[t|j]s(x?)$/,
         exclude: /node_modules/,
-        loaders: tsLoaders
+        use: tsLoaders
       },
-      { test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url?limit=10000' },
-      { test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/, loader: 'file' },
-      { test: /\.html$/, loader: 'file-loader?name=[name].[ext]' },
-      { test: /\.scss$/, loaders: scssLoaders },
-      { test: /\.css$/, loaders: cssLoaders },
-      { test: /\.png$/, loader: 'url-loader?limit=100000' },
-      { test: /\.jpg$/, loader: 'file-loader' },
-      { test: /\.json$/, loader: 'json-loader' }
+      { test: /\.scss$/, use: scssLoaders },
+      { test: /\.css$/, use: cssLoaders },
+      { test: /\.html$/, loader: 'file-loader', options: {name: '[name].[ext]'}},
+      { test: /\.png$/, loader: 'url-loader', options: {limit: 10000}},
+      { test: /\.jpg$/, loader: 'file-loader' }
     ]
   };
 }
@@ -136,13 +168,15 @@ function plugins() {
   ];
 
   if (env == 'production') {
-    plugins.push(new webpack.optimize.OccurenceOrderPlugin());
-    plugins.push(new webpack.optimize.DedupePlugin());
-    plugins.push(new webpack.NoErrorsPlugin());
-  }
-  else if (env == 'development') {
+    plugins.push(new webpack.optimize.OccurrenceOrderPlugin());
+    plugins.push(new webpack.NoEmitOnErrorsPlugin());
+  } else if (env == 'development') {
+    plugins.push(new webpack.NoEmitOnErrorsPlugin());
     plugins.push(new webpack.HotModuleReplacementPlugin());
-    plugins.push(new webpack.NoErrorsPlugin());
+  } else if (env == 'test') {
+    plugins.push(new webpack.SourceMapDevToolPlugin({
+      test: /\.(ts|js|tsx)($|\?)/i // process .js, .ts, .tsx files only
+    }));
   }
 
   return plugins;

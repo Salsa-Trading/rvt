@@ -1,5 +1,10 @@
 import * as React from 'react';
-import { Router, Route, browserHistory } from 'react-router';
+import {
+  BrowserRouter as Router,
+  Route
+} from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+
 import Navbar from './navbar';
 import Home from './home';
 
@@ -9,6 +14,9 @@ import Layout from './examples/Layout';
 import Style from './examples/Style';
 import VirtualTable from './examples/VirtualTable';
 
+const history = createBrowserHistory();
+console.log(history);
+
 export default class App extends React.Component<{}, {}> {
 
   constructor(props, context) {
@@ -17,21 +25,19 @@ export default class App extends React.Component<{}, {}> {
 
   public render() {
     return (
-      <div id='rvt-demo'>
-        <Navbar />
-        <main>
-          <Router history={browserHistory}>
+      <Router history={history}>
+        <div id='rvt-demo'>
+          <Navbar />
+          <main>
             <Route path='/home' component={Home} />
-            <Route path='/examples/'>
-              <Route path='virtualTable' component={VirtualTable} />
-              <Route path='style' component={Style} />
-              <Route path='layout' component={Layout} />
-              <Route path='virtualGrid' component={VirtualGrid} />
-              <Route path='customGrid' component={CustomGrid} />
-            </Route>
-          </Router>
-        </main>
-      </div>
+            <Route path='/examples/virtualTable' component={VirtualTable} />
+            <Route path='/examples/style' component={Style} />
+            <Route path='/examples/layout' component={Layout} />
+            <Route path='/examples/virtualGrid' component={VirtualGrid} />
+            <Route path='/examples/customGrid' component={CustomGrid} />
+          </main>
+        </div>
+      </Router>
     );
   }
 }

@@ -94,8 +94,8 @@ export default class Scroller extends React.Component<{
       right: '0px',
       top: `${top}px`,
       height: `${height}px`,
-      overflowY: 'scroll',
-      overflowX: 'hidden',
+      overflowY: 'scroll' as any,
+      overflowX: 'hidden' as any,
       width: '15px',
       display: visible ? 'block' : 'none'
     };

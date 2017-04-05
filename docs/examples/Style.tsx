@@ -24,7 +24,7 @@ const Row = ({data, index}) =>
 
 const rows = generateData(500000);
 
-export default class Style extends React.Component<{}, {
+export default class Style extends React.Component<void, {
   rows: any[];
 }> {
 

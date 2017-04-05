@@ -4,23 +4,34 @@ var path = require('path');
 var webpack = require('webpack');
 var projectRoot = __dirname.split('/').slice(0, -2).join('/');
 var outputPath = path.join(projectRoot, 'docs/public/vendor/');
-var packageFile = require(path.join(projectRoot, 'package.json'));
+var packageConfig = require(path.join(projectRoot, 'package.json'));
+
 
 module.exports = function(env) {
-  var cssLoaders, scssLoaders;
+  const scssLoaders = [{
+    loader: 'style-loader'
+  }, {
+    loader: 'css-loader'
+  }, {
+    loader: 'postcss-loader',
+    options: {plugins: postcss()}
+  }, {
+    loader: 'sass-loader'
+  }];
 
-  if (env == 'development' || env == 'test') {
-    scssLoaders = ['style', 'css?sourceMap', 'postcss?sourceMap', 'sass?sourceMap'];
-    cssLoaders =  ['style', 'css?sourceMap', 'postcss?sourceMap'];
-  } else {
-    scssLoaders = ['style', 'css', 'postcss', 'sass'];
-    cssLoaders =  ['style', 'css', 'postcss'];
-  }
+  const cssLoaders = [{
+    loader: 'style-loader'
+  }, {
+    loader: 'css-loader'
+  }, {
+    loader: 'postcss-loader',
+    options: {plugins: postcss()}
+  }];
 
   return {
     context: projectRoot,
     entry: {
-      react: packageFile.vendored
+      react: packageConfig.vendored
     },
     output: {
       filename: '[name].bundle.js',
@@ -28,26 +39,23 @@ module.exports = function(env) {
       publicPath: '/vendor/',
       library: '[name]_lib'
     },
-    devtool: 'eval-cheap-module-source-map',
+    devtool: env === 'development' ? 'source-map' : false,
     module: {
-      loaders: [
+      rules: [
         {
           test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-          loader: 'url?limit=10000'
+          loader: 'url-loader',
+          options: {limit: 10000}
         },
         {
           test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
-          loader: 'file'
+          loader: 'file-loader'
         },
-        { test: /\.scss$/, loaders: scssLoaders },
-        { test: /\.css$/, loaders: cssLoaders },
-        { test: /\.png$/, loader: 'url-loader?limit=100000' },
-        { test: /\.jpg$/, loader: 'file-loader' },
-        { test: /\.json$/, loader: 'json-loader' }
+        { test: /\.scss$/, use: scssLoaders },
+        { test: /\.css$/, use: cssLoaders },
+        { test: /\.html$/, loader: 'file-loader', options: {name: '[name].[ext]'}},
+        { test: /\.jpg$/, loader: 'file-loader' }
       ]
-    },
-    postcss: function () {
-      return [require('autoprefixer')];
     },
     plugins: [
       new webpack.DllPlugin({
@@ -57,3 +65,9 @@ module.exports = function(env) {
     ]
   };
 };
+
+function postcss() {
+  return function (){
+    return [require('autoprefixer')];
+  };
+}

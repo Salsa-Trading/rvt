@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { MenuItem, Nav, Navbar, NavDropdown } from 'react-bootstrap';
-// import { LinkContainer } from 'react-router-bootstrap';
 
 export default class NavBar extends React.Component<{
 }, {}> {
-  public render() {
 
+  public render() {
     return (
       <Navbar fluid>
         <Navbar.Header>
@@ -18,9 +17,9 @@ export default class NavBar extends React.Component<{
         <Navbar.Collapse>
           <Nav>
             <NavDropdown title='Examples' id='examples-dropdown'>
-              <MenuItem href='/examples/grid'>Grid</MenuItem>
-              <MenuItem href='/examples/style'>Style</MenuItem>
               <MenuItem href='/examples/virtualTable'>Virtual Table</MenuItem>
+              <MenuItem href='/examples/style'>Style</MenuItem>
+              <MenuItem href='/examples/virtualGrid'>Grid</MenuItem>
               <MenuItem href='/examples/customGrid'>Custom Grid</MenuItem>
             </NavDropdown>
           </Nav>
