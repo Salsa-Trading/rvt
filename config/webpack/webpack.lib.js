@@ -21,7 +21,7 @@ module.exports = function(_env) {
 
 function resolve() {
   return {
-    extensions: ['', '.ts', '.tsx', '.js', '.jsx', '.json']
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
   };
 }
 
@@ -31,7 +31,13 @@ function moduleObj() {
       {
         test: /\.[t|j]s(x?)$/,
         exclude: /node_modules/,
-        loaders: ['ts-loader?configFileName=./tsconfig.json']
+        loader: 'ts-loader',
+        options: {
+          configFileName: './tsconfig.json',
+          compilerOptions: {
+            declaration: false
+          }
+        }
       }
     ]
   };
@@ -60,7 +66,7 @@ function externals() {
   return {
     'react': 'react',
     'react-dom': 'react-dom',
-    'lodash': 'lodash'
+    'lodash': '_'
   };
 }
 
@@ -74,13 +80,15 @@ function plugins() {
   ];
 
   if (env == 'production') {
-    plugins.push(new webpack.optimize.OccurenceOrderPlugin());
-    plugins.push(new webpack.optimize.DedupePlugin());
-    plugins.push(new webpack.NoErrorsPlugin());
-  }
-  else if (env == 'development') {
+    plugins.push(new webpack.optimize.OccurrenceOrderPlugin());
+    plugins.push(new webpack.NoEmitOnErrorsPlugin());
+  } else if (env == 'development') {
+    plugins.push(new webpack.NoEmitOnErrorsPlugin());
     plugins.push(new webpack.HotModuleReplacementPlugin());
-    plugins.push(new webpack.NoErrorsPlugin());
+  } else if (env == 'test') {
+    plugins.push(new webpack.SourceMapDevToolPlugin({
+      test: /\.(ts|js|tsx)($|\?)/i // process .js, .ts, .tsx files only
+    }));
   }
 
   return plugins;
