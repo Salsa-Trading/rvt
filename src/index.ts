@@ -12,7 +12,7 @@ export {
   default as List,
   ListState,
   ListStateChangeType,
-  isDataChange,
+  isDataChange
 } from './List';
 
 export {
