@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as _ from 'lodash';
 import { FieldSet, RootFieldSet } from './FieldSet';
 import { Field, SortDirection, FieldDefaults, FieldDisplay } from './Field';
 import strEnum from '../utils/strEnum';
@@ -85,9 +84,9 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       const fieldSet = new FieldSet({name: RootFieldSet, children}, fieldDefaults, fields);
       const allFields = fieldSet.getFields();
       allFields.forEach(c => {
-        const sortDirection = _.find(sorts, s => s.fieldName === c.name);
+        const sortDirection = sorts.find(s => s.fieldName === c.name);
         c.sortDirection = (sortDirection && sortDirection.direction) || c.sortDirection;
-        c.filter = _.find(filters, s => s.field === c.name);
+        c.filter = filters[c.name];
       });
       return fieldSet;
     }
@@ -119,15 +118,18 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
         onListStateChanged(newListState, listStateChange, fieldName);
       };
 
-      const filters = _.cloneDeep(listState.filters);
-      const sorts = _.cloneDeep(listState.sorts);
+      const filters = JSON.parse(JSON.stringify(listState.filters));
+      const sorts = JSON.parse(JSON.stringify(listState.sorts));
       return { filters, sorts, onListStateChanged: onListState };
     }
 
     private onSortSelection(direction: SortDirection, field: Field) {
       const { onListStateChanged, sorts } = this.listStateHelper();
 
-      _.remove(sorts, s => s.fieldName === field.name);
+      const index = sorts.findIndex(s => s.fieldName === field.name);
+      if(index >= 0) {
+        sorts.splice(index, 1);
+      }
       sorts.unshift({fieldName: field.name, direction});
       onListStateChanged(ListStateChangeType.sorts, sorts, field.name);
     }

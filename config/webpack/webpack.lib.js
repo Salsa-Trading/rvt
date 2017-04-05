@@ -65,8 +65,7 @@ function devtool() {
 function externals() {
   return {
     'react': 'react',
-    'react-dom': 'react-dom',
-    'lodash': '_'
+    'react-dom': 'react-dom'
   };
 }
 
