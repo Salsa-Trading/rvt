@@ -3,7 +3,7 @@ thead th {
     content: '☔';
   }
 
-  .sort-acc::after {
+  .sort-asc::after {
     content: '▲';
   }
 
@@ -18,8 +18,9 @@ thead th {
   .sort-desc-narrow::after {
     content: '↓';
   }
+
+  .filter-pane .checked::after {
+    content: '✓';
+  }
 }
 
-.filter-pane .checked::after {
-  content: '✓';
-}

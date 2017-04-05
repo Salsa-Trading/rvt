@@ -14,24 +14,25 @@ thead {
 
     // Icon is dark when active filters
     .filtered .edit-filters { opacity: 1; }
+
+    .filter-pane {
+      position: absolute;
+
+      padding: 1rem;
+      border-radius: 1rem;
+      border: $filter-pane-border;
+      background-color: $filter-pane-bg-color;
+
+      input {
+        width: 100%;
+      }
+
+      .form-actions {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+      }
+    }
   }
 }
 
-.filter-pane {
-  position: absolute;
-
-  padding: 1rem;
-  border-radius: 1rem;
-  border: $filter-pane-border;
-  background-color: $filter-pane-bg-color;
-
-  input {
-    width: 100%;
-  }
-
-  .form-actions {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-  }
-}

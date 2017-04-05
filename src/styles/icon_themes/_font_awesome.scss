@@ -1,0 +1,33 @@
+@import '../../../node_modules/font-awesome/scss/_variables';
+
+thead th {
+  .edit-filters::after {
+    font-family: FontAwesome;
+    content: $fa-var-filter;
+  }
+
+  .sort-asc::after {
+    font-family: FontAwesome;
+    content: $fa-var-sort-amount-asc;
+  }
+
+  .sort-desc::after {
+    font-family: FontAwesome;
+    content: $fa-var-sort-amount-desc;
+  }
+
+  .sort-asc-narrow::after {
+    font-family: FontAwesome;
+    content: $fa-var-sort-asc;
+  }
+
+  .sort-desc-narrow::after {
+    font-family: FontAwesome;
+    content: $fa-var-sort-desc;
+  }
+
+  .filter-pane .checked::after {
+    font-family: FontAwesome;
+    content: $fa-var-check;
+  }
+}
