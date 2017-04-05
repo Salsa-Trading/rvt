@@ -1,4 +1,5 @@
-$filter-pane-bg-color: transparentize(white, 0.2);
+$white: #fff;
+$filter-pane-bg-color: transparentize($white, .2);
 $filter-pane-border: 1px solid lightgray;
 
 thead {
@@ -7,8 +8,6 @@ thead {
       @extend %button;
       white-space: nowrap;
     }
-
-    .edit-filters::after { content: '☔'; }
 
     // Icon is grayed out when no active filters
     .filterable .edit-filters { opacity: .4; }
@@ -29,8 +28,6 @@ thead {
   input {
     width: 100%;
   }
-
-  .checked::after { content: '✓'; }
 
   .form-actions {
     display: flex;

@@ -1,0 +1,25 @@
+thead th {
+  .edit-filters::after {
+    content: '☔';
+  }
+
+  .sort-acc::after {
+    content: '▲';
+  }
+
+  .sort-desc::after {
+    content: '▼';
+  }
+
+  .sort-asc-narrow::after {
+    content: '↑';
+  }
+
+  .sort-desc-narrow::after {
+    content: '↓';
+  }
+}
+
+.filter-pane .checked::after {
+  content: '✓';
+}

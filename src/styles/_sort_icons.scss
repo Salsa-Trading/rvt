@@ -1,12 +1,5 @@
 thead {
   th {
-
-    .sort-asc::after { content: '▲'; }
-    .sort-desc::after { content: '▼'; }
-    
-    .sort-asc-narrow::after { content: '\2191'; }
-    .sort-desc-narrow::after { content: '\2193'; }
-
     button.sort {
       @extend %button;
       display: none;
