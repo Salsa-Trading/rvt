@@ -1,11 +1,6 @@
 $hover-highlight-color: lightgray;
 $sort-direction-color: royalblue;
 
-@import 'filters';
-@import 'sort_icons';
-@import 'icon_themes/unicode';
-// @import 'icon_themes/font_awesome';
-
 %button {
   background-color: Transparent;
   background-repeat: no-repeat;

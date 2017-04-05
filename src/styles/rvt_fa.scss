@@ -1,4 +1,8 @@
-@import '../../../node_modules/font-awesome/scss/_variables';
+@import 'base';
+@import 'filters';
+@import 'sort_icons';
+
+@import '../../node_modules/font-awesome/scss/_variables';
 
 thead th {
   .edit-filters::after {

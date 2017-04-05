@@ -1,3 +1,7 @@
+@import 'base';
+@import 'filters';
+@import 'sort_icons';
+
 thead th {
   .edit-filters::after {
     content: '☔';
