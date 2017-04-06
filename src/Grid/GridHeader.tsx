@@ -3,6 +3,7 @@ import { Field } from '../List/Field';
 import { FieldSet } from '../List/FieldSet';
 import { ListViewProps } from '../List';
 import GridHeaderCell from './GridHeaderCell';
+import ColumnChooser from './ColumnChooser';
 import safeMouseMove from '../utils/saveMouseMove';
 
 const hoverClassName = 'field-moving-hover';
@@ -15,7 +16,8 @@ export default class GridHeader extends React.Component<ListViewProps, {}> {
     onSortSelection: React.PropTypes.func,
     onFilterChanged: React.PropTypes.func,
     onWidthChanged: React.PropTypes.func,
-    onMove: React.PropTypes.func
+    onMove: React.PropTypes.func,
+    onHiddenChange: React.PropTypes.func
   };
 
   constructor(props, context) {
@@ -75,14 +77,22 @@ export default class GridHeader extends React.Component<ListViewProps, {}> {
     );
   }
 
-  private renderHeaderRow(rowSpan: number, field: Field|FieldSet, c: number) {
+  private renderHeaderRow(rowIndex: number, rowCount: number, field: Field|FieldSet, colIndex: number, fields: (Field|FieldSet)[]) {
     const { fieldSet } = this.props;
-    const { onSortSelection, onFilterChanged, onWidthChanged } = this.props;
+    const { onSortSelection, onFilterChanged, onWidthChanged, onHiddenChange } = this.props;
+
     let colSpan = 1;
+    let rowSpan = rowCount - rowIndex;
     if(field instanceof FieldSet) {
       colSpan = field.getCount();
       rowSpan = rowSpan - field.getCount();
     }
+
+    let columnChooser;
+    if(rowIndex === 0 && colIndex === fields.length - 1) {
+      columnChooser = <ColumnChooser fieldSet={fieldSet} onHiddenChange={onHiddenChange} />;
+    }
+
     return <GridHeaderCell
       key={field.name}
       field={field}
@@ -93,18 +103,21 @@ export default class GridHeader extends React.Component<ListViewProps, {}> {
       onFilterChanged={onFilterChanged}
       onWidthChanged={onWidthChanged}
       onMouseDown={this.onFieldMouseDown.bind(this)}
+      canResize={colIndex < fields.length - 1 && rowIndex === rowCount - 1}
+      columnChooser={columnChooser}
     />;
   }
 
   public render() {
     const { fieldSet } = this.props;
     const rows = fieldSet.getLevels();
+    console.log(rows);
     return (
       <thead>
         {rows.map((row, r) => {
           return (
             <tr key={r}>
-              {row.map(this.renderHeaderRow.bind(this, rows.length - r))}
+              {row.map(this.renderHeaderRow.bind(this, r, rows.length))}
             </tr>
           );
         })}

@@ -14,7 +14,7 @@ class VirtualGrid extends React.Component<VirtualTableBaseProps & ListViewProps 
 }, {}> {
 
   public render() {
-    const { fieldSet, onSortSelection, onFilterChanged, onWidthChanged, onMove, ...rest } = this.props;
+    const { fieldSet, onSortSelection, onFilterChanged, onWidthChanged, onMove, onHiddenChange, ...rest } = this.props;
 
     const header =
       <GridHeader
@@ -23,6 +23,7 @@ class VirtualGrid extends React.Component<VirtualTableBaseProps & ListViewProps 
         onFilterChanged={onFilterChanged}
         onWidthChanged={onWidthChanged}
         onMove={onMove}
+        onHiddenChange={onHiddenChange}
       />;
 
     const fields = fieldSet.getFields();

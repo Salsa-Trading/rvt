@@ -15,7 +15,6 @@ import Style from './examples/Style';
 import VirtualTable from './examples/VirtualTable';
 
 const history = createBrowserHistory();
-console.log(history);
 
 export default class App extends React.Component<{}, {}> {
 

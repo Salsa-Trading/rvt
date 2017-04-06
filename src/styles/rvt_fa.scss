@@ -1,6 +1,7 @@
 @import 'base';
 @import 'filters';
 @import 'sort_icons';
+@import 'column_chooser';
 
 @import '../../node_modules/font-awesome/scss/_variables';
 
@@ -33,5 +34,10 @@
   .filter-pane .checked::after {
     font-family: FontAwesome;
     content: $fa-var-check;
+  }
+
+  .column-chooser-btn::after {
+    font-family: FontAwesome;
+    content: $fa-var-columns;
   }
 }

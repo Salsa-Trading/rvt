@@ -2,6 +2,7 @@ import * as React from 'react';
 import Filter from '../Filter';
 import { Field, SortDirection } from '../List/Field';
 import { FieldSet } from '../List/FieldSet';
+import ColumnChooserButton from './ColumnChooserButton';
 import safeMouseMove from '../utils/saveMouseMove';
 
 export type GridHeaderCellProps = {
@@ -9,6 +10,8 @@ export type GridHeaderCellProps = {
   fieldSet: FieldSet;
   rowSpan?: number;
   colSpan?: number;
+  canResize?: boolean;
+  columnChooser?: any;
   onSortSelection?: (sortDirection: SortDirection, field: Field) => void;
   onFilterChanged?: (filter: any, field: Field) => void;
   onWidthChanged?: (width: number, field: Field) => void;
@@ -16,6 +19,10 @@ export type GridHeaderCellProps = {
 };
 
 export default class GridHeaderCell extends React.Component<GridHeaderCellProps, {}> {
+
+  public static defaultProps = {
+    canResize: true
+  };
 
   public static propTypes = {
     field: React.PropTypes.any,
@@ -87,6 +94,8 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
         filterable,
         filter
       },
+      columnChooser,
+      canResize,
       rowSpan,
       colSpan,
       onSortSelection,
@@ -127,7 +136,8 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
           <div className='sort-filter'>
             {sortFilterControl}
           </div>
-          <div className='resize-handle' onMouseDown={this.onResizeHandleMouseDown.bind(this)} />
+          {canResize && <div className='resize-handle' onMouseDown={this.onResizeHandleMouseDown.bind(this)} />}
+          {columnChooser && <div className='column-chooser'><ColumnChooserButton columnChooser={columnChooser} /></div>}
         </div>
       </th>
     );

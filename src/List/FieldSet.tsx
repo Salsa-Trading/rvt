@@ -128,6 +128,9 @@ export class FieldSet {
   public getLevelCount(): number {
     let levels = 0;
     for(let child of this.children) {
+      if(child.hidden) {
+        continue;
+      }
       if(child instanceof FieldSet) {
         levels = Math.max(levels, child.getLevelCount());
       }
@@ -138,6 +141,9 @@ export class FieldSet {
   public getLevels() {
     let levels = [];
     for(let child of this.children) {
+      if(child.hidden) {
+        continue;
+      }
       if(child instanceof FieldSet) {
         let subLevels = child.getLevels();
         for(let i = 0; i < subLevels.length; i++) {
@@ -145,7 +151,7 @@ export class FieldSet {
         }
       }
     }
-    const retVal = [this.children, ...levels];
+    const retVal = [this.children.filter(c => !c.hidden), ...levels];
     return retVal;
   }
 

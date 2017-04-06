@@ -31,10 +31,11 @@ export type ListProps = {
 
 export type ListViewProps = {
   fieldSet: FieldSet,
-  onSortSelection?: (sortDirection: SortDirection, field: Field) => void;
-  onFilterChanged?: (filter: any, field: Field) => void;
-  onWidthChanged?: (width: number, field: Field) => void;
-  onMove?: (newIndex: number, field: Field) => void;
+  onSortSelection?: (sortDirection: SortDirection, field: Field|FieldSet) => void;
+  onFilterChanged?: (filter: any, field: Field|FieldSet) => void;
+  onWidthChanged?: (width: number, field: Field|FieldSet) => void;
+  onMove?: (newIndex: number, field: Field|FieldSet) => void;
+  onHiddenChange?: (hidden: boolean, field: Field|FieldSet) => void;
 };
 
 export type ListViewType = React.ComponentClass<ListViewProps>|React.StatelessComponent<ListViewProps>;
@@ -164,6 +165,15 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       onListStateChanged(ListStateChangeType.fields, fieldSet.getFieldDisplay(), field.name);
     }
 
+    private onHiddenChange(hidden: boolean, field: Field|FieldSet) {
+      console.log('list', hidden, field);
+      const { onListStateChanged } = this.listStateHelper();
+      const { fieldSet } = this.state;
+      field.hidden = hidden;
+      onListStateChanged(ListStateChangeType.fields, fieldSet.getFieldDisplay(), field.name);
+    }
+
+
     public render() {
       const { fieldSet } = this.state;
 
@@ -172,7 +182,8 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
         onSortSelection: this.onSortSelection.bind(this),
         onFilterChanged: this.onFilterChanged.bind(this),
         onWidthChanged: this.onWidthChanged.bind(this),
-        onMove: this.onMove.bind(this)
+        onMove: this.onMove.bind(this),
+        onHiddenChange: this.onHiddenChange.bind(this)
       };
 
       return (

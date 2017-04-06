@@ -1,6 +1,7 @@
 @import 'base';
 @import 'filters';
 @import 'sort_icons';
+@import 'column_chooser';
 
 .rvt thead th {
   .edit-filters::after {
@@ -25,6 +26,10 @@
 
   .filter-pane .checked::after {
     content: '✓';
+  }
+
+  .column-chooser-btn::after {
+    content: '◫';
   }
 }
 

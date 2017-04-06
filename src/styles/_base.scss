@@ -35,7 +35,8 @@ $sort-direction-color: royalblue;
         padding: 4px;
       }
 
-      .sort-filter {
+      .sort-filter,
+      .column-chooser {
         align-self: center;
         flex: 1 auto;
       }
@@ -44,6 +45,7 @@ $sort-direction-color: royalblue;
         cursor: col-resize;
         flex: 1 auto;
         width: 10px;
+        margin-right: -5px;
       }
     }
   }

@@ -27,7 +27,7 @@ export default class VirtualGridExample extends React.Component<void, {
         style: {backgroundColor: index % 2 === 0 ? '' : 'lightgray'}
       }
     };
-  };
+  }
 
   private onListStateChanged(listState: ListState, changeType: ListStateChangeType) {
     if(!isDataChange(changeType)) {
@@ -63,7 +63,7 @@ export default class VirtualGridExample extends React.Component<void, {
       >
         <FieldSet header='Group 1' name='group1'>
           <Field header='Col 1' name='col1' sortDirection='asc' />
-          <Field header='Col 2' name='col2' />
+          <Field header='Col 2' name='col2' hidden />
           <Field header='Col 3' name='col3' cell={d => <input type='checkbox' defaultChecked={d.col3} />} />
         </FieldSet>
         <FieldSet header='Group 2' name='group2'>
