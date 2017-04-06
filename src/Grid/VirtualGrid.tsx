@@ -14,14 +14,17 @@ class VirtualGrid extends React.Component<VirtualTableBaseProps & ListViewProps 
 }, {}> {
 
   public render() {
-    const { fieldSet, onSortSelection, onFilterChanged, onWidthChanged, onMove, ...rest } = this.props;
+    const { fieldSet, onSortSelection, onFilterChanged, onWidthChanged, onMove, onHiddenChange, ...rest } = this.props;
 
-    const header = <GridHeader
-      fieldSet={fieldSet}
-      onSortSelection={onSortSelection}
-      onFilterChanged={onFilterChanged}
-      onWidthChanged={onWidthChanged}
-      onMove={onMove} />;
+    const header =
+      <GridHeader
+        fieldSet={fieldSet}
+        onSortSelection={onSortSelection}
+        onFilterChanged={onFilterChanged}
+        onWidthChanged={onWidthChanged}
+        onMove={onMove}
+        onHiddenChange={onHiddenChange}
+      />;
 
     const fields = fieldSet.getFields();
     const row = <GridRow fields={fields} />;

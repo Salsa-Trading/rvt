@@ -31,7 +31,7 @@ export interface FieldProps extends React.Props<FieldProps> {
   sortDirection?: SortDirection;
   filter?: any;
   hidden?: boolean;
-};
+}
 
 export class Field implements FieldProps {
 

@@ -1,0 +1,27 @@
+{
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "extends": "eslint:recommended",
+  "no-console": 0,
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "rules": {
+    "indent": [
+      "error",
+      2
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "no-console": 0,
+    "quotes": ["error", "single", "avoid-escape"],
+    "semi": [
+      "error",
+      "always"
+    ]
+  }
+}

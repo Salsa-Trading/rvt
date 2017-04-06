@@ -10,9 +10,12 @@ export default function safeMouseMove<T>(
   };
 
   const onMouseUp = (upEvent: React.MouseEvent<T>) => {
-    if(onUp) {
-      onUp(upEvent);
+    try {
+      if(onUp) {
+        onUp(upEvent);
+      }
     }
+    catch(err) {}
     document.removeEventListener('mousemove', onMouseMove as any);
     document.removeEventListener('mouseup', onMouseUp as any);
     upEvent.preventDefault();

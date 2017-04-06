@@ -10,12 +10,14 @@ class CustomGrid extends React.Component<React.HTMLProps<HTMLTableElement> & Lis
   public render() {
     const { fieldSet, onSortSelection, onFilterChanged, onWidthChanged, onMove, body, data, ...rest } = this.props;
 
-    const header = <GridHeader
-      fieldSet={fieldSet}
-      onSortSelection={onSortSelection}
-      onFilterChanged={onFilterChanged}
-      onWidthChanged={onWidthChanged}
-      onMove={onMove} />;
+    const header =
+      <GridHeader
+        fieldSet={fieldSet}
+        onSortSelection={onSortSelection}
+        onFilterChanged={onFilterChanged}
+        onWidthChanged={onWidthChanged}
+        onMove={onMove}
+      />;
 
     const fields = fieldSet.getFields();
 
