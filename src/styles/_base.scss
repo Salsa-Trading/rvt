@@ -44,8 +44,9 @@ $sort-direction-color: royalblue;
       .resize-handle {
         cursor: col-resize;
         flex: 1 auto;
-        width: 10px;
-        margin-right: -5px;
+        z-index: 50;
+        width: 12px;
+        margin-right: -6px;
       }
     }
   }
