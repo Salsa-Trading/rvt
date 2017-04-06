@@ -1,6 +1,6 @@
 {
   "name": "react-virtual-table",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "",
   "scripts": {
     "start": "./node_modules/.bin/webpack --config config/webpack/webpack.vendor.dev.js  ./node_modules/.bin/webpack-dev-server --config config/webpack/webpack.dev.js",
@@ -15,7 +15,8 @@
     "*.json": "jsonlint",
     "*.js": "eslint"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "files": [
     "lib",
     "scss",
