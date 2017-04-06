@@ -8,18 +8,10 @@
   }
 
   .sort-asc::after {
-    content: '▲';
-  }
-
-  .sort-desc::after {
-    content: '▼';
-  }
-
-  .sort-asc-narrow::after {
     content: '↑';
   }
 
-  .sort-desc-narrow::after {
+  .sort-desc::after {
     content: '↓';
   }
 

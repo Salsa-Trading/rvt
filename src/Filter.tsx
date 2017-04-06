@@ -100,20 +100,24 @@ export default class Filter extends React.Component<{
     );
   }
 
+  private sortDirectionIcon() {
+    const { sortDirection } = this.props.field;
+
+    if(sortDirection === SortDirection.asc) {
+      return <span className='sort-asc' />;
+    }
+    else if(sortDirection === SortDirection.desc) {
+      return <span className='sort-desc' />;
+    }
+  }
+
   public render() {
     const { showFilter } = this.state;
-    let sortArrow;
-    if(this.props.field.sortDirection === SortDirection.asc) {
-      sortArrow = <span className='sort-asc-narrow' />;
-    }
-    else if(this.props.field.sortDirection === SortDirection.desc) {
-      sortArrow = <span className='sort-desc-narrow' />;
-    }
     return (
       <div>
         <button className='filter-btn' onClick={this.toggleFilterPane.bind(this)}>
           <span className='edit-filters' />
-          {sortArrow}
+          {this.sortDirectionIcon()}
         </button>
         {showFilter && this.renderFilterPane()}
       </div>
