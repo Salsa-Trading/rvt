@@ -51,7 +51,9 @@ export class FieldSet {
     }
     let fields: Field[] = [];
     for(let field of this.children ) {
-      fields = fields.concat(field.getFields());
+      if(!field.hidden) {
+        fields = fields.concat(field.getFields());
+      }
     }
     return fields;
   }
@@ -128,7 +130,7 @@ export class FieldSet {
   public getLevelCount(): number {
     let levels = 0;
     for(let child of this.children) {
-      if(child.hidden) {
+      if(!isVisible(child)) {
         continue;
       }
       if(child instanceof FieldSet) {
@@ -141,7 +143,7 @@ export class FieldSet {
   public getLevels() {
     let levels = [];
     for(let child of this.children) {
-      if(child.hidden) {
+      if(!isVisible(child)) {
         continue;
       }
       if(child instanceof FieldSet) {
@@ -151,12 +153,12 @@ export class FieldSet {
         }
       }
     }
-    const retVal = [this.children.filter(c => !c.hidden), ...levels];
+    const retVal = [this.children.filter(c => isVisible(c)), ...levels];
     return retVal;
   }
 
   public getCount() {
-    return this.children.reduce((r, c) =>  r + c.getCount(), 0);
+    return this.children.reduce((r, c) => r + (isVisible(c) ? c.getCount() : 0), 0);
   }
 
   public resize(width: number) {
@@ -164,6 +166,16 @@ export class FieldSet {
     this.width = width;
   }
 
+}
+
+function isVisible(field: Field|FieldSet) {
+  if(field.hidden) {
+    return false;
+  }
+  if(field instanceof FieldSet) {
+    return field.children.some(isVisible);
+  }
+  return true;
 }
 
 export class FieldSetDefinition extends React.Component<FieldSetProps, {}> {
