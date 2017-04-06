@@ -5,8 +5,8 @@
   "scripts": {
     "postinstall": "./node_modules/.bin/webpack --config config/webpack/webpack.vendor.dev.js",
     "start": "./node_modules/.bin/webpack-dev-server --config config/webpack/webpack.dev.js",
-    "clean": "rm -rf lib && rm -rf scss && rm -rf css",
-    "deploy": "npm run clean && ./node_modules/.bin/gulp deploy",
+    "clean": "rm -rf lib && rm -rf scss && rm -rf css && rm -rf dist",
+    "deploy": "npm run clean && ./node_modules/.bin/gulp deploy && ./node_modules/.bin/webpack --config config/webpack/webpack.lib.production.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "lint-staged": {
@@ -20,7 +20,8 @@
   "files": [
     "lib",
     "scss",
-    "css"
+    "css",
+    "dist"
   ],
   "keywords": [
     "react",
