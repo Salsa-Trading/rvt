@@ -1,12 +1,7 @@
 {
   "name": "react-virtual-table",
-  "version": "0.2.1",
+  "version": "0.5.0",
   "description": "",
-  "repository": {
-    "type": "git",
-    "url": "jheyse/react-virtual-grid"
-  },
-  "homepage": "https://git.drwholdings.com/jheyse/pages/react-virtual-grid/",
   "scripts": {
     "postinstall": "./node_modules/.bin/webpack --config config/webpack/webpack.vendor.dev.js",
     "start": "./node_modules/.bin/webpack-dev-server --config config/webpack/webpack.dev.js",
