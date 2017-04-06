@@ -19,7 +19,6 @@ export default class ColumnChooser extends React.Component<ColumnChooserProps, v
 
   private onChange(field: Field|FieldSet, e: React.ChangeEvent<HTMLInputElement>) {
     const { onHiddenChange } = this.props;
-    console.log(onHiddenChange, field, e);
     if(onHiddenChange) {
       onHiddenChange(!e.target.checked, field);
     }

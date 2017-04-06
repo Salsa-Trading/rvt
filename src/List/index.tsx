@@ -166,7 +166,6 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
     }
 
     private onHiddenChange(hidden: boolean, field: Field|FieldSet) {
-      console.log('list', hidden, field);
       const { onListStateChanged } = this.listStateHelper();
       const { fieldSet } = this.state;
       field.hidden = hidden;

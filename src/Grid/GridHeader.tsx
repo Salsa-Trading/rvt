@@ -111,7 +111,6 @@ export default class GridHeader extends React.Component<ListViewProps, {}> {
   public render() {
     const { fieldSet } = this.props;
     const rows = fieldSet.getLevels();
-    console.log(rows);
     return (
       <thead>
         {rows.map((row, r) => {
