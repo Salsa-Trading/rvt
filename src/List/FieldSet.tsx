@@ -75,16 +75,16 @@ export class FieldSet extends FieldBase {
     return false;
   }
 
-  public findFieldSetByName(field: string): FieldSet {
-    if(field === RootFieldSet) {
+  public findFieldByName(name: string): FieldBase {
+    if(name === RootFieldSet) {
       return this;
     }
     for(let child of this.children) {
+      if(child.name === name) {
+        return child;
+      }
       if(child instanceof FieldSet) {
-        if(child.name === field) {
-          return child;
-        }
-        let found = child.findFieldSetByName(field);
+        let found = child.findFieldByName(name);
         if(found) {
           return found;
         }
@@ -93,7 +93,7 @@ export class FieldSet extends FieldBase {
     return null;
   }
 
-  public findParent(field: FieldBase) {
+  public findParent(field: FieldBase): FieldSet {
     if(this.findFieldIndex(field) >= 0) {
       return this;
     }

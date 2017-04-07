@@ -24,31 +24,18 @@ export default class GridHeader extends React.Component<ListViewProps, {}> {
     super(props, context);
   }
 
-  private findFieldIndex(tableRow: HTMLTableRowElement, tableHeader: HTMLTableHeaderCellElement, group: string) {
-    let index = 0;
-    for(let i = 0; i < tableRow.children.length; i++) {
-      let item = tableRow.children.item(i) as any;
-      if(item.dataset['group'] === group) {
-        if(item === tableHeader) {
-          return index;
-        }
-        index++;
-      }
-    }
-    return -1;
-  }
-
   private onFieldMouseDown(e: React.MouseEvent<HTMLTableHeaderCellElement>) {
-    const { onMove, fieldSet } = this.props;
+    const { onMove } = this.props;
+    const rootFieldSet = this.props.fieldSet;
 
     e.persist();
     const target = e.currentTarget;
     const tr = e.currentTarget.closest('tr') as HTMLTableRowElement;
     const th = target.closest('th') as HTMLTableHeaderCellElement;
     const group = th.dataset['group'];
+    const fieldName = th.dataset['field'];
 
-    const parentGroup = fieldSet.findFieldSetByName(group);
-    const field = parentGroup.getFieldIndex(this.findFieldIndex(tr, th, group));
+    const field = rootFieldSet.findFieldByName(fieldName);
 
     tr.classList.add(movingClassName);
     let currentHover: HTMLTableHeaderCellElement;
@@ -69,8 +56,10 @@ export default class GridHeader extends React.Component<ListViewProps, {}> {
           tr.classList.remove(movingClassName);
           if(currentHover) {
             currentHover.classList.remove(hoverClassName);
-            const newIndex = this.findFieldIndex(tr, currentHover, group);
-            onMove(newIndex, field);
+            const hoverFieldName = currentHover.dataset['field'];
+            const hoverField = rootFieldSet.findFieldByName(hoverFieldName);
+            const parentFieldSet = rootFieldSet.findParent(hoverField);
+            onMove(parentFieldSet.findFieldIndex(hoverField) , field);
           }
         }
       }

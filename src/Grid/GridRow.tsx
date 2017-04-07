@@ -31,11 +31,14 @@ export default class GridRow extends React.Component<{
     const { data, fields, rowProps } = this.props;
     return (
       <tr {...rowProps} >
-        {(fields || []).map((field) => (
-          <td key={field.name} style={{width: field.width}}>
-            {this.renderTableCell(field, data)}
-          </td>
-        ))}
+        {(fields || []).map(field => {
+          const dataSet = {'data-field': field.name};
+          return (
+            <td key={field.name} style={{width: field.width}} {...dataSet}>
+              {this.renderTableCell(field, data)}
+            </td>
+          );
+        })}
       </tr>
     );
   }
