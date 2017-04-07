@@ -105,11 +105,7 @@ export default class GridHeader extends React.Component<ListViewProps & {
     const { pinnedRows, gridRow } = this.props;
 
     const rowElement = React.isValidElement(gridRow) ? gridRow : React.createElement(gridRow as any);
-    return pinnedRows.map((r, i) => {
-      const props = {...r, key: i};
-      console.log(props);
-      return React.cloneElement(rowElement as any, props);
-    });
+    return pinnedRows.map((r, i) => React.cloneElement(rowElement as any, {...r, key: i}));
   }
 
   public render() {
