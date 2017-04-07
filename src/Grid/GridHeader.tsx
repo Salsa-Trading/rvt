@@ -5,14 +5,18 @@ import { ListViewProps } from '../List';
 import GridHeaderCell from './GridHeaderCell';
 import ColumnChooser from './ColumnChooser';
 import safeMouseMove from '../utils/saveMouseMove';
+import { RowData } from './VirtualGrid';
 
 const hoverClassName = 'field-moving-hover';
 const movingClassName = 'field-moving';
 
-export default class GridHeader extends React.Component<ListViewProps, {}> {
+export default class GridHeader extends React.Component<ListViewProps & {
+  pinnedRows?: RowData[];
+  gridRow?: React.ComponentClass<any>|React.StatelessComponent<any>|React.ReactElement<any>;
+}, {}> {
 
   public static propTypes = {
-    fieldSet: React.PropTypes.any,
+    fieldSet: React.PropTypes.any.isRequired,
     onSortSelection: React.PropTypes.func,
     onFilterChanged: React.PropTypes.func,
     onWidthChanged: React.PropTypes.func,
@@ -97,8 +101,19 @@ export default class GridHeader extends React.Component<ListViewProps, {}> {
     />;
   }
 
+  public renderPinnedRows() {
+    const { pinnedRows, gridRow } = this.props;
+
+    const rowElement = React.isValidElement(gridRow) ? gridRow : React.createElement(gridRow as any);
+    return pinnedRows.map((r, i) => {
+      const props = {...r, key: i};
+      console.log(props);
+      return React.cloneElement(rowElement as any, props);
+    });
+  }
+
   public render() {
-    const { fieldSet } = this.props;
+    const { fieldSet, pinnedRows } = this.props;
     const rows = fieldSet.getLevels();
     return (
       <thead>
@@ -109,6 +124,7 @@ export default class GridHeader extends React.Component<ListViewProps, {}> {
             </tr>
           );
         })}
+        {pinnedRows && this.renderPinnedRows()}
       </thead>
     );
   }

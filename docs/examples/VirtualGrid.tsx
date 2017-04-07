@@ -22,7 +22,7 @@ export default class VirtualGridExample extends React.Component<void, {
 
   public getRow(index: number): RowData {
     return {
-      data: this.state.data[index],
+      data: this.state.data[index + 2],
       rowProps: {
         style: {backgroundColor: index % 2 === 0 ? '' : 'lightgray'}
       }
@@ -54,7 +54,7 @@ export default class VirtualGridExample extends React.Component<void, {
     return (
       <VirtualGrid
         getRow={this.getRow.bind(this)}
-        rowCount={this.state.data.length}
+        rowCount={this.state.data.length - 2}
         listState={listState}
         onListStateChanged={this.onListStateChanged.bind(this)}
         className='table table-bordered table-condensed'
@@ -62,11 +62,12 @@ export default class VirtualGridExample extends React.Component<void, {
         autoResize={true}
         onMouseDown={(e, d, f) => console.log('mouse down', e, d, f)}
         onClick={(e, d, f) => console.log('click', e, d, f)}
+        pinnedRows={this.state.data.slice(0, 2).map(d => ({data: d, rowProps: { style: { backgroundColor: 'red'}} }))}
       >
-      <FieldSet header='Group 1' name='group1'>
-        <Field header='Col 1' name='col1' sortDirection='asc' />
-        <Field header='Col 2' name='col2' hidden />
-      </FieldSet>
+        <FieldSet header='Group 1' name='group1'>
+          <Field header='Col 1' name='col1' sortDirection='asc' />
+          <Field header='Col 2' name='col2' hidden />
+        </FieldSet>
         <Field header='Col 3' name='col3' cell={d => <input type='checkbox' defaultChecked={d.col3} />} />
         <Field header='Col 4' name='col4' cell={(d) => d.col4.toString()} />
         <Field header='Col 5' name='col5' />
