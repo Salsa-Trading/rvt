@@ -61,15 +61,13 @@ export default class VirtualGridExample extends React.Component<void, {
         fieldDefaults={{sortable: true, filterable: true}}
         autoResize={true}
       >
-        <FieldSet header='Group 1' name='group1'>
-          <Field header='Col 1' name='col1' sortDirection='asc' />
-          <Field header='Col 2' name='col2' hidden />
-          <Field header='Col 3' name='col3' cell={d => <input type='checkbox' defaultChecked={d.col3} />} />
-        </FieldSet>
-        <FieldSet header='Group 2' name='group2'>
-          <Field header='Col 4' name='col4' cell={(d) => d.col4.toString()} />
-          <Field header='Col 5' name='col5' />
-        </FieldSet>
+      <FieldSet header='Group 1' name='group1'>
+        <Field header='Col 1' name='col1' sortDirection='asc' />
+        <Field header='Col 2' name='col2' hidden />
+      </FieldSet>
+        <Field header='Col 3' name='col3' cell={d => <input type='checkbox' defaultChecked={d.col3} />} />
+        <Field header='Col 4' name='col4' cell={(d) => d.col4.toString()} />
+        <Field header='Col 5' name='col5' />
       </VirtualGrid>
     );
   }

@@ -60,7 +60,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
     };
 
     public static getListState(listState: ListState):  ListState {
-      return {...ListContainer.defaultProps, ...listState};
+      return {...ListContainer.defaultProps.listState, ...listState};
     }
 
     constructor(props, context) {
