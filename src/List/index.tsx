@@ -138,7 +138,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
     private onFilterChanged(filter: any, field: Field) {
       const { onListStateChanged, filters } = this.listStateHelper();
 
-      if(filter === null || filter === undefined) {
+      if(filter === null || filter === (void(0))) {
         delete filters[field.name];
       }
       else if((typeof filter === 'string' || filter instanceof String) && filter.length === 0) {
