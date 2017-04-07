@@ -1,6 +1,8 @@
 {
   "extends": ["tslint-react"],
   "rules": {
+    "jsx-no-lambda": false,
+    "jsx-boolean-value": false,
     "class-name": true,
     "comment-format": [true, "check-space"],
     "curly": true,
