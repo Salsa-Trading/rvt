@@ -60,6 +60,8 @@ export default class VirtualGridExample extends React.Component<void, {
         className='table table-bordered table-condensed'
         fieldDefaults={{sortable: true, filterable: true}}
         autoResize={true}
+        onMouseDown={(e, d, f) => console.log('mouse down', e, d, f)}
+        onClick={(e, d, f) => console.log('click', e, d, f)}
       >
       <FieldSet header='Group 1' name='group1'>
         <Field header='Col 1' name='col1' sortDirection='asc' />

@@ -1,11 +1,15 @@
 import * as React from 'react';
 import { Field } from '../List/Field';
 import * as get from 'lodash.get';
+import { VirtualGridMouseEventHandler } from './VirtualGrid';
+
 
 export default class GridRow extends React.Component<{
   fields: Field[];
   data?: any;
   rowProps?: React.HTMLProps<HTMLTableRowElement>;
+  onMouseDown?: VirtualGridMouseEventHandler;
+  onClick?: VirtualGridMouseEventHandler;
 }, {}> {
 
   public static propTypes = {
@@ -27,10 +31,17 @@ export default class GridRow extends React.Component<{
     }
   }
 
+  private onMouseEvent(eventHandler: VirtualGridMouseEventHandler, e: React.MouseEvent<any>) {
+    const { data } = this.props;
+    const td = (e.target as any).closest('td');
+    eventHandler(e, data, td.dataset['field']);
+  }
+
   public render() {
-    const { data, fields, rowProps } = this.props;
+    const { data, fields, rowProps, onClick, onMouseDown } = this.props;
+
     return (
-      <tr {...rowProps} >
+      <tr onClick={onClick && this.onMouseEvent.bind(this, onClick)} onMouseDown={onMouseDown  && this.onMouseEvent.bind(this, onMouseDown)} {...rowProps}>
         {(fields || []).map(field => {
           const dataSet = {'data-field': field.name};
           return (

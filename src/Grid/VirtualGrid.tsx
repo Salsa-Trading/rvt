@@ -4,17 +4,33 @@ import GridHeader from './GridHeader';
 import List, { ListProps, ListViewProps } from '../List';
 import VirtualTable, { VirtualTableBaseProps } from '../VirtualTable';
 
+export type VirtualGridMouseEventHandler = (e: React.MouseEvent<any>, data: any, fieldName: string) => void;
+
 export type RowData = {
   data: any;
   rowProps?: React.HTMLProps<HTMLTableRowElement>;
 };
 
-class VirtualGrid extends React.Component<VirtualTableBaseProps & ListViewProps & {
+type VirtualGridProps = {
   getRow: (rowIndex: number) => RowData;
-}, {}> {
+  onMouseDown?: VirtualGridMouseEventHandler;
+  onClick?: VirtualGridMouseEventHandler;
+};
+
+class VirtualGrid extends React.Component<VirtualTableBaseProps & ListViewProps & VirtualGridProps, {}> {
 
   public render() {
-    const { fieldSet, onSortSelection, onFilterChanged, onWidthChanged, onMove, onHiddenChange, ...rest } = this.props;
+    const {
+      fieldSet,
+      onSortSelection,
+      onFilterChanged,
+      onWidthChanged,
+      onMove,
+      onHiddenChange,
+      onMouseDown,
+      onClick,
+      ...rest
+    } = this.props;
 
     const header =
       <GridHeader
@@ -27,7 +43,12 @@ class VirtualGrid extends React.Component<VirtualTableBaseProps & ListViewProps 
       />;
 
     const fields = fieldSet.getFields();
-    const row = <GridRow fields={fields} />;
+    const row =
+      <GridRow
+        fields={fields}
+        onMouseDown={onMouseDown}
+        onClick={onClick}
+      />;
 
     return (
       <VirtualTable
@@ -39,6 +60,4 @@ class VirtualGrid extends React.Component<VirtualTableBaseProps & ListViewProps 
   }
 }
 
-export default List(VirtualGrid) as React.ComponentClass<VirtualTableBaseProps & ListProps & {
-  getRow: (rowIndex: number) => RowData;
-}>;
+export default List(VirtualGrid) as React.ComponentClass<VirtualTableBaseProps & ListProps & VirtualGridProps>;
