@@ -30,7 +30,7 @@ export interface FieldPropsBase {
   sortDirection?: SortDirection;
   filter?: any;
   hidden?: boolean;
-  alwaysVisible?: boolean;
+  showAlways?: boolean;
 }
 
 export interface FieldProps extends FieldPropsBase, React.Props<FieldProps> {
@@ -47,7 +47,7 @@ export abstract class FieldBase implements FieldPropsBase {
   public sortDirection?: SortDirection;
   public filter?: any;
   public hidden?: boolean;
-  public alwaysVisible?: boolean;
+  public showAlways?: boolean;
 
   constructor(props: FieldPropsBase, fieldDisplay: FieldDisplay) {
     Object.assign(this, props);
@@ -102,7 +102,7 @@ export const FieldBasePropTypes = {
   sortDirection: React.PropTypes.string,
   filter: React.PropTypes.any,
   hidden: React.PropTypes.bool,
-  alwaysVisible: React.PropTypes.bool
+  showAlways: React.PropTypes.bool
 };
 
 export class FieldDefinition extends React.Component<FieldProps, {}> {
