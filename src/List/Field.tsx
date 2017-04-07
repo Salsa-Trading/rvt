@@ -91,7 +91,7 @@ export class Field extends FieldBase implements FieldProps {
 }
 
 export const FieldBasePropTypes = {
-  name: React.PropTypes.string,
+  name: React.PropTypes.string.isRequired,
   header: React.PropTypes.any,
   width: React.PropTypes.oneOfType([
     React.PropTypes.string,
