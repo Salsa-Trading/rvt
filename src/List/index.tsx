@@ -2,6 +2,7 @@ import * as React from 'react';
 import { FieldSet, RootFieldSet } from './FieldSet';
 import { Field, SortDirection, FieldDefaults, FieldDisplay } from './Field';
 import strEnum from '../utils/strEnum';
+import isNil from '../utils/isNil';
 
 export type SortState = {fieldName: string, direction: SortDirection}[];
 export type FilterState = {[fieldName: string]: any };
@@ -138,7 +139,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
     private onFilterChanged(filter: any, field: Field) {
       const { onListStateChanged, filters } = this.listStateHelper();
 
-      if(filter === null || filter === (void(0))) {
+      if(isNil(filter)) {
         delete filters[field.name];
       }
       else if((typeof filter === 'string' || filter instanceof String) && filter.length === 0) {

@@ -1,38 +1,36 @@
 import * as React from 'react';
-import { Field, FieldProps, FieldDefaults, FieldDisplay } from './Field';
+import { FieldBase, FieldPropsBase, FieldDefaults, Field, FieldDisplay, FieldBasePropTypes } from './Field';
 
 export const RootFieldSet = '_root_';
 
-export interface FieldSetProps extends React.Props<FieldSetProps> {
-  name?: string;
-  header?: JSX.Element|string;
-  hidden?: boolean;
+export interface FieldSetProps extends FieldPropsBase, React.Props<FieldSetProps> {
 }
 
-export class FieldSet {
+export interface FieldSetDisplay extends FieldDisplay {
+  children?: FieldDisplay[];
+}
+
+export class FieldSet extends FieldBase {
 
   public name: string;
   public header: JSX.Element|string;
   public hidden?: boolean;
   public width?: number|string;
-  public children: (Field|FieldSet)[];
+  public children: FieldBase[];
 
-  constructor(props: FieldProps, fieldDefaults: FieldDefaults, fields: FieldDisplay) {
-    this.name = props.name;
-    this.header = props.header;
-    this.hidden = (fields && fields.hidden) || props.hidden;
-    this.width = (fields && fields.width) || props.width;
+  constructor(props: FieldSetProps, fieldDefaults: FieldDefaults, fields: FieldSetDisplay) {
+    super(props, fields);
 
     const children = React.Children.map(props.children, (c: any) => {
-      let colDisplay = null;
+      let field: FieldDisplay;
       if(fields) {
-        colDisplay = fields.children.find(cd => cd.name === c.props.name);
+        field = fields.children.find(cd => cd.name === c.props.name);
       }
       if(c.type.name === 'FieldSetDefinition') {
-        return new FieldSet(c.props, fieldDefaults, colDisplay);
+        return new FieldSet(c.props, fieldDefaults, field as FieldSetDisplay);
       }
       if(c.type.name === 'FieldDefinition') {
-        return new Field({...fieldDefaults, ...c.props, ...colDisplay});
+        return new Field({...fieldDefaults, ...c.props}, field);
       }
     });
     if(!fields || !fields.children || fields.children.length === 0) {
@@ -58,7 +56,7 @@ export class FieldSet {
     return fields;
   }
 
-  public moveField(newIndex: number, field: Field) {
+  public moveField(newIndex: number, field: FieldBase) {
     const oldIndex = this.children.indexOf(field);
     if(oldIndex >= 0) {
       this.children.splice(newIndex, 0, this.children.splice(oldIndex, 1)[0]);
@@ -77,7 +75,7 @@ export class FieldSet {
     return false;
   }
 
-  public findFieldSetByName(field: string) {
+  public findFieldSetByName(field: string): FieldSet {
     if(field === RootFieldSet) {
       return this;
     }
@@ -95,7 +93,7 @@ export class FieldSet {
     return null;
   }
 
-  public findParent(field: Field|FieldSet) {
+  public findParent(field: FieldBase) {
     if(this.findFieldIndex(field) >= 0) {
       return this;
     }
@@ -110,7 +108,7 @@ export class FieldSet {
     return null;
   }
 
-  public findFieldIndex(field: Field|FieldSet) {
+  public findFieldIndex(field: FieldBase) {
     return this.children.findIndex(c => c === field);
   }
 
@@ -118,7 +116,7 @@ export class FieldSet {
     return this.children[index];
   }
 
-  public getFieldDisplay(): FieldDisplay {
+  public getFieldDisplay(): FieldSetDisplay {
     return {
       name: this.name,
       width: this.width,
@@ -180,9 +178,7 @@ function isVisible(field: Field|FieldSet) {
 
 export class FieldSetDefinition extends React.Component<FieldSetProps, {}> {
 
-  public static propTypes = {
-    header: React.PropTypes.any
-  };
+  public static propTypes = FieldBasePropTypes;
 
   constructor(props, context) {
     super(props, context);

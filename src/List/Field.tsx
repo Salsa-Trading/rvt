@@ -1,5 +1,6 @@
 import * as React from 'react';
 import strEnum from '../utils/strEnum';
+import isNil from '../utils/isNil';
 import { FilterControlProps } from '../Filter';
 
 export const SortDirection = strEnum([
@@ -17,12 +18,10 @@ export interface FieldDisplay {
   name: string;
   width?: number|string;
   hidden?: boolean;
-  children?: FieldDisplay[];
 }
 
-export interface FieldProps extends React.Props<FieldProps> {
+export interface FieldPropsBase {
   name: string;
-  cell?: (data: any) => JSX.Element;
   header?: JSX.Element|string;
   filterControl?: React.ComponentClass<FilterControlProps>|React.StatelessComponent<FilterControlProps>;
   width?: number|string;
@@ -31,12 +30,15 @@ export interface FieldProps extends React.Props<FieldProps> {
   sortDirection?: SortDirection;
   filter?: any;
   hidden?: boolean;
+  alwaysVisible?: boolean;
 }
 
-export class Field implements FieldProps {
+export interface FieldProps extends FieldPropsBase, React.Props<FieldProps> {
+  cell?: (data: any) => JSX.Element;
+}
 
+export abstract class FieldBase implements FieldPropsBase {
   public name: string;
-  public cell?: (data: any) => JSX.Element;
   public header?: JSX.Element|string;
   public filterControl?: React.ComponentClass<FilterControlProps>|React.StatelessComponent<FilterControlProps>;
   public width?: number|string;
@@ -45,9 +47,12 @@ export class Field implements FieldProps {
   public sortDirection?: SortDirection;
   public filter?: any;
   public hidden?: boolean;
+  public alwaysVisible?: boolean;
 
-  constructor(props: FieldProps) {
+  constructor(props: FieldPropsBase, fieldDisplay: FieldDisplay) {
     Object.assign(this, props);
+    this.hidden = fieldDisplay && !isNil(fieldDisplay.hidden) ? fieldDisplay.hidden : props.hidden;
+    this.width = fieldDisplay && !isNil(fieldDisplay.width) ? fieldDisplay.width : props.width;
   }
 
   public getFields(): Field[] {
@@ -72,24 +77,39 @@ export class Field implements FieldProps {
   public resize(width: number) {
     this.width = width;
   }
+}
+
+export class Field extends FieldBase implements FieldProps {
+
+  public cell?: (data: any) => JSX.Element;
+
+  constructor(props: FieldProps, fieldDisplay: FieldDisplay) {
+    super(props, fieldDisplay);
+    this.cell = props.cell;
+  }
 
 }
+
+export const FieldBasePropTypes = {
+  name: React.PropTypes.string,
+  header: React.PropTypes.any,
+  width: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.number
+  ]),
+  sortable: React.PropTypes.bool,
+  filterable: React.PropTypes.bool,
+  sortDirection: React.PropTypes.string,
+  filter: React.PropTypes.any,
+  hidden: React.PropTypes.bool,
+  alwaysVisible: React.PropTypes.bool
+};
 
 export class FieldDefinition extends React.Component<FieldProps, {}> {
 
   public static propTypes = {
-    name: React.PropTypes.string,
-    header: React.PropTypes.any,
-    cell: React.PropTypes.any,
-    width: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.number
-    ]),
-    sortable: React.PropTypes.bool,
-    filterable: React.PropTypes.bool,
-    sortDirection: React.PropTypes.string,
-    filter: React.PropTypes.any,
-    hidden: React.PropTypes.bool
+    ...FieldBasePropTypes,
+    cell: React.PropTypes.any
   };
 
   constructor(props, context) {
