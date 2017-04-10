@@ -6,7 +6,7 @@ const sass = require('gulp-sass');
 const merge2 = require('merge2');
 
 gulp.task('clean', (done) => {
-  del(['./lib/**', './scss/**', './css/**']).then(() => done());
+  del(['./lib/**', './css/**']).then(() => done());
 });
 
 const tsProject = ts.createProject('./tsconfig.json');
@@ -22,15 +22,9 @@ gulp.task('build', () => {
 });
 
 gulp.task('sass', function () {
-  return gulp.src('./src/styles/**/*.scss')
+  return gulp.src('./scss//**/*.scss')
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest('./css'));
-});
-
-gulp.task('copy-assets', ['clean'], () => {
-  return merge2(
-    gulp.src(['src/styles/**.scss']).pipe(gulp.dest('./scss/'))
-  );
 });
 
 gulp.task('deploy', ['clean', 'build', 'sass', 'copy-assets'],  () => {

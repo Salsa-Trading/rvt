@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { Grid, Field, FieldSet, ListState, ListStateChangeType, isDataChange, RowData } from '../../src/index';
 import { generateData } from '../../test/dataUtils';
 
-import '../../src/styles/rvt_fa.scss';
+import '../../scss/rvt_fa.scss';
 
 export default class VirtualGridExample extends React.Component<void, {
   originalData?: any[];

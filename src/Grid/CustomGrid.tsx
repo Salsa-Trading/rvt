@@ -24,10 +24,12 @@ class CustomGrid extends React.Component<React.HTMLProps<HTMLTableElement> & Lis
     const bodyElement = React.createElement(body as any, {fields, data});
 
     return (
-      <table {...rest}>
-        {header}
-        {bodyElement}
-      </table>
+      <div className='rvt'>
+        <table {...rest}>
+          {header}
+          {bodyElement}
+        </table>
+      </div>
     );
   }
 }

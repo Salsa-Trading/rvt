@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { CustomGrid, Field, FieldSet, FieldProps, ListState, ListStateChangeType, isDataChange, RowData } from '../../src/index';
 import { generateData } from '../../test/dataUtils';
 
-import '../../src/styles/rvt_fa.scss';
+import '../../scss/rvt_fa.scss';
 
 class Body extends React.Component<{
   data: any[];
