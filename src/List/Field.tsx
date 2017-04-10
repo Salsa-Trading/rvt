@@ -34,7 +34,7 @@ export interface FieldPropsBase {
 }
 
 export interface FieldProps extends FieldPropsBase, React.Props<FieldProps> {
-  cell?: (data: any) => JSX.Element;
+  cell?: (data: any, field: FieldProps) => JSX.Element;
 }
 
 export abstract class FieldBase implements FieldPropsBase {
@@ -81,7 +81,7 @@ export abstract class FieldBase implements FieldPropsBase {
 
 export class Field extends FieldBase implements FieldProps {
 
-  public cell?: (data: any) => JSX.Element;
+  public cell?: (data: any, field: FieldProps) => JSX.Element;
 
   constructor(props: FieldProps, fieldDisplay: FieldDisplay) {
     super(props, fieldDisplay);

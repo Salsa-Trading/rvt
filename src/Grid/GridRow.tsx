@@ -29,10 +29,10 @@ export default class GridRow extends React.Component<{
 
   private renderTableCell(field: Field, data: any) {
     if(field.cell) {
-      return field.cell(data);
+      return field.cell(data, field);
     }
     else {
-      return get(data, field.name);
+      return get(data, field.name).toString();
     }
   }
 
