@@ -186,9 +186,13 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
         onHiddenChange: this.onHiddenChange.bind(this)
       };
 
+      /* tslint:disable:no-unused-variable */
+      const { listState, onListStateChanged, ...ownProps } = this.props;
+      /* tslint:enable:no-unused-variable */
+
       return (
         <View
-          {...this.props}
+          {...ownProps}
           {...props}
         />
       );
