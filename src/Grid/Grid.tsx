@@ -39,8 +39,6 @@ class Grid extends React.Component<React.HTMLProps<HTMLTableElement> & ListViewP
         gridRow={<GridRow fields={fields} onMouseDown={onMouseDown} onClick={onClick} />}
       />;
 
-    console.log(data);
-
     return (
       <div className='rvt'>
         <table {...rest}>
