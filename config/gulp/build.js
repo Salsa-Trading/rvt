@@ -27,6 +27,6 @@ gulp.task('sass', function () {
     .pipe(gulp.dest('./css'));
 });
 
-gulp.task('deploy', ['clean', 'build', 'sass', 'copy-assets'],  () => {
+gulp.task('deploy', ['clean', 'build', 'sass'],  () => {
 
 });
