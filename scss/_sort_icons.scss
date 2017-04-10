@@ -1,0 +1,29 @@
+.rvt thead th {
+  button.sort {
+    @extend %button;
+    display: none;
+  }
+
+  &:not(:hover) {
+    // When not hovering, only show active by default
+    .sort-active { display: inline; }
+
+    // If no active, make the second inactive button inline, but transparent for spacing
+    .sort-inactive + .sort-inactive {
+      display: inline;
+      opacity: 0;
+    }
+  }
+
+  &:hover {
+    // When hovering, show first inactive button
+    .sort-inactive {
+      display: inline;
+      opacity: .5;
+    }
+
+    .sort-inactive + .sort-inactive {
+      display: none;
+    }
+  }
+}

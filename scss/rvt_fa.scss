@@ -1,0 +1,33 @@
+@import 'base';
+@import 'filters';
+@import 'sort_icons';
+@import 'column_chooser';
+
+@import 'node_modules/font-awesome/scss/_variables';
+
+.rvt thead th {
+  .edit-filters::after {
+    font-family: FontAwesome;
+    content: $fa-var-filter;
+  }
+
+  .sort-asc::after {
+    font-family: FontAwesome;
+    content: $fa-var-sort-asc;
+  }
+
+  .sort-desc::after {
+    font-family: FontAwesome;
+    content: $fa-var-sort-desc;
+  }
+
+  .filter-pane .checked::after {
+    font-family: FontAwesome;
+    content: $fa-var-check;
+  }
+
+  .column-chooser-btn::after {
+    font-family: FontAwesome;
+    content: $fa-var-columns;
+  }
+}

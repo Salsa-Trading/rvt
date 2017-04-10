@@ -1,0 +1,27 @@
+@import 'base';
+@import 'filters';
+@import 'sort_icons';
+@import 'column_chooser';
+
+.rvt thead th {
+  .edit-filters::after {
+    content: '☔';
+  }
+
+  .sort-asc::after {
+    content: '↑';
+  }
+
+  .sort-desc::after {
+    content: '↓';
+  }
+
+  .filter-pane .checked::after {
+    content: '✓';
+  }
+
+  .column-chooser-btn::after {
+    content: '◫';
+  }
+}
+
