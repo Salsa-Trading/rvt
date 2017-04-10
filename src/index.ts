@@ -16,13 +16,20 @@ export {
 } from './List';
 
 export {
-  default as VirtualGrid,
-  RowData
+  default as VirtualGrid
 } from './Grid/VirtualGrid';
+
+export {
+  RowData
+} from './Grid/GridRow';
 
 export {
   default as CustomGrid
 } from './Grid/CustomGrid';
+
+export {
+  default as Grid
+} from './Grid/Grid';
 
 export {
   default as VirtualTable

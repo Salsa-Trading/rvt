@@ -19,7 +19,8 @@ export default class NavBar extends React.Component<{
             <NavDropdown title='Examples' id='examples-dropdown'>
               <MenuItem href='/examples/virtualTable'>Virtual Table</MenuItem>
               <MenuItem href='/examples/style'>Style</MenuItem>
-              <MenuItem href='/examples/virtualGrid'>Grid</MenuItem>
+              <MenuItem href='/examples/grid'>Grid</MenuItem>
+              <MenuItem href='/examples/virtualGrid'>Virtual Grid</MenuItem>
               <MenuItem href='/examples/customGrid'>Custom Grid</MenuItem>
             </NavDropdown>
           </Nav>

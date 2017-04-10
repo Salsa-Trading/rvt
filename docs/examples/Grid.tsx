@@ -1,29 +1,9 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { CustomGrid, Field, FieldSet, FieldProps, ListState, ListStateChangeType, isDataChange, RowData } from '../../src/index';
+import { Grid, Field, FieldSet, ListState, ListStateChangeType, isDataChange, RowData } from '../../src/index';
 import { generateData } from '../../test/dataUtils';
 
 import '../../src/styles/rvt_fa.scss';
-
-class Body extends React.Component<{
-  data: any[];
-  fields?: FieldProps[];
-}, {}> {
-
-  public render() {
-    const { data, fields} = this.props;
-    return <tbody>
-      {data.map((d, i) => <tr key={i}>
-        {fields.map((f, c) => <td key={c}>
-          {_.get(d, f.name).toString()}
-        </td>
-        )}
-        </tr>
-      )}
-    </tbody>;
-  }
-
-}
 
 export default class VirtualGridExample extends React.Component<void, {
   originalData?: any[];
@@ -40,9 +20,9 @@ export default class VirtualGridExample extends React.Component<void, {
     };
   }
 
-  public getRow(index: number): RowData {
+  public getRow(data: any, index: number): RowData {
     return {
-      data: this.state.data[index],
+      data,
       rowProps: {
         style: {backgroundColor: index % 2 === 0 ? '' : 'lightgray'}
       }
@@ -72,28 +52,21 @@ export default class VirtualGridExample extends React.Component<void, {
   public render() {
     const { listState, data } = this.state;
     return (
-      <CustomGrid
+      <Grid
         listState={listState}
         onListStateChanged={this.onListStateChanged.bind(this)}
         fieldDefaults={{sortable: true, filterable: true}}
         className='table table-bordered table-condensed'
-        data={data}
-        body={Body}
+        data={data.map(this.getRow.bind(this))}
       >
         <FieldSet header='Group 1' name='group1'>
-          <Field header='Col 1' name='col1' sortable />
-          <FieldSet header='Sub Group 1' name='subGroup1'>
-            <Field header='Col 2' name='col2' filterable sortable sortDirection='desc' />
-            <Field header='Col 3' name='col3' />
-          </FieldSet>
+          <Field header='Col 1' name='col1' sortDirection='asc' />
+          <Field header='Col 2' name='col2' hidden />
         </FieldSet>
-        <FieldSet header='Group 2' name='group2'>
-          <FieldSet header='Sub Group 2' name='subGroup2'>
-            <Field header='Col 4' name='col4' />
-          </FieldSet>
-          <Field header='Col 5' name='col5' />
-        </FieldSet>
-      </CustomGrid>
+        <Field header='Col 3' name='col3' cell={d => <input type='checkbox' defaultChecked={d.col3} />} />
+        <Field header='Col 4' name='col4' cell={(d) => d.col4.toString()} />
+        <Field header='Col 5' name='col5' />
+      </Grid>
     );
   }
 }

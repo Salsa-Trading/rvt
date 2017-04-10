@@ -5,7 +5,7 @@ import { ListViewProps } from '../List';
 import GridHeaderCell from './GridHeaderCell';
 import ColumnChooser from './ColumnChooser';
 import safeMouseMove from '../utils/saveMouseMove';
-import { RowData } from './VirtualGrid';
+import { RowData } from './GridRow';
 
 const hoverClassName = 'field-moving-hover';
 const movingClassName = 'field-moving';

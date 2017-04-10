@@ -1,8 +1,13 @@
 import * as React from 'react';
 import { Field } from '../List/Field';
 import * as get from 'lodash.get';
-import { VirtualGridMouseEventHandler } from './VirtualGrid';
 
+export type VirtualGridMouseEventHandler = (e: React.MouseEvent<any>, data: any, fieldName: string) => void;
+
+export type RowData = {
+  data: any;
+  rowProps?: React.HTMLProps<HTMLTableRowElement>;
+};
 
 export default class GridRow extends React.Component<{
   fields: Field[];

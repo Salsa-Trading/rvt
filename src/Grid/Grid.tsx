@@ -1,18 +1,14 @@
 import * as React from 'react';
-import GridRow, { VirtualGridMouseEventHandler, RowData } from './GridRow';
 import GridHeader from './GridHeader';
+import GridRow, { VirtualGridMouseEventHandler, RowData } from './GridRow';
 import List, { ListProps, ListViewProps } from '../List';
-import VirtualTable, { VirtualTableBaseProps } from '../VirtualTable';
 
-
-type VirtualGridProps = {
-  getRow: (rowIndex: number) => RowData;
+class Grid extends React.Component<React.HTMLProps<HTMLTableElement> & ListViewProps & {
+  data: RowData[];
   onMouseDown?: VirtualGridMouseEventHandler;
   onClick?: VirtualGridMouseEventHandler;
   pinnedRows?: RowData[];
-};
-
-class VirtualGrid extends React.Component<VirtualTableBaseProps & ListViewProps & VirtualGridProps, {}> {
+}, {}> {
 
   public render() {
     const {
@@ -25,17 +21,11 @@ class VirtualGrid extends React.Component<VirtualTableBaseProps & ListViewProps 
       onMouseDown,
       onClick,
       pinnedRows,
+      data,
       ...rest
     } = this.props;
 
     const fields = fieldSet.getFields();
-    const row =
-      <GridRow
-        fields={fields}
-        onMouseDown={onMouseDown}
-        onClick={onClick}
-      />;
-
 
     const header =
       <GridHeader
@@ -46,17 +36,25 @@ class VirtualGrid extends React.Component<VirtualTableBaseProps & ListViewProps 
         onMove={onMove}
         onHiddenChange={onHiddenChange}
         pinnedRows={pinnedRows}
-        gridRow={row}
+        gridRow={<GridRow fields={fields} onMouseDown={onMouseDown} onClick={onClick} />}
       />;
 
+    console.log(data);
+
     return (
-      <VirtualTable
-        {...rest}
-        header={header}
-        row={row}
-      />
+      <div className='rvt'>
+        <table {...rest}>
+          {header}
+          <tbody>
+            {data.map((d, i) => <GridRow key={i} fields={fields} data={d.data} rowProps={d.rowProps} onMouseDown={onMouseDown} onClick={onClick} />)}
+          </tbody>
+        </table>
+      </div>
     );
   }
 }
 
-export default List(VirtualGrid) as React.ComponentClass<VirtualTableBaseProps & ListProps & VirtualGridProps>;
+export default List(Grid) as React.ComponentClass<React.HTMLProps<HTMLTableElement> & ListProps & {
+  data: any;
+}>;
+
