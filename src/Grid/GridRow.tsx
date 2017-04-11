@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Field } from '../List/Field';
 import * as get from 'lodash.get';
+import isNil from '../utils/isNil';
 
 export type VirtualGridMouseEventHandler = (e: React.MouseEvent<any>, data: any, fieldName: string) => void;
 
@@ -32,7 +33,8 @@ export default class GridRow extends React.Component<{
       return field.cell(data, field);
     }
     else {
-      return get(data, field.name).toString();
+      const value = get(data, field.name);
+      return isNil(value) ? value : value.toString();
     }
   }
 
