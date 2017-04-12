@@ -81,13 +81,33 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     />;
   }
 
+  private renderHeader() {
+    const {
+      field,
+      field: {
+        header,
+        name
+      }
+    } = this.props;
+
+    if(header) {
+      if(typeof header === 'string') {
+        return header;
+      }
+      if(React.isValidElement(header)) {
+        return header;
+      }
+      return React.createElement(header as any, {field});
+    }
+    return name;
+  }
+
   public render() {
     const {
       fieldSet,
       field,
       field: {
         name,
-        header,
         width,
         sortDirection,
         sortable,
@@ -130,7 +150,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
       <th key={name} style={{width, padding: 0}} rowSpan={rowSpan} colSpan={colSpan} {...dataSet}>
         <div className={`${headerClassName}`}>
           <div className='header' onMouseDown={onMouseDown}>
-            {header || name}
+            {this.renderHeader()}
           </div>
           <div className='sort-filter'>
             {sortFilterControl}

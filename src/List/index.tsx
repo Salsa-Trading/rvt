@@ -187,7 +187,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       };
 
       /* tslint:disable:no-unused-variable */
-      const { listState, onListStateChanged, ...ownProps } = this.props;
+      const { listState, onListStateChanged, fieldDefaults, ...ownProps } = this.props;
       /* tslint:enable:no-unused-variable */
 
       return (

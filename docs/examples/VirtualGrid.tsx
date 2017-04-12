@@ -68,8 +68,8 @@ export default class VirtualGridExample extends React.Component<void, {
           <Field header='Col 1' name='col1' sortDirection='asc' />
           <Field header='Col 2' name='col2' hidden />
         </FieldSet>
-        <Field header='Col 3' name='col3' cell={d => <input type='checkbox' defaultChecked={d.col3} />} />
-        <Field header='Col 4' name='col4' cell={(d) => d.col4.toString()} />
+        <Field header='Col 3' name='col3' cell={({data}) => <input type='checkbox' defaultChecked={data.col3} />} />
+        <Field header='Col 4' name='col4' format={d => d.col4.toString()} />
         <Field header='Col 5' name='col5' />
       </VirtualGrid>
     );

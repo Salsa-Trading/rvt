@@ -20,10 +20,14 @@ export interface FieldDisplay {
   hidden?: boolean;
 }
 
+export type CellType = React.ComponentClass<CellProps>|React.StatelessComponent<CellProps>;
+export type FilterControlType = React.ComponentClass<FilterControlProps>|React.StatelessComponent<FilterControlProps>;
+export type HeaderType = JSX.Element|string|React.ComponentClass<FilterControlProps>|React.StatelessComponent<FilterControlProps>;
+
 export interface FieldPropsBase {
   name: string;
-  header?: JSX.Element|string;
-  filterControl?: React.ComponentClass<FilterControlProps>|React.StatelessComponent<FilterControlProps>;
+  header?: HeaderType;
+  filterControl?: FilterControlType;
   width?: number|string;
   sortable?: boolean;
   filterable?: boolean;
@@ -33,14 +37,20 @@ export interface FieldPropsBase {
   showAlways?: boolean;
 }
 
+export type CellProps = {
+  data: any;
+  field: FieldProps;
+};
+
 export interface FieldProps extends FieldPropsBase, React.Props<FieldProps> {
-  cell?: (data: any, field: FieldProps) => JSX.Element;
+  format?: (data: any, field: FieldProps) => string;
+  cell?: CellType;
 }
 
 export abstract class FieldBase implements FieldPropsBase {
   public name: string;
-  public header?: JSX.Element|string;
-  public filterControl?: React.ComponentClass<FilterControlProps>|React.StatelessComponent<FilterControlProps>;
+  public header?: HeaderType;
+  public filterControl?: FilterControlType;
   public width?: number|string;
   public sortable?: boolean;
   public filterable?: boolean;
@@ -81,7 +91,8 @@ export abstract class FieldBase implements FieldPropsBase {
 
 export class Field extends FieldBase implements FieldProps {
 
-  public cell?: (data: any, field: FieldProps) => JSX.Element;
+  public format?: (data: any, field: FieldProps) => string;
+  public cell?: CellType;
 
   constructor(props: FieldProps, fieldDisplay: FieldDisplay) {
     super(props, fieldDisplay);
@@ -109,7 +120,8 @@ export class FieldDefinition extends React.Component<FieldProps, {}> {
 
   public static propTypes = {
     ...FieldBasePropTypes,
-    cell: React.PropTypes.any
+    cell: React.PropTypes.any,
+    format: React.PropTypes.any
   };
 
   constructor(props, context) {

@@ -1,9 +1,17 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { Grid, Field, FieldSet, ListState, ListStateChangeType, isDataChange, RowData } from '../../src/index';
+import { Grid, Field, FieldSet, ListState, ListStateChangeType, isDataChange, RowData, FieldProps } from '../../src/index';
 import { generateData } from '../../test/dataUtils';
 
 import '../../scss/rvt_fa.scss';
+
+function Cell({ data, field }: { data: any, field: FieldProps }) {
+  return <span style={{color: 'red'}}>{data.col5}</span>;
+}
+
+function Header(props: any) {
+  return <span>props.field.name</span>;
+}
 
 export default class VirtualGridExample extends React.Component<void, {
   originalData?: any[];
@@ -60,12 +68,12 @@ export default class VirtualGridExample extends React.Component<void, {
         data={data.map(this.getRow.bind(this))}
       >
         <FieldSet header='Group 1' name='group1'>
-          <Field header='Col 1' name='col1' sortDirection='asc' />
+          <Field header={Header} name='col1' sortDirection='asc' />
           <Field header='Col 2' name='col2' hidden />
         </FieldSet>
-        <Field header='Col 3' name='col3' cell={d => <input type='checkbox' defaultChecked={d.col3} />} />
-        <Field header='Col 4' name='col4' cell={(d) => d.col4.toString()} />
-        <Field header='Col 5' name='col5' />
+        <Field header='Col 3' name='col3' cell={({data}) => <input type='checkbox' defaultChecked={data.col3} />} />
+        <Field header='Col 4' name='col4' format={d => d.col4.toString()} />
+        <Field header='Col 5' name='col5' cell={Cell} />
       </Grid>
     );
   }
