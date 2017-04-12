@@ -96,7 +96,7 @@ export default class GridHeader extends React.Component<ListViewProps & {
       onFilterChanged={onFilterChanged}
       onWidthChanged={onWidthChanged}
       onMouseDown={this.onFieldMouseDown.bind(this)}
-      canResize={colIndex < fields.length - 1 && rowIndex === rowCount - 1}
+      canResize={colIndex < fields.length - 1 && ((rowIndex + rowSpan) === rowCount)}
       columnChooser={columnChooser}
     />;
   }
