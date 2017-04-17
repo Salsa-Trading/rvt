@@ -4,6 +4,7 @@ import { FieldSet } from '../List/FieldSet';
 import { ListViewProps } from '../List';
 import GridHeaderCell from './GridHeaderCell';
 import ColumnChooser from './ColumnChooser';
+import ColumnChooserButton from './ColumnChooserButton';
 import safeMouseMove from '../utils/saveMouseMove';
 import { RowData } from './GridRow';
 
@@ -13,7 +14,9 @@ const movingClassName = 'field-moving';
 export default class GridHeader extends React.Component<ListViewProps & {
   pinnedRows?: RowData[];
   gridRow?: React.ComponentClass<any>|React.StatelessComponent<any>|React.ReactElement<any>;
-}, {}> {
+}, {
+  showColumnChooser: boolean;
+}> {
 
   public static propTypes = {
     fieldSet: React.PropTypes.any.isRequired,
@@ -26,6 +29,9 @@ export default class GridHeader extends React.Component<ListViewProps & {
 
   constructor(props, context) {
     super(props, context);
+    this.state = {
+      showColumnChooser: false
+    };
   }
 
   private onFieldMouseDown(e: React.MouseEvent<HTMLTableHeaderCellElement>) {
@@ -70,20 +76,37 @@ export default class GridHeader extends React.Component<ListViewProps & {
     );
   }
 
+  private onToggleColumnChooserVisibility(isVisible: boolean) {
+    this.setState({showColumnChooser: isVisible});
+  }
+
   private renderHeaderRow(rowIndex: number, rowCount: number, field: Field|FieldSet, colIndex: number, fields: (Field|FieldSet)[]) {
-    const { fieldSet } = this.props;
-    const { onSortSelection, onFilterChanged, onWidthChanged, onHiddenChange } = this.props;
+    const { showColumnChooser } = this.state;
+    const { fieldSet, onSortSelection, onFilterChanged, onWidthChanged, onHiddenChange } = this.props;
 
     let colSpan = 1;
     let rowSpan = rowCount - rowIndex;
     if(field instanceof FieldSet) {
       colSpan = field.getCount();
-      rowSpan = rowSpan - field.getCount();
+      rowSpan = rowSpan - field.getLevels().length;
     }
 
-    let columnChooser;
+    let columnChooser, columnChooserButton;
     if(rowIndex === 0 && colIndex === fields.length - 1) {
-      columnChooser = <ColumnChooser fieldSet={fieldSet} onHiddenChange={onHiddenChange} />;
+      columnChooser = (
+        <ColumnChooser
+          fieldSet={fieldSet}
+          onHiddenChange={onHiddenChange}
+          onToggleVisibility={this.onToggleColumnChooserVisibility.bind(this)}
+        />
+      );
+      columnChooserButton = (
+        <ColumnChooserButton
+          columnChooser={columnChooser}
+          onToggleVisibility={this.onToggleColumnChooserVisibility.bind(this)}
+          showColumnChooser={showColumnChooser}
+        />
+      );
     }
 
     return <GridHeaderCell
@@ -97,7 +120,7 @@ export default class GridHeader extends React.Component<ListViewProps & {
       onWidthChanged={onWidthChanged}
       onMouseDown={this.onFieldMouseDown.bind(this)}
       canResize={colIndex < fields.length - 1 && ((rowIndex + rowSpan) === rowCount)}
-      columnChooser={columnChooser}
+      columnChooserButton={columnChooserButton}
     />;
   }
 

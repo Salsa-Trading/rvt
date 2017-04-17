@@ -11,7 +11,7 @@ export type GridHeaderCellProps = {
   rowSpan?: number;
   colSpan?: number;
   canResize?: boolean;
-  columnChooser?: any;
+  columnChooserButton?: any;
   onSortSelection?: (sortDirection: SortDirection, field: Field) => void;
   onFilterChanged?: (filter: any, field: Field) => void;
   onWidthChanged?: (width: number, field: Field) => void;
@@ -95,7 +95,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
         return header;
       }
       if(React.isValidElement(header)) {
-        return header;
+        return React.cloneElement(header as any, {field});
       }
       return React.createElement(header as any, {field});
     }
@@ -114,7 +114,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
         filterable,
         filter
       },
-      columnChooser,
+      columnChooserButton,
       canResize,
       rowSpan,
       colSpan,
@@ -133,6 +133,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
       filterable ? 'filterable' : null,
       filterable && filter ? 'filtered' : null
     ].join(' ');
+
     let sortFilterControl;
     if(filterable) {
       sortFilterControl = <Filter field={field} onSortSelection={sortSelectionHandler} onFilterChanged={filterChangedHandler} />;
@@ -156,7 +157,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
             {sortFilterControl}
           </div>
           {canResize && <div className='resize-handle' onMouseDown={this.onResizeHandleMouseDown.bind(this)} />}
-          {columnChooser && <div className='column-chooser'><ColumnChooserButton columnChooser={columnChooser} /></div>}
+          {columnChooserButton && <div className='column-chooser'>{columnChooserButton}</div>}
         </div>
       </th>
     );

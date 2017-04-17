@@ -20,9 +20,13 @@ export interface FieldDisplay {
   hidden?: boolean;
 }
 
-export type CellType = React.ComponentClass<CellProps>|React.StatelessComponent<CellProps>;
+export interface HeaderProps {
+  field: FieldPropsBase;
+}
+
+export type CellType = React.ComponentClass<CellProps>|React.StatelessComponent<CellProps>|React.ReactElement<CellProps>;
 export type FilterControlType = React.ComponentClass<FilterControlProps>|React.StatelessComponent<FilterControlProps>;
-export type HeaderType = JSX.Element|string|React.ComponentClass<FilterControlProps>|React.StatelessComponent<FilterControlProps>;
+export type HeaderType = JSX.Element|string|React.ComponentClass<HeaderProps>|React.StatelessComponent<HeaderProps>;
 
 export interface FieldPropsBase {
   name: string;

@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { Field } from '../List/Field';
 import { FieldSet } from '../List/FieldSet';
+import safeMouseDown from '../utils/safeMouseDown';
 
 export type ColumnChooserProps = {
   fieldSet: FieldSet;
   onHiddenChange?: (hidden: boolean, field: Field|FieldSet) => void;
+  onToggleVisibility: (isVisible: boolean) => void;
 };
 
 export default class ColumnChooser extends React.Component<ColumnChooserProps, void> {
@@ -13,8 +15,26 @@ export default class ColumnChooser extends React.Component<ColumnChooserProps, v
     fieldSet: React.PropTypes.any
   };
 
+  private mouseDownHandler: () => void;
+
   constructor(props, context) {
     super(props, context);
+  }
+
+  public componentDidMount() {
+    const { onToggleVisibility } = this.props;
+    this.mouseDownHandler = safeMouseDown<HTMLElement>((e) => {
+      if(!(e as any).target.closest('.column-chooser-btn') &&
+         !(e as any).target.closest('.column-chooser-pane')) {
+        onToggleVisibility(false);
+      }
+    });
+  }
+
+  public componentWillUnmount() {
+    if(this.mouseDownHandler) {
+      this.mouseDownHandler();
+    }
   }
 
   private onChange(field: Field|FieldSet, e: React.ChangeEvent<HTMLInputElement>) {
@@ -59,7 +79,11 @@ export default class ColumnChooser extends React.Component<ColumnChooserProps, v
       fieldSet
     } = this.props as any;
 
-    return this.renderFieldSet(fieldSet);
+    return (
+      <div className='column-chooser-pane'>
+        {this.renderFieldSet(fieldSet)}
+      </div>
+    );
   }
 }
 
