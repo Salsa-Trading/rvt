@@ -2,8 +2,8 @@ import * as React from 'react';
 
 export default function safeMouseMove<T>(
   e: React.MouseEvent<T>,
-  onMove: ((moveEvent: React.MouseEvent<T>) => void),
-  onUp?: ((upvent: React.MouseEvent<T>) => void)) {
+  onMove: React.MouseEventHandler<T>,
+  onUp?: React.MouseEventHandler<T>) {
   const onMouseMove = (moveEvent: React.MouseEvent<T>) => {
     onMove(moveEvent);
     moveEvent.preventDefault();
@@ -25,3 +25,4 @@ export default function safeMouseMove<T>(
   document.addEventListener('mouseup', onMouseUp as any);
   e.preventDefault();
 }
+

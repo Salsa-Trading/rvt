@@ -2,9 +2,9 @@ import * as React from 'react';
 
 export default class Filter extends React.Component<{
   columnChooser: any;
-}, {
   showColumnChooser: boolean;
-}> {
+  onToggleVisibility: (isVisible: boolean) => void;
+}, {}> {
 
   constructor(props, context) {
     super(props, context);
@@ -14,24 +14,16 @@ export default class Filter extends React.Component<{
   }
 
   private toggleFilterPane() {
-    this.setState({showColumnChooser: !this.state.showColumnChooser });
-  }
-
-  private renderColumnChooserPane() {
-    const { columnChooser } = this.props;
-    return (
-      <div className='column-chooser-pane'>
-        {columnChooser}
-      </div>
-    );
+    const { showColumnChooser, onToggleVisibility } = this.props;
+    onToggleVisibility(!showColumnChooser);
   }
 
   public render() {
-    const { showColumnChooser } = this.state;
+    const { columnChooser, showColumnChooser } = this.props;
     return (
       <div>
         <button className='column-chooser-btn' onClick={this.toggleFilterPane.bind(this)} />
-        {showColumnChooser && this.renderColumnChooserPane()}
+        {showColumnChooser && columnChooser}
       </div>
     );
   }
