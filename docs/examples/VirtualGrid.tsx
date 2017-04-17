@@ -1,9 +1,18 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { VirtualGrid, Field, FieldSet, ListState, ListStateChangeType, isDataChange, RowData } from '../../src/index';
+import { VirtualGrid, Field, FieldSet, FieldProps, ListState, ListStateChangeType, isDataChange, RowData } from '../../src/index';
 import { generateData } from '../../test/dataUtils';
 
 import '../../scss/rvt_unicode.scss';
+
+function CustomCell({label, data, field}: {label: string, data?: any, field?: FieldProps }) {
+  return (
+    <div>
+      <span style={{marginRight: 5}}>{label}</span>
+      <span>{data.col5}</span>
+    </div>
+  );
+}
 
 export default class VirtualGridExample extends React.Component<void, {
   originalData?: any[];
@@ -70,7 +79,7 @@ export default class VirtualGridExample extends React.Component<void, {
         </FieldSet>
         <Field header='Col 3' name='col3' cell={({data}) => <input type='checkbox' defaultChecked={data.col3} />} />
         <Field header='Col 4' name='col4' format={d => d.col4.toString()} />
-        <Field header='Col 5' name='col5' />
+        <Field header='Col 5' name='col5' cell={<CustomCell label='test' />} />
       </VirtualGrid>
     );
   }

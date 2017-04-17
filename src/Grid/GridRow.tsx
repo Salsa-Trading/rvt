@@ -30,7 +30,12 @@ export default class GridRow extends React.Component<{
 
   private renderTableCell(field: Field, data: any) {
     if(field.cell) {
-      return React.createElement(field.cell as any, {field, data});
+      if(React.isValidElement(field.cell)) {
+        return React.cloneElement(field.cell as any, {field, data});
+      }
+      else {
+        return React.createElement(field.cell as any, {field, data});
+      }
     }
     else if(field.format) {
       return field.format(data, field);
