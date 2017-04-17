@@ -78,7 +78,7 @@ export default class GridHeader extends React.Component<ListViewProps & {
     let rowSpan = rowCount - rowIndex;
     if(field instanceof FieldSet) {
       colSpan = field.getCount();
-      rowSpan = rowSpan - field.getCount();
+      rowSpan = rowSpan - field.getLevels().length;
     }
 
     let columnChooser;
