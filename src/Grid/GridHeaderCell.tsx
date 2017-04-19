@@ -91,11 +91,8 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     } = this.props;
 
     if(header) {
-      if(typeof header === 'string') {
+      if(typeof header === 'string' || React.isValidElement(header)) {
         return header;
-      }
-      if(React.isValidElement(header)) {
-        return React.cloneElement(header as any, {field});
       }
       return React.createElement(header as any, {field});
     }
