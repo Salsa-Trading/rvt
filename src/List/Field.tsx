@@ -25,6 +25,7 @@ export interface HeaderProps {
 }
 
 export type CellType = React.ComponentClass<CellProps>|React.StatelessComponent<CellProps>|React.ReactElement<CellProps>;
+export type FormatType = (data: any, field: FieldProps) => string|JSX.Element;
 export type FilterControlType = React.ComponentClass<FilterControlProps>|React.StatelessComponent<FilterControlProps>;
 export type HeaderType = JSX.Element|string|React.ComponentClass<HeaderProps>|React.StatelessComponent<HeaderProps>;
 
@@ -47,7 +48,7 @@ export type CellProps = {
 };
 
 export interface FieldProps extends FieldPropsBase, React.Props<FieldProps> {
-  format?: (data: any, field: FieldProps) => string;
+  format?: FormatType;
   cell?: CellType;
 }
 
@@ -95,7 +96,7 @@ export abstract class FieldBase implements FieldPropsBase {
 
 export class Field extends FieldBase implements FieldProps {
 
-  public format?: (data: any, field: FieldProps) => string;
+  public format?: FormatType;
   public cell?: CellType;
 
   constructor(props: FieldProps, fieldDisplay: FieldDisplay) {
