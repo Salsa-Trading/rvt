@@ -14,6 +14,14 @@ type VirtualGridProps = {
 
 class VirtualGrid extends React.Component<VirtualTableBaseProps & ListViewProps & VirtualGridProps, {}> {
 
+  private virtualTable: VirtualTable;
+
+  public calculateHeights() {
+    if(this.virtualTable) {
+      this.virtualTable.calculateHeights();
+    }
+  }
+
   public render() {
     const {
       fieldSet,
@@ -36,7 +44,6 @@ class VirtualGrid extends React.Component<VirtualTableBaseProps & ListViewProps 
         onClick={onClick}
       />;
 
-
     const header =
       <GridHeader
         fieldSet={fieldSet}
@@ -49,11 +56,13 @@ class VirtualGrid extends React.Component<VirtualTableBaseProps & ListViewProps 
         gridRow={row}
       />;
 
+    const setRef = (ref) => this.virtualTable = ref;
     return (
       <VirtualTable
         {...rest}
         header={header}
         row={row}
+        ref={setRef}
       />
     );
   }
