@@ -113,9 +113,9 @@ export type VirtualTableBaseProps = {
   rowHeight?: number;
   headerHeight?: number;
   containerClassName?: string;
-  containerStyle?: any;
+  containerStyle?: React.CSSProperties;
   className?: string;
-  style?: any;
+  style?: React.CSSProperties;
 };
 
 export type VirtualTableProps = VirtualTableBaseProps & {
