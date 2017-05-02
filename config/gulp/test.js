@@ -2,9 +2,9 @@ const gulp = require('gulp');
 const KarmaServer = require('karma').Server;
 const Xvfb = require('xvfb');
 const os = require('os');
-const karmaOptions = require('../karma.conf');
-
-console.log(karmaOptions);
+const karmaOptions = {
+  configFile: __dirname + '/../karma.conf.js'
+};
 
 // Execute client karma tests in a watch loop
 gulp.task('karma', function (done) {
@@ -21,7 +21,7 @@ gulp.task('karma', function (done) {
 gulp.task('karma:run', function (done) {
   const xvfb = new Xvfb({silent: true});
   xvfb.start(function() {
-    const karmaServer = new KarmaServer(Object.assign({singleRun: true}, karmaOptions));
+    const karmaServer = new KarmaServer(Object.assign(karmaOptions, {singleRun: true}));
 
     karmaServer.on('run_complete', function (browsers, results) {
       done(results.error ? 'There are test failures' : null);
