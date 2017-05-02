@@ -1,14 +1,17 @@
 {
   "extends": ["tslint-react"],
   "rules": {
-    "jsx-no-lambda": false,
-    "jsx-boolean-value": false,
     "class-name": true,
     "comment-format": [true, "check-space"],
     "curly": true,
     "eofline": true,
     "forin": false,
     "indent": [true, "spaces"],
+    "jsx-boolean-value": false,
+    "jsx-no-bind": false,
+    "jsx-no-lambda": false,
+    "jsx-no-multiline-js": false,
+    "jsx-wrap-multiline": false,
     "label-position": true,
     "max-line-length": [true, 200],
     "member-access": true,
@@ -66,9 +69,6 @@
       "check-operator",
       "check-separator",
       "check-type"
-    ],
-    "jsx-no-multiline-js": false,
-    "jsx-wrap-multiline": false,
-    "jsx-no-bind": false
+    ]
   }
 }
