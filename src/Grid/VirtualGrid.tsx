@@ -37,14 +37,15 @@ class VirtualGrid extends React.Component<VirtualTableBaseProps & ListViewProps 
     } = this.props;
 
     const fields = fieldSet.getFields();
-    const row =
+    const row = (
       <GridRow
         fields={fields}
         onMouseDown={onMouseDown}
         onClick={onClick}
-      />;
+      />
+    );
 
-    const header =
+    const header = (
       <GridHeader
         fieldSet={fieldSet}
         onSortSelection={onSortSelection}
@@ -54,7 +55,8 @@ class VirtualGrid extends React.Component<VirtualTableBaseProps & ListViewProps 
         onHiddenChange={onHiddenChange}
         pinnedRows={pinnedRows}
         gridRow={row}
-      />;
+      />
+    );
 
     const setRef = (ref) => this.virtualTable = ref;
     return (

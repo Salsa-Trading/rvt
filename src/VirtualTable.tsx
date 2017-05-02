@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
+import { autobind } from 'core-decorators';
 import Scroller from './Scroller';
 
 const propTypes = {
@@ -216,6 +217,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
    * onScroll handler for Scroller or Wheel
    * @private
    */
+  @autobind
   private onScroll(scrollTop) {
     const topRow = Math.round(scrollTop / this.state.rowHeight);
     this.setTopRow(topRow);
@@ -225,6 +227,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
    * onWhell handler sets scrollRef.scrollTop, which calls onScroll
    * @private
    */
+  @autobind
   private onWheel(e) {
     const { scrollWheelRows } = this.props;
     e.stopPropagation();
@@ -367,7 +370,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
 
     return (
       <div
-        onWheel={this.onWheel.bind(this)}
+        onWheel={this.onWheel}
         ref={refFn}
         className={`rvt ${containerClassName ? containerClassName : ''}`}
         style={containerStyle}
@@ -381,7 +384,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
           </table>
         </div>
         <Scroller
-          onScroll={this.onScroll.bind(this)}
+          onScroll={this.onScroll}
           scrollTop={topRow * rowHeight}
           top={(headerHeight || 0)}
           height={this.visibleRows() * rowHeight}

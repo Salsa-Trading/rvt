@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { autobind } from 'core-decorators';
 
 export default class Filter extends React.Component<{
   columnChooser: any;
@@ -13,6 +14,7 @@ export default class Filter extends React.Component<{
     };
   }
 
+  @autobind
   private toggleFilterPane() {
     const { showColumnChooser, onToggleVisibility } = this.props;
     onToggleVisibility(!showColumnChooser);
@@ -22,7 +24,7 @@ export default class Filter extends React.Component<{
     const { columnChooser, showColumnChooser } = this.props;
     return (
       <div>
-        <button className='column-chooser-btn' onClick={this.toggleFilterPane.bind(this)} />
+        <button className='column-chooser-btn' onClick={this.toggleFilterPane} />
         {showColumnChooser && columnChooser}
       </div>
     );

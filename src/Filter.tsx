@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { autobind } from 'core-decorators';
 import { Field, SortDirection } from './List/Field';
 
 export type FilterControlProps = {
@@ -8,6 +9,7 @@ export type FilterControlProps = {
 
 class DefaultFilter extends React.Component<FilterControlProps, {}> {
 
+  @autobind
   private handleFilterChanged(e: React.ChangeEvent<HTMLInputElement>) {
     const { onFilterChange } = this.props;
     onFilterChange(e.target.value);
@@ -19,7 +21,7 @@ class DefaultFilter extends React.Component<FilterControlProps, {}> {
       <input
         type='search'
         value={filter}
-        onChange={this.handleFilterChanged.bind(this)}
+        onChange={this.handleFilterChanged}
         autoFocus={true}
       />
     );
@@ -47,10 +49,12 @@ export default class Filter extends React.Component<{
     this.setState({filter});
   }
 
+  @autobind
   private toggleFilterPane() {
     this.setState({showFilter: !this.state.showFilter });
   }
 
+  @autobind
   private handleOk(e) {
     e.preventDefault();
     const { onFilterChanged } = this.props;
@@ -59,6 +63,7 @@ export default class Filter extends React.Component<{
     this.setState({showFilter: false});
   }
 
+  @autobind
   private handleCancel(e) {
     e.preventDefault();
     this.setState({showFilter: false});
@@ -89,10 +94,10 @@ export default class Filter extends React.Component<{
             Descending
           </button>
         </div>
-        <form onSubmit={this.handleOk.bind(this)}>
+        <form onSubmit={this.handleOk}>
           {filterElement}
           <div className='form-actions'>
-            <button type='reset' onClick={this.handleCancel.bind(this)}>Cancel</button>
+            <button type='reset' onClick={this.handleCancel}>Cancel</button>
             <button type='submit'>Ok</button>
           </div>
         </form>
@@ -115,7 +120,7 @@ export default class Filter extends React.Component<{
     const { showFilter } = this.state;
     return (
       <div>
-        <button className='filter-btn' onClick={this.toggleFilterPane.bind(this)}>
+        <button className='filter-btn' onClick={this.toggleFilterPane}>
           <span className='edit-filters' />
           {this.sortDirectionIcon()}
         </button>

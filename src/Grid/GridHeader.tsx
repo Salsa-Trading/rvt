@@ -1,5 +1,7 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
+import { autobind } from 'core-decorators';
+
 import { Field } from '../List/Field';
 import { FieldSet } from '../List/FieldSet';
 import { ListViewProps } from '../List';
@@ -35,6 +37,7 @@ export default class GridHeader extends React.Component<ListViewProps & {
     };
   }
 
+  @autobind
   private onFieldMouseDown(e: React.MouseEvent<HTMLTableHeaderCellElement>) {
     const { onMove } = this.props;
     const rootFieldSet = this.props.fieldSet;
@@ -77,6 +80,7 @@ export default class GridHeader extends React.Component<ListViewProps & {
     );
   }
 
+  @autobind
   private onToggleColumnChooserVisibility(isVisible: boolean) {
     this.setState({showColumnChooser: isVisible});
   }
@@ -98,31 +102,33 @@ export default class GridHeader extends React.Component<ListViewProps & {
         <ColumnChooser
           fieldSet={fieldSet}
           onHiddenChange={onHiddenChange}
-          onToggleVisibility={this.onToggleColumnChooserVisibility.bind(this)}
+          onToggleVisibility={this.onToggleColumnChooserVisibility}
         />
       );
       columnChooserButton = (
         <ColumnChooserButton
           columnChooser={columnChooser}
-          onToggleVisibility={this.onToggleColumnChooserVisibility.bind(this)}
+          onToggleVisibility={this.onToggleColumnChooserVisibility}
           showColumnChooser={showColumnChooser}
         />
       );
     }
 
-    return <GridHeaderCell
-      key={field.name}
-      field={field}
-      fieldSet={fieldSet.findParent(field)}
-      colSpan={colSpan}
-      rowSpan={rowSpan}
-      onSortSelection={onSortSelection}
-      onFilterChanged={onFilterChanged}
-      onWidthChanged={onWidthChanged}
-      onMouseDown={this.onFieldMouseDown.bind(this)}
-      canResize={colIndex < fields.length - 1 && ((rowIndex + rowSpan) === rowCount)}
-      columnChooserButton={columnChooserButton}
-    />;
+    return (
+      <GridHeaderCell
+        key={field.name}
+        field={field}
+        fieldSet={fieldSet.findParent(field)}
+        colSpan={colSpan}
+        rowSpan={rowSpan}
+        onSortSelection={onSortSelection}
+        onFilterChanged={onFilterChanged}
+        onWidthChanged={onWidthChanged}
+        onMouseDown={this.onFieldMouseDown}
+        canResize={colIndex < fields.length - 1 && ((rowIndex + rowSpan) === rowCount)}
+        columnChooserButton={columnChooserButton}
+      />
+    );
   }
 
   public renderPinnedRows() {

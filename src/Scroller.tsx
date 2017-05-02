@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
+import { autobind } from 'core-decorators';
 
 export default class Scroller extends React.Component<{
   top: number;
@@ -48,6 +49,7 @@ export default class Scroller extends React.Component<{
     super(props);
   }
 
+  @autobind
   private onScroll() {
     const { onScroll } = this.props;
     if (onScroll) {
@@ -104,7 +106,7 @@ export default class Scroller extends React.Component<{
     return (
       <div
         className='virtual-table-scroller'
-        onScroll={this.onScroll.bind(this)}
+        onScroll={this.onScroll}
         ref={refFn}
         style={style}
       >

@@ -27,7 +27,7 @@ class Grid extends React.Component<React.HTMLProps<HTMLTableElement> & ListViewP
 
     const fields = fieldSet.getFields();
 
-    const header =
+    const header = (
       <GridHeader
         fieldSet={fieldSet}
         onSortSelection={onSortSelection}
@@ -37,7 +37,8 @@ class Grid extends React.Component<React.HTMLProps<HTMLTableElement> & ListViewP
         onHiddenChange={onHiddenChange}
         pinnedRows={pinnedRows}
         gridRow={<GridRow fields={fields} onMouseDown={onMouseDown} onClick={onClick} />}
-      />;
+      />
+    );
 
     return (
       <div className='rvt'>

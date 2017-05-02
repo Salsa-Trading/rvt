@@ -1,5 +1,7 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
+import { autobind } from 'core-decorators';
+
 import Filter from '../Filter';
 import { Field, SortDirection } from '../List/Field';
 import { FieldSet } from '../List/FieldSet';
@@ -34,6 +36,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     onFilterChanged: PropTypes.func
   };
 
+  @autobind
   private onResizeHandleMouseDown(e: React.MouseEvent<HTMLDivElement>) {
     if(e.button !== 0) {
       return;
@@ -76,10 +79,12 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
       field.sortDirection === sortDirection ? 'sort-active' : 'sort-inactive'
     ].join(' ');
 
-    return <button
-      onClick={this.onSortClick.bind(this, sortDirection)}
-      className={classNames}
-    />;
+    return (
+      <button
+        onClick={this.onSortClick.bind(this, sortDirection)}
+        className={classNames}
+      />
+    );
   }
 
   private renderHeader() {
@@ -154,7 +159,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
           <div className='sort-filter'>
             {sortFilterControl}
           </div>
-          {canResize && <div className='resize-handle' onMouseDown={this.onResizeHandleMouseDown.bind(this)} />}
+          {canResize && <div className='resize-handle' onMouseDown={this.onResizeHandleMouseDown} />}
           {columnChooserButton && <div className='column-chooser'>{columnChooserButton}</div>}
         </div>
       </th>

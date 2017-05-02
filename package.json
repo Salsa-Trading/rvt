@@ -59,6 +59,7 @@
     "bootstrap-sass": "3.3.7",
     "chai": "3.5.0",
     "chai-enzyme": "0.6.1",
+    "core-decorators": "0.18.0",
     "css-loader": "0.28.0",
     "del": "2.2.2",
     "enzyme": "2.6.0",
