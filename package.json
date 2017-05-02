@@ -35,8 +35,8 @@
   "author": "Josh Heyse <josh@heyse.us>",
   "license": "MIT",
   "peerDependencies": {
-    "react": ">=15.0.0",
-    "react-dom": ">=15.0.0"
+    "react": ">=15.5.0",
+    "react-dom": ">=15.5.0"
   },
   "devDependencies": {
     "@types/chai": "3.4.35",
