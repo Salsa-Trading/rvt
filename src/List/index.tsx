@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import { FieldSet, RootFieldSet } from './FieldSet';
 import { Field, SortDirection, FieldDefaults, FieldDisplay } from './Field';
 import strEnum from '../utils/strEnum';
@@ -49,10 +50,10 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
   }> {
 
     public static propTypes = {
-      onListStateChanged: React.PropTypes.func.isRequired,
-      listState: React.PropTypes.any,
-      fieldDefaults: React.PropTypes.any,
-      viewRef: React.PropTypes.func
+      onListStateChanged: PropTypes.func.isRequired,
+      listState: PropTypes.any,
+      fieldDefaults: PropTypes.any,
+      viewRef: PropTypes.func
     };
 
     public static defaultProps = {

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import Filter from '../Filter';
 import { Field, SortDirection } from '../List/Field';
 import { FieldSet } from '../List/FieldSet';
@@ -25,12 +26,12 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
   };
 
   public static propTypes = {
-    field: React.PropTypes.any,
-    fieldSet: React.PropTypes.any,
-    rowSpan: React.PropTypes.number,
-    onSortSelection: React.PropTypes.func,
-    onWidthChanged: React.PropTypes.func,
-    onFilterChanged: React.PropTypes.func
+    field: PropTypes.any,
+    fieldSet: PropTypes.any,
+    rowSpan: PropTypes.number,
+    onSortSelection: PropTypes.func,
+    onWidthChanged: PropTypes.func,
+    onFilterChanged: PropTypes.func
   };
 
   private onResizeHandleMouseDown(e: React.MouseEvent<HTMLDivElement>) {

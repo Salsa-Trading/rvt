@@ -1,65 +1,66 @@
 import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import Scroller from './Scroller';
 
 const propTypes = {
   /**
     * The total number of rows in the data set, used to calculate the scrollbar thumb size & scroll range
     */
-  rowCount: React.PropTypes.number.isRequired,
+  rowCount: PropTypes.number.isRequired,
   /**
     * A callback function to get the data for the row at the specified index (index: number) => { data: any }
     */
-  getRow: React.PropTypes.func.isRequired,
+  getRow: PropTypes.func.isRequired,
   /**
    *  The height of the table. If a number it is provided it assumed to be px, strings can be any valid height css value
    */
-  height: React.PropTypes.oneOfType([
-    React.PropTypes.number,
-    React.PropTypes.string
+  height: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string
   ]),
   /**
    *  The width of the table. If a number it is provided it assumed to be px, strings can be any valid height css value
    */
-  width: React.PropTypes.oneOfType([
-    React.PropTypes.number,
-    React.PropTypes.string
+  width: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string
   ]),
   /**
    *  The topRow index, use if parent component controlls topRow
    */
-  topRow: React.PropTypes.number,
+  topRow: PropTypes.number,
   /**
    *  The topRowChanged callback, use if parent component controlls topRow
    */
-  onTopRowChanged: React.PropTypes.func,
+  onTopRowChanged: PropTypes.func,
   /**
    *  The number of rows to move when the scrollWheel is used
    */
-  scrollWheelRows: React.PropTypes.number,
+  scrollWheelRows: PropTypes.number,
   /**
    *  The static height of each row
    */
-  rowHeight: React.PropTypes.number,
+  rowHeight: PropTypes.number,
   /**
    *  The static height of the hader row
    */
-  headerHeight: React.PropTypes.number,
+  headerHeight: PropTypes.number,
   /**
    *  Class names to the container div
    */
-  containerClassName: React.PropTypes.string,
+  containerClassName: PropTypes.string,
   /**
    *  Style attributes to apply to the container div
    */
-  containerStyle: React.PropTypes.any,
+  containerStyle: PropTypes.any,
   /**
    *  Class names to apply to the table element
    */
-  className: React.PropTypes.string,
+  className: PropTypes.string,
   /**
    *  Style attributes to apply to the table element
    */
-  style: React.PropTypes.any,
+  style: PropTypes.any,
   /**
    *  The React Component or React Stateless function to render the header (must render a <thead> root element
    */

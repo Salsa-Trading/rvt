@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import { Field } from '../List/Field';
 import { FieldSet } from '../List/FieldSet';
 import safeMouseDown from '../utils/safeMouseDown';
@@ -12,7 +13,7 @@ export type ColumnChooserProps = {
 export default class ColumnChooser extends React.Component<ColumnChooserProps, void> {
 
   public static propTypes = {
-    fieldSet: React.PropTypes.any
+    fieldSet: PropTypes.any
   };
 
   private mouseDownHandler: () => void;

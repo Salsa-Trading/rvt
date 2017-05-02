@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import { Field } from '../List/Field';
 import * as get from 'lodash.get';
 import isNil from '../utils/isNil';
@@ -19,9 +20,9 @@ export default class GridRow extends React.Component<{
 }, {}> {
 
   public static propTypes = {
-    fields: React.PropTypes.any,
-    data: React.PropTypes.any,
-    className: React.PropTypes.string
+    fields: PropTypes.any,
+    data: PropTypes.any,
+    className: PropTypes.string
   };
 
   constructor(props, context) {

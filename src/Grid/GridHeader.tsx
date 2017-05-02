@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import { Field } from '../List/Field';
 import { FieldSet } from '../List/FieldSet';
 import { ListViewProps } from '../List';
@@ -19,12 +20,12 @@ export default class GridHeader extends React.Component<ListViewProps & {
 }> {
 
   public static propTypes = {
-    fieldSet: React.PropTypes.any.isRequired,
-    onSortSelection: React.PropTypes.func,
-    onFilterChanged: React.PropTypes.func,
-    onWidthChanged: React.PropTypes.func,
-    onMove: React.PropTypes.func,
-    onHiddenChange: React.PropTypes.func
+    fieldSet: PropTypes.any.isRequired,
+    onSortSelection: PropTypes.func,
+    onFilterChanged: PropTypes.func,
+    onWidthChanged: PropTypes.func,
+    onMove: PropTypes.func,
+    onHiddenChange: PropTypes.func
   };
 
   constructor(props, context) {

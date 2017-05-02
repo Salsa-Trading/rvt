@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import strEnum from '../utils/strEnum';
 import isNil from '../utils/isNil';
 import { FilterControlProps } from '../Filter';
@@ -107,26 +108,26 @@ export class Field extends FieldBase implements FieldProps {
 }
 
 export const FieldBasePropTypes = {
-  name: React.PropTypes.string.isRequired,
-  header: React.PropTypes.any,
-  width: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number
+  name: PropTypes.string.isRequired,
+  header: PropTypes.any,
+  width: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
   ]),
-  sortable: React.PropTypes.bool,
-  filterable: React.PropTypes.bool,
-  sortDirection: React.PropTypes.string,
-  filter: React.PropTypes.any,
-  hidden: React.PropTypes.bool,
-  showAlways: React.PropTypes.bool
+  sortable: PropTypes.bool,
+  filterable: PropTypes.bool,
+  sortDirection: PropTypes.string,
+  filter: PropTypes.any,
+  hidden: PropTypes.bool,
+  showAlways: PropTypes.bool
 };
 
 export class FieldDefinition extends React.Component<FieldProps, {}> {
 
   public static propTypes = {
     ...FieldBasePropTypes,
-    cell: React.PropTypes.any,
-    format: React.PropTypes.any
+    cell: PropTypes.any,
+    format: PropTypes.any
   };
 
   constructor(props, context) {

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as PropTypes from 'prop-types';
 
 export default class Scroller extends React.Component<{
   top: number;
@@ -13,27 +14,27 @@ export default class Scroller extends React.Component<{
     /**
      * The top offset of the Scroller, used to place the scroller below the table header
      */
-    top: React.PropTypes.number,
+    top: PropTypes.number,
     /**
      * The height of the Scroller, typically the rowHeight * maxVisibleRows
      */
-    height: React.PropTypes.number,
+    height: PropTypes.number,
     /**
      * The viewPortHeight is the number of total rows * the row height
      */
-    viewPortHeight: React.PropTypes.number,
+    viewPortHeight: PropTypes.number,
     /**
      * Show or hide the scrollbar
      */
-    visible: React.PropTypes.bool,
+    visible: PropTypes.bool,
     /**
      * callback for onScroll called with the scroll thumb changes
      */
-    onScroll: React.PropTypes.func,
+    onScroll: PropTypes.func,
     /**
      * The scrollTop value of the scroller div
      */
-    scrollTop: React.PropTypes.number
+    scrollTop: PropTypes.number
   };
 
   public static defaultProps = {
@@ -89,7 +90,7 @@ export default class Scroller extends React.Component<{
 
   public render() {
     const { top, height, visible, viewPortHeight } = this.props;
-    const style = {
+    const style: React.CSSProperties = {
       position: 'absolute',
       right: '0px',
       top: `${top}px`,
