@@ -9,7 +9,7 @@ gulp.task('lint', ['tslint', 'jsonlint', 'sasslint', 'eslint']);
 
 gulp.task('sasslint', () =>
   gulp.src([
-    'src/**/*.s+(a|c)ss',
+    'src/**/*.s?(a|c)ss',
     '!node_modules/**/*'
   ])
   .pipe(sasslint())
