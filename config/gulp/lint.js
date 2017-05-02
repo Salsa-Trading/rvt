@@ -44,6 +44,8 @@ gulp.task('tslint', () => {
     .src([
       'src/**/*.ts',
       'src/**/*.tsx',
+      'test/**/*.ts',
+      'test/**/*.tsx',
       '!node_modules/**/*'
     ])
     .pipe(gulpTslint({

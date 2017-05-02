@@ -1,3 +1,5 @@
+/* tslint:disable:no-unused-expression */
+
 import * as React from 'react';
 import { expect } from 'chai';
 import { FieldDefinition } from '../src/List/Field';
@@ -28,8 +30,5 @@ describe('<FieldSet />', () => {
     it('should have 2 levels', () => {
       expect(columnGroup.getLevelCount()).to.equal(2);
     });
-
-
   });
-
 });

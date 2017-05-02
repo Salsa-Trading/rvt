@@ -1,3 +1,5 @@
+/* tslint:disable:no-unused-expression */
+
 import * as React from 'react';
 import * as sinon from 'sinon';
 import { expect } from 'chai';
@@ -19,7 +21,7 @@ describe('<SortIndicator />', () => {
 
   beforeEach(() => {
     props.onScroll = onScrollSpy = sinon.spy();
-    wrapper = mount(<Scroller {...props } />);
+    wrapper = mount(<Scroller {...props} />);
     div = wrapper.first('.virtual-table-scroller');
   });
 
@@ -76,7 +78,7 @@ describe('<SortIndicator />', () => {
   });
 
   it('should call internal onScroll when the div is scrolled', () => {
-    wrapper = mount(<Scroller {...props } />);
+    wrapper = mount(<Scroller {...props} />);
     div = wrapper.first('.virtual-table-scroller');
     div.simulate('scroll');
     expect(onScrollSpy).to.have.been.called;

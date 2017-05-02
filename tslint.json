@@ -68,6 +68,7 @@
       "check-type"
     ],
     "jsx-no-multiline-js": false,
-    "jsx-wrap-multiline": false
+    "jsx-wrap-multiline": false,
+    "jsx-no-bind": false
   }
 }
