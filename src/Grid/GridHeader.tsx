@@ -2,8 +2,8 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
 
-import { Field } from '../List/Field';
-import { FieldSet } from '../List/FieldSet';
+import { Field, FieldBase } from '../List/Field';
+import { FieldSet, isVisible } from '../List/FieldSet';
 import { ListViewProps } from '../List';
 import GridHeaderCell from './GridHeaderCell';
 import ColumnChooser from './ColumnChooser';
@@ -13,6 +13,37 @@ import { RowData } from './GridRow';
 
 const hoverClassName = 'field-moving-hover';
 const movingClassName = 'field-moving';
+
+export type FieldHeader = {
+  field: FieldBase;
+  rowSpan: number;
+  colSpan: number;
+};
+
+export function fillLevels(fieldSet: FieldSet, rows: number): FieldHeader[][] {
+  const level: FieldHeader[] = [];
+  const levels = [level];
+  for(let child of fieldSet.children) {
+    if(child instanceof FieldSet) {
+      level.push({field: child, colSpan: child.getFieldCount(), rowSpan: 1});
+      let subLevels = fillLevels(child, rows - 1);
+      for(let i = 0; i < subLevels.length; i++) {
+        if(subLevels[i] && subLevels[i].length > 0) {
+          levels[i + 1] = (levels[i + 1] || []).concat(subLevels[i]);
+        }
+      }
+    }
+    else if(child instanceof Field) {
+      level.push({field: child, colSpan: 1, rowSpan: Math.max(rows, 1)});
+    }
+  }
+  return levels;
+}
+
+export function getLevels(fieldSet: FieldSet): FieldHeader[][] {
+  const maxRows = fieldSet.getLevelCount();
+  return fillLevels(fieldSet, maxRows);
+}
 
 export default class GridHeader extends React.Component<ListViewProps & {
   pinnedRows?: RowData[];
@@ -85,19 +116,23 @@ export default class GridHeader extends React.Component<ListViewProps & {
     this.setState({showColumnChooser: isVisible});
   }
 
-  private renderHeaderRow(rowIndex: number, rowCount: number, field: Field|FieldSet, colIndex: number, fields: (Field|FieldSet)[]) {
+  private renderHeaderRow(rowCount: number, colCount: number, rowIndex: number, fieldHeader: FieldHeader, colIndex: number, fieldHeadersOnRow: FieldHeader[]) {
     const { showColumnChooser } = this.state;
+    const { field, colSpan, rowSpan } = fieldHeader;
     const { fieldSet, onSortSelection, onFilterChanged, onWidthChanged, onHiddenChange } = this.props;
-
-    let colSpan = 1;
-    let rowSpan = rowCount - rowIndex;
-    if(field instanceof FieldSet) {
-      colSpan = field.getCount();
-      rowSpan = rowSpan - field.getLevels().length;
-    }
-
     let columnChooser, columnChooserButton;
-    if(rowIndex === 0 && colIndex === fields.length - 1) {
+
+    const isFirstRow = rowIndex === 0;
+    const isLastRow = ((rowIndex + rowSpan) === rowCount);
+
+    let colSum = 0;
+    for(let i = 0; i <= colIndex; i++) {
+      colSum += fieldHeadersOnRow[i].colSpan;
+    }
+    let isLastCol = colSum === colCount;
+
+    // place ColumnChooser in the last column of the first row
+    if(isFirstRow && isLastCol) {
       columnChooser = (
         <ColumnChooser
           fieldSet={fieldSet}
@@ -125,7 +160,7 @@ export default class GridHeader extends React.Component<ListViewProps & {
         onFilterChanged={onFilterChanged}
         onWidthChanged={onWidthChanged}
         onMouseDown={this.onFieldMouseDown}
-        canResize={colIndex < fields.length - 1 && ((rowIndex + rowSpan) === rowCount)}
+        canResize={isLastRow && !isLastCol}
         columnChooserButton={columnChooserButton}
       />
     );
@@ -140,13 +175,14 @@ export default class GridHeader extends React.Component<ListViewProps & {
 
   public render() {
     const { fieldSet, pinnedRows } = this.props;
-    const rows = fieldSet.getLevels();
+    const rows = getLevels(fieldSet);
+    const colCount = rows[0].reduce((r, i) => r + i.colSpan, 0);
     return (
       <thead>
-        {rows.map((row, r) => {
+        {rows.map((row: FieldHeader[], r: number) => {
           return (
             <tr key={r}>
-              {row.map(this.renderHeaderRow.bind(this, r, rows.length))}
+              {row.map(this.renderHeaderRow.bind(this, rows.length, colCount, r))}
             </tr>
           );
         })}

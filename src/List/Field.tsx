@@ -86,7 +86,7 @@ export abstract class FieldBase implements FieldPropsBase {
     };
   }
 
-  public getCount() {
+  public getFieldCount() {
     return 1;
   }
 

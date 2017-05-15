@@ -74,12 +74,16 @@ export default class VirtualGridExample extends React.Component<void, {
         pinnedRows={this.state.data.slice(0, 2).map(d => ({data: d, rowProps: { style: { backgroundColor: 'red'}} }))}
       >
         <FieldSet header='Group 1' name='group1'>
-          <Field header='Col 1' name='col1' sortDirection='asc' />
-          <Field header='Col 2' name='col2' hidden />
+          <FieldSet header='Group 2' name='group2'>
+            <Field header='Col 1' name='col1' sortDirection='asc' />
+            <Field header='Col 2' name='col2' />
+          </FieldSet>
         </FieldSet>
-        <Field header='Col 3' name='col3' cell={({data}) => <input type='checkbox' defaultChecked={data.col3} />} />
-        <Field header='Col 4' name='col4' format={d => d.col4.toString()} />
-        <Field header='Col 5' name='col5' cell={<CustomCell label='test' />} />
+        <FieldSet header='Group 3' name='group3'>
+          <Field header='Col 3' name='col3' cell={({data}) => <input type='checkbox' defaultChecked={data.col3} />} />
+          <Field header='Col 4' name='col4' format={d => d.col4.toString()} />
+          <Field header='Col 5' name='col5' cell={<CustomCell label='test' />} />
+        </FieldSet>
       </VirtualGrid>
     );
   }

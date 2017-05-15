@@ -21,7 +21,7 @@ export class FieldSet extends FieldBase {
   constructor(props: FieldSetProps, fieldDefaults: FieldDefaults, fields: FieldSetDisplay) {
     super(props, fields);
 
-    const children = React.Children.map(props.children, (c: any) => {
+    const children = React.Children.map(props.children || [], (c: any) => {
       let field: FieldDisplay;
       if(fields) {
         field = fields.children.find(cd => cd.name === c.props.name);
@@ -138,25 +138,8 @@ export class FieldSet extends FieldBase {
     return levels + 1;
   }
 
-  public getLevels() {
-    let levels = [];
-    for(let child of this.children) {
-      if(!isVisible(child)) {
-        continue;
-      }
-      if(child instanceof FieldSet) {
-        let subLevels = child.getLevels();
-        for(let i = 0; i < subLevels.length; i++) {
-          levels[i] = (levels[i] || []).concat(subLevels[i]);
-        }
-      }
-    }
-    const retVal = [this.children.filter(c => isVisible(c)), ...levels];
-    return retVal;
-  }
-
-  public getCount() {
-    return this.children.reduce((r, c) => r + (isVisible(c) ? c.getCount() : 0), 0);
+  public getFieldCount() {
+    return Math.max(this.children.reduce((r, c) => r + (isVisible(c) ? c.getFieldCount() : 0), 0), 1);
   }
 
   public resize(width: number) {
@@ -166,7 +149,7 @@ export class FieldSet extends FieldBase {
 
 }
 
-function isVisible(field: Field|FieldSet) {
+export function isVisible(field: Field|FieldSet) {
   if(field.hidden) {
     return false;
   }
