@@ -325,7 +325,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
     const { row } = this.props;
     const topRow = this.getTopRow();
     let rowCount = this.visibleRows();
-    if(rowCount === 0) {
+    if(!rowCount) {
       return [];
     }
 
