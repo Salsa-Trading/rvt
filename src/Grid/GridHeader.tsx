@@ -23,7 +23,7 @@ export type FieldHeader = {
 export function fillLevels(fieldSet: FieldSet, rows: number): FieldHeader[][] {
   const level: FieldHeader[] = [];
   const levels = [level];
-  for(let child of fieldSet.children) {
+  for(let child of fieldSet.children.filter(f => isVisible(f))) {
     if(child instanceof FieldSet) {
       level.push({field: child, colSpan: child.getFieldCount(), rowSpan: 1});
       let subLevels = fillLevels(child, rows - 1);
