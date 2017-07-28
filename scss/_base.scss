@@ -50,4 +50,10 @@ $sort-direction-color: royalblue;
       }
     }
   }
+
+  th:last-child {
+    .filter-pane {
+      right: 0;
+    }
+  }
 }
