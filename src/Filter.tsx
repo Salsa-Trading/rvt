@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { autobind } from 'core-decorators';
 import { Field, SortDirection } from './List/Field';
+import safeMouseDown from './utils/safeMouseDown';
 
 export type FilterControlProps = {
   filter: any;
@@ -37,12 +38,28 @@ export default class Filter extends React.Component<{
   filter: any;
 }> {
 
+  private mouseDownHandler: () => void;
+
   constructor(props, context) {
     super(props, context);
     this.state = {
       showFilter: false,
       filter: props.filter || ''
     };
+  }
+
+  public componentDidMount() {
+    this.mouseDownHandler = safeMouseDown<HTMLElement>((e) => {
+      if(!(e as any).target.closest('.filter-pane')) {
+        this.setState({showFilter: false});
+      }
+    });
+  }
+
+  public componentWillUnmount() {
+    if(this.mouseDownHandler) {
+      this.mouseDownHandler();
+    }
   }
 
   private handleFilterChanged(filter: any) {
