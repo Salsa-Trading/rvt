@@ -240,7 +240,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
    * @private
    */
   private visibleRows() {
-    return Math.min(this.props.rowCount, this.state.maxVisibleRows);
+    return Math.max(Math.min(this.props.rowCount, this.state.maxVisibleRows), 0);
   }
 
   /**
