@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import { expect } from 'chai';
-import { FieldDefinition } from '../src/List/Field';
-import { FieldSetDefinition, FieldSet } from '../src/List/FieldSet';
+import { FieldDefinition } from '../../src/List/Field';
+import { FieldSetDefinition, FieldSet } from '../../src/List/FieldSet';
 
 describe('<FieldSet />', () => {
 

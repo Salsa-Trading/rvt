@@ -64,7 +64,6 @@ describe.only('<GridHeader />', () => {
       const fieldSet = new FieldSetClass(fields.props, {}, null);
       expect(fieldSet.getLevelCount()).to.eq(1);
       expect(equalLevels(getLevels(fieldSet), [[
-        {field: {name: 'group1'}, colSpan: 1, rowSpan: 1},
         {field: {name: 'field1'}, colSpan: 1, rowSpan: 1},
         {field: {name: 'field2'}, colSpan: 1, rowSpan: 1},
         {field: {name: 'field3'}, colSpan: 1, rowSpan: 1}

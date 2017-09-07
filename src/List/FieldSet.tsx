@@ -41,7 +41,7 @@ export class FieldSet extends FieldBase {
         children: children.map(c => ({name: c.name, hidden: false}))
       };
     }
-    this.children = fields.children.map(cd => children.find(c => cd.name === c.name)).filter(c => !isNil(c));
+    this.children = fields.children.map(cd => children.find(c => cd.name === c.name)); // .filter(c => !isNil(c));
   }
 
   public getFields(): Field[] {

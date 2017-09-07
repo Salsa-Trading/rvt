@@ -19,6 +19,7 @@ export interface FieldDisplay {
   name: string;
   width?: number|string;
   hidden?: boolean;
+  children?: FieldDisplay[];
 }
 
 export interface HeaderProps {
