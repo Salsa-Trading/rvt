@@ -1,4 +1,5 @@
 import * as React from 'react';
+import isNil from '../utils/isNil';
 import { FieldBase, FieldPropsBase, FieldDefaults, Field, FieldDisplay, FieldBasePropTypes } from './Field';
 
 export const RootFieldSet = '_root_';
@@ -40,7 +41,7 @@ export class FieldSet extends FieldBase {
         children: children.map(c => ({name: c.name, hidden: false}))
       };
     }
-    this.children = fields.children.map(cd => children.find(c => cd.name === c.name));
+    this.children = fields.children.map(cd => children.find(c => cd.name === c.name)).filter(c => !isNil(c));
   }
 
   public getFields(): Field[] {
@@ -48,7 +49,7 @@ export class FieldSet extends FieldBase {
       return [];
     }
     let fields: Field[] = [];
-    for(let field of this.children ) {
+    for(let field of this.children) {
       if(!field.hidden) {
         fields = fields.concat(field.getFields());
       }
