@@ -87,7 +87,7 @@ export default class GridHeader extends React.Component<ListViewProps & {
 
     safeMouseMove<HTMLTableHeaderCellElement>(e,
       (moveEvent) => {
-        const over = (moveEvent.target as any).closest(`th[data-group=${group}]`) as HTMLTableHeaderCellElement;
+        const over = (moveEvent.target as any).closest(`th[data-group="${group}"]`) as HTMLTableHeaderCellElement;
         if(currentHover && over !== currentHover) {
           currentHover.classList.remove(hoverClassName);
         }
