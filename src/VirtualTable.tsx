@@ -140,7 +140,6 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
   public static defaultProps = defaultProps;
 
   private containerRef: any;
-  private headerRef: any;
   private calculateHeightsBound: any;
 
   constructor(props, context) {
@@ -307,14 +306,12 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
   private buildHeader() {
     const { header } = this.props;
     if (!header) {
-      this.headerRef = null;
       return null;
     }
     if (React.isValidElement(header)) {
-      this.headerRef = header;
       return header;
     }
-    return React.createElement(header as any, { ref: ref => this.headerRef = ref });
+    return React.createElement(header as any);
   }
 
   /**

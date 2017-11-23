@@ -64,7 +64,9 @@ describe('<Scroller />', () => {
     let viewPortDiv;
 
     beforeEach(() => {
-      viewPortDiv = div.childAt(0);
+      // viewPortDiv = div.childAt(0);
+      // Single div.childAt(0) used to work and seems correct, but now multiple childAt are necessary
+      viewPortDiv = div.childAt(0).childAt(0);
     });
 
     it('sould have a viewPort div', () => {
