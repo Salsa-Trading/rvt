@@ -2,7 +2,7 @@ import * as React from 'react';
 import { VirtualTable } from '../../src/index';
 import { generateData } from '../../test/dataUtils';
 
-const Head = () =>
+const Head = () => (
   <thead>
     <tr>
       <th>Col 1</th>
@@ -11,18 +11,20 @@ const Head = () =>
       <th>Col 4</th>
       <th>Col 5</th>
     </tr>
-  </thead>;
+  </thead>
+);
 
-const Row = ({data}) =>
+const Row = ({data}) => (
   <tr>
     <td>{data.col1}</td>
     <td>{data.col2}</td>
     <td>{data.col3.toString()}</td>
     <td>{data.col4.toLocaleString()}</td>
     <td style={{whiteSpace: 'nowrap'}}>{data.col5.toFixed(5)}</td>
-  </tr>;
+  </tr>
+);
 
-export default class Style extends React.Component<void, {
+export default class Style extends React.Component<{}, {
   rows: any[];
 }> {
 

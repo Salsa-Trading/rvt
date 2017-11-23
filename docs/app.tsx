@@ -1,21 +1,17 @@
 import * as React from 'react';
 import {
-  BrowserRouter as Router,
+  BrowserRouter,
   Route
 } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
 
 import Navbar from './navbar';
 import Home from './home';
-
 import VirtualGrid from './examples/VirtualGrid';
 import CustomGrid from './examples/CustomGrid';
 import Layout from './examples/Layout';
 import Style from './examples/Style';
 import VirtualTable from './examples/VirtualTable';
 import Grid from './examples/Grid';
-
-const history = createBrowserHistory();
 
 export default class App extends React.Component<{}, {}> {
 
@@ -25,7 +21,7 @@ export default class App extends React.Component<{}, {}> {
 
   public render() {
     return (
-      <Router history={history}>
+      <BrowserRouter>
         <div id='rvt-demo'>
           <Navbar />
           <main>
@@ -38,7 +34,7 @@ export default class App extends React.Component<{}, {}> {
             <Route path='/examples/customGrid' component={CustomGrid} />
           </main>
         </div>
-      </Router>
+      </BrowserRouter>
     );
   }
 }

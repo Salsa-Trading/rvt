@@ -14,7 +14,7 @@ function CustomCell({label, data, field}: {label: string, data?: any, field?: Fi
   );
 }
 
-export default class VirtualGridExample extends React.Component<void, {
+export default class VirtualGridExample extends React.Component<{}, {
   originalData?: any[];
   data?: any[]
   listState?: ListState

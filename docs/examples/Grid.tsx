@@ -13,7 +13,7 @@ function Header(props: any) {
   return <span>props.field.name</span>;
 }
 
-export default class VirtualGridExample extends React.Component<void, {
+export default class VirtualGridExample extends React.Component<{}, {
   originalData?: any[];
   data?: any[]
   listState?: ListState

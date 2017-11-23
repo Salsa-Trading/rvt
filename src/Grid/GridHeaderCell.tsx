@@ -5,7 +5,6 @@ import { autobind } from 'core-decorators';
 import Filter from '../Filter';
 import { Field, SortDirection } from '../List/Field';
 import { FieldSet } from '../List/FieldSet';
-import ColumnChooserButton from './ColumnChooserButton';
 import safeMouseMove from '../utils/saveMouseMove';
 
 export type GridHeaderCellProps = {

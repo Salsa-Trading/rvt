@@ -1,11 +1,16 @@
 // Ensure all files in src folder are loaded for proper code coverage analysis.
-import * as chai from 'chai';
-import * as chaiEnzyme from 'chai-enzyme';
 
-const srcContext = require.context('../src', true, /.*\.tsx?$/);
-srcContext.keys().forEach(srcContext);
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+// import * as chai from 'chai';
+// import * as chaiEnzyme from 'chai-enzyme';
 
-const testsContext = require.context('.', true, /.*\Spec.tsx?$/);
-testsContext.keys().forEach(testsContext);
+// const srcContext = require.context('../src', true, /.*\.tsx?$/);
+// srcContext.keys().forEach(srcContext);
+//
+// const testsContext = require.context('.', true, /.*\Spec.tsx?$/);
+// testsContext.keys().forEach(testsContext);
 
-chai.use(chaiEnzyme());
+
+configure({ adapter: new Adapter() });
+// chai.use(chaiEnzyme());

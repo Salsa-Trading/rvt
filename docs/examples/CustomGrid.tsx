@@ -12,20 +12,22 @@ class Body extends React.Component<{
 
   public render() {
     const { data, fields} = this.props;
-    return <tbody>
-      {data.map((d, i) => <tr key={i}>
-        {fields.map((f, c) => <td key={c}>
-          {_.get(d, f.name).toString()}
-        </td>
+    return (
+      <tbody>
+        {data.map((d, i) => <tr key={i}>
+          {fields.map((f, c) => <td key={c}>
+            {_.get(d, f.name).toString()}
+          </td>
+          )}
+          </tr>
         )}
-        </tr>
-      )}
-    </tbody>;
+      </tbody>
+    );
   }
 
 }
 
-export default class VirtualGridExample extends React.Component<void, {
+export default class VirtualGridExample extends React.Component<{}, {
   originalData?: any[];
   data?: any[]
   listState?: ListState

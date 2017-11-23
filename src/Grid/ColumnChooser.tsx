@@ -10,7 +10,7 @@ export type ColumnChooserProps = {
   onToggleVisibility: (isVisible: boolean) => void;
 };
 
-export default class ColumnChooser extends React.Component<ColumnChooserProps, void> {
+export default class ColumnChooser extends React.Component<ColumnChooserProps, {}> {
 
   public static propTypes = {
     fieldSet: PropTypes.any
