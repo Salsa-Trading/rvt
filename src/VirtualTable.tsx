@@ -99,7 +99,7 @@ const defaultProps = {
 };
 
 export type RowProps = {
-  data: any;
+  data: object;
   index: number;
   [k: string]: any;
 };
@@ -121,8 +121,8 @@ export type VirtualTableBaseProps = {
 };
 
 export type VirtualTableProps = VirtualTableBaseProps & {
-  header: React.ComponentClass<any>|React.StatelessComponent<any>|React.ReactElement<any>;
-  row: React.ComponentClass<RowProps>|React.StatelessComponent<RowProps>|React.ReactElement<RowProps>;
+  header: React.ComponentType<any>|React.ReactElement<any>;
+  row: React.ComponentType<RowProps>|React.ReactElement<RowProps>;
   getRow: (rowIndex: number) => {data: any, [k: string]: any};
 };
 
@@ -139,8 +139,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
   public static propTypes = propTypes;
   public static defaultProps = defaultProps;
 
-  private containerRef: any;
-  private calculateHeightsBound: any;
+  private containerRef: HTMLDivElement;
 
   constructor(props, context) {
     super(props, context);
@@ -157,7 +156,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
    * Caclulate the maxVisibleRows from height values for the container, header and rows
    * @private
    */
-  private calculateHeightStateValues(height, headerHeight, rowHeight) {
+  private calculateHeightStateValues(height: number|string, headerHeight: number, rowHeight: number) {
     let maxVisibleRows = null;
     if (typeof height === 'number') {
       if (height && rowHeight && headerHeight) {
@@ -178,7 +177,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
    * Get the topRow via internal state or owner controlled topRow prop
    * @private
    */
-  private getTopRow() {
+  private getTopRow(): number {
     if(this.state.topRowControlled) {
       return this.props.topRow;
     }
@@ -189,7 +188,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
    * Set the topRow via internal state or owner controlled onTopRowChanged prop
    * @private
    */
-  private setTopRow(topRow) {
+  private setTopRow(topRow: number) {
     topRow = Math.max(0, Math.min(topRow, this.props.rowCount - this.visibleRows()));
     if(this.state.topRowControlled) {
       const { onTopRowChanged } = this.props;
@@ -206,7 +205,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
    * Get the row data for the visibleRowIndex based on topRow
    * @private
    */
-  private getRowProps(topRow, visibleRowIndex) {
+  private getRowProps(topRow: number, visibleRowIndex: number): RowProps {
     const { getRow } = this.props;
     const index = topRow + visibleRowIndex;
     return Object.assign({}, {index}, getRow(index));
@@ -217,7 +216,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
    * @private
    */
   @autobind
-  private onScroll(scrollTop) {
+  private onScroll(scrollTop: number) {
     const topRow = Math.round(scrollTop / this.state.rowHeight);
     this.setTopRow(topRow);
   }
@@ -227,7 +226,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
    * @private
    */
   @autobind
-  private onWheel(e) {
+  private onWheel(e: React.WheelEvent<{}>) {
     const { scrollWheelRows } = this.props;
     e.stopPropagation();
     e.preventDefault();
@@ -252,8 +251,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
     }
 
     if (this.props.autoResize) {
-      this.calculateHeightsBound = this.calculateHeights.bind(this);
-      window.addEventListener('resize', this.calculateHeightsBound);
+      window.addEventListener('resize', this.calculateHeights);
     }
   }
 
@@ -262,7 +260,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
    */
   public componentWillUnmount() {
     if (this.props.autoResize) {
-      window.removeEventListener('resize', this.calculateHeightsBound);
+      window.removeEventListener('resize', this.calculateHeights);
     }
   }
 
@@ -278,7 +276,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
   /**
    * If the table was initialized as an empty table (no rows) re-run calculator
    */
-  public componentWillReceiveProps(nextProps) {
+  public componentWillReceiveProps(nextProps: VirtualTableProps) {
     if(!this.props.rowCount && nextProps.rowCount) {
       this.setState({calculatingHeights: true});
     }
@@ -288,6 +286,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
    * Recalculate header and row heights based on container size
    * Call this method when the window or container size changed
    */
+  @autobind
   public calculateHeights() {
     const div = this.containerRef;
     const height = this.props.height ? div.clientHeight : (div.parentElement.clientHeight) - 6;
@@ -311,7 +310,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
     if (React.isValidElement(header)) {
       return header;
     }
-    return React.createElement(header as any);
+    return React.createElement(header as React.ComponentType<any>);
   }
 
   /**
@@ -326,13 +325,18 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
       return [];
     }
 
-    const rowElement = React.isValidElement(row) ? row : React.createElement(row as any);
+    const rowElement = React.isValidElement(row) ? row : React.createElement(row as React.ComponentType<RowProps>);
     const rows = new Array(rowCount);
     for (let i = 0; i < rowCount; i++) {
-      let props = Object.assign({}, this.getRowProps(topRow, i), { key: i});
-      rows[i] = React.cloneElement(rowElement as any, props);
+      let props: RowProps = Object.assign({}, this.getRowProps(topRow, i), { key: i});
+      rows[i] = React.cloneElement(rowElement, props);
     }
     return rows;
+  }
+
+  @autobind
+  private setContainerRef(ref: HTMLDivElement) {
+    this.containerRef = ref;
   }
 
   public render() {
@@ -363,12 +367,11 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
     const { rowCount } = this.props;
     const { headerHeight, rowHeight } = this.state;
     const topRow = this.getTopRow();
-    const refFn = (ref) => this.containerRef = ref;
 
     return (
       <div
         onWheel={this.onWheel}
-        ref={refFn}
+        ref={this.setContainerRef}
         className={`rvt ${containerClassName ? containerClassName : ''}`}
         style={containerStyle}
       >
@@ -397,11 +400,10 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
    * @private
    */
   private renderCalculator(header, rows, containerClassName, containerStyle, tableClassName, tableStyle) {
-    const refFn = (ref) => this.containerRef = ref;
     return (
       <div
         className={`${containerClassName} calculator`}
-        ref={refFn}
+        ref={this.setContainerRef}
         style={Object.assign({}, containerStyle, {visibility: 'hidden'})}
       >
         <div style={{overflowX: 'auto', overflowY: 'hidden'}}>
