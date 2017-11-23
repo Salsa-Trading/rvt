@@ -11,7 +11,30 @@ const propTypes = {
   /**
     * A callback function to get the data for the row at the specified index (index: number) => { data: any }
     */
-  getRow: PropTypes.func.isRequired,
+  getRow: (props) => {
+    const {getRow} = props;
+    if(!getRow) {
+      return;
+    }
+    if(!(typeof getRow === 'function')) {
+      throw new Error('getRow must be a function');
+    }
+  },
+  /**
+   *  The height of the table. If a number it is provided it assumed to be px, strings can be any valid height css value
+   */
+  getRows: (props) => {
+    const {getRow, getRows} = props;
+    if(!(typeof getRows === 'function')) {
+      throw new Error('getRows must be a function');
+    }
+    if(getRow) {
+      console.warn('ReactVirtualTable: getRow is deprecated use getRows instead');
+    }
+    if(getRow && getRows) {
+      throw new Error('getRow and getRows can not both be defined');
+    }
+  },
   /**
    *  The height of the table. If a number it is provided it assumed to be px, strings can be any valid height css value
    */
@@ -76,7 +99,7 @@ const propTypes = {
     if (React.isValidElement(header)) {
       return;
     }
-    throw Error('header, if supplied, must be a Stateless Functional Component or extend React.Component');
+    throw new Error('header, if supplied, must be a Stateless Functional Component or extend React.Component');
   },
   /**
    *  The React Component or React Stateless function to render rows (must render a <tr> root element
@@ -89,7 +112,7 @@ const propTypes = {
     if (React.isValidElement(row)) {
       return;
     }
-    throw Error('row must be a Stateless Functional Component or extend React.Component');
+    throw new Error('row must be a Stateless Functional Component or extend React.Component');
   }
 };
 
@@ -123,7 +146,8 @@ export type VirtualTableBaseProps = {
 export type VirtualTableProps = VirtualTableBaseProps & {
   header: React.ComponentType<any>|React.ReactElement<any>;
   row: React.ComponentType<RowProps>|React.ReactElement<RowProps>;
-  getRow: (rowIndex: number) => {data: any, [k: string]: any};
+  getRow?: (rowIndex: number) => {data: any, [k: string]: any};
+  getRows?: (topRowIndex: number, count: number) => {data: any, [k: string]: any}[];
 };
 
 export default class VirtualTable extends React.PureComponent<VirtualTableProps, {

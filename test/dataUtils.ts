@@ -1,3 +1,5 @@
+import * as _ from 'lodash';
+
 const longString = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas interdum',
   'enim erat, non lobortis risus imperdiet at. Sed luctus felis quam, eget',
@@ -13,7 +15,7 @@ const longString = [
   'amet risus interdum, interdum elit nec, molestie justo.'
 ].join(' ');
 
-export function generateDataForIndex(index) {
+export function generateDataForIndex(index: number) {
   return {
     col1: index,
     col2: (40960 + index).toString(16),
@@ -24,10 +26,18 @@ export function generateDataForIndex(index) {
   };
 }
 
-export function generateRowDataForIndex(index) {
+export function generateDataForSlice(index: number, count: number) {
+  return _.range(index, count).map(i => generateDataForIndex(i));
+}
+
+export function generateRowDataForIndex(index: number) {
   return {
     data: generateDataForIndex(index)
   };
+}
+
+export function generateRowDataSlice(index: number, count: number) {
+  return generateDataForSlice(index, count).map(data => ({data}));
 }
 
 export function generateData(rowCount) {

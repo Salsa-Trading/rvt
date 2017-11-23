@@ -1,15 +1,17 @@
 /* tslint:disable:no-unused-expression */
 
 import * as React from 'react';
+import * as _ from 'lodash';
 import { expect } from 'chai';
+import { spy } from 'sinon';
 import { shallow, mount } from 'enzyme';
 import { VirtualTable } from '../src/index';
-import { generateRowDataForIndex } from './dataUtils';
+import { generateRowDataSlice } from './dataUtils';
 
 describe('<Table />', () => {
 
   const defaultProps = {
-    getRow: generateRowDataForIndex,
+    getRows: generateRowDataSlice,
     rowCount: 0,
     header: () => { return null; },
     row: () => { return null; }
@@ -17,6 +19,16 @@ describe('<Table />', () => {
 
   let wrapper;
   let mounted;
+
+  describe('getRows to getRow', () => {
+
+    it('should log warning if getRow', () => {
+      const props = {..._.omit(defaultProps, 'getRows')} as any;
+      spy(console, 'warn');
+      shallow(<VirtualTable {...props} />);
+      expect(console.warn).to.have.be.called;
+    });
+  });
 
   describe('root element', () => {
 
