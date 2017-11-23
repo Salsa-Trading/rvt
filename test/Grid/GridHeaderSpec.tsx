@@ -29,7 +29,7 @@ function equalLevels(result, expected) {
 
 }
 
-describe.only('<GridHeader />', () => {
+describe('<GridHeader />', () => {
 
   describe('getLevels', () => {
 

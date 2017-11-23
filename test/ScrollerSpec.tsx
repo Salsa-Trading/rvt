@@ -6,7 +6,7 @@ import { expect } from 'chai';
 import { mount } from 'enzyme';
 import Scroller from '../src/Scroller';
 
-describe('<SortIndicator />', () => {
+describe('<Scroller />', () => {
 
   let props = {
     top: 10,
