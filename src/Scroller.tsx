@@ -2,14 +2,16 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
 
-export default class Scroller extends React.Component<{
+export type ScrollerProps = {
   top: number;
   height: number;
   viewPortHeight: number;
   visible: boolean;
   onScroll: (scrollTop: number) => void;
   scrollTop: number;
-}, {}> {
+};
+
+export default class Scroller extends React.Component<ScrollerProps, {}> {
 
   public static propTypes = {
     /**
@@ -57,7 +59,7 @@ export default class Scroller extends React.Component<{
     }
   }
 
-  private setScrollTop(scrollTop) {
+  private setScrollTop(scrollTop: number) {
     if(this.scrollTop === scrollTop) {
       return;
     }
@@ -67,7 +69,7 @@ export default class Scroller extends React.Component<{
     }
   }
 
-  public shouldComponentUpdate(nextProps) {
+  public shouldComponentUpdate(nextProps: ScrollerProps) {
     const { top, height, visible, viewPortHeight, scrollTop } = this.props;
     if(nextProps.top !== top ||
        nextProps.height !== height ||
@@ -90,6 +92,11 @@ export default class Scroller extends React.Component<{
     this.setScrollTop(this.props.scrollTop);
   }
 
+  @autobind
+  private setScrollerRef(ref: HTMLDivElement) {
+    this.scrollerRef = ref;
+  }
+
   public render() {
     const { top, height, visible, viewPortHeight } = this.props;
     const style: React.CSSProperties = {
@@ -102,12 +109,11 @@ export default class Scroller extends React.Component<{
       width: '15px',
       display: visible ? 'block' : 'none'
     };
-    const refFn = ref => this.scrollerRef = ref;
     return (
       <div
         className='virtual-table-scroller'
         onScroll={this.onScroll}
-        ref={refFn}
+        ref={this.setScrollerRef}
         style={style}
       >
         <div style={{width: '1px', height: `${viewPortHeight}px`}}/>
