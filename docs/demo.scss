@@ -20,11 +20,12 @@ body {
   overflow-y: hidden;
 
   nav {
+    flex: 0 0 50px;
     margin-bottom: 0;
   }
 
   main {
-    flex: auto;
+    flex: 1 1;
     position: relative;
     overflow-y: auto;
   }
