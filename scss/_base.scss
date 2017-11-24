@@ -51,9 +51,7 @@ $sort-direction-color: royalblue;
     }
   }
 
-  tr:first-child th:last-child {
-    .filter-pane {
-      right: 0;
-    }
+  tr th:last-child:not(:first-child) .filter-pane {
+    right: 0;
   }
 }

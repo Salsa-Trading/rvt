@@ -18,7 +18,7 @@ $filter-pane-border: 1px solid lightgray;
   .filter-pane {
     position: absolute;
 
-    padding: 1rem;
+    padding: .5rem;
 
     .btn-group,
     input {
@@ -42,6 +42,10 @@ $filter-pane-border: 1px solid lightgray;
       display: flex;
       flex-direction: row;
       justify-content: space-around;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
     }
   }
 }
