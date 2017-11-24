@@ -86,13 +86,31 @@ export default class Filter extends React.Component<{
     this.setState({showFilter: false});
   }
 
+  @autobind
+  private sortAscFn() {
+    const {field, onSortSelection} = this.props;
+    if(field.sortDirection === SortDirection.asc) {
+      onSortSelection(null);
+    } else {
+      onSortSelection(SortDirection.asc);
+    }
+  }
+
+  @autobind
+  private sortDescFn() {
+    const {field, onSortSelection} = this.props;
+    if(field.sortDirection === SortDirection.desc) {
+      onSortSelection(null);
+    } else {
+      onSortSelection(SortDirection.desc);
+    }
+  }
+
   private renderFilterPane() {
     const { field, onSortSelection } = this.props;
     const { sortDirection } = field;
 
     const { filter } = this.state;
-    const sortAscFn = () => onSortSelection(SortDirection.asc);
-    const sortDescFn = () => onSortSelection(SortDirection.desc);
 
     const filterElement = React.createElement((field.filterControl || DefaultFilter as any), {
       filter,
@@ -102,11 +120,11 @@ export default class Filter extends React.Component<{
     return (
       <div className='filter-pane'>
         <div>
-          <button onClick={sortAscFn}>
+          <button onClick={this.sortAscFn}>
             {sortDirection === SortDirection.asc ? <span className='checked'/> : null}
             Ascending
           </button>
-          <button onClick={sortDescFn}>
+          <button onClick={this.sortDescFn}>
             {sortDirection === SortDirection.desc ? <span className='checked'/> : null}
             Descending
           </button>
