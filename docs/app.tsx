@@ -23,7 +23,9 @@ export default class App extends React.Component<{}, {}> {
     return (
       <BrowserRouter>
         <div id='rvt-demo'>
-          <Navbar />
+          <header>
+            <Navbar />
+          </header>
           <main>
             <Route path='/home' component={Home} />
             <Route path='/examples/virtualTable' component={VirtualTable} />
