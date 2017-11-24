@@ -50,6 +50,7 @@ export default class GridHeader extends React.Component<ListViewProps & {
   gridRow?: React.ComponentClass<any>|React.StatelessComponent<any>|React.ReactElement<any>;
 }, {
   showColumnChooser: boolean;
+  draggingColumn: boolean;
 }> {
 
   public static propTypes = {
@@ -64,7 +65,8 @@ export default class GridHeader extends React.Component<ListViewProps & {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      showColumnChooser: false
+      showColumnChooser: false,
+      draggingColumn: false
     };
   }
 
@@ -72,6 +74,8 @@ export default class GridHeader extends React.Component<ListViewProps & {
   private onFieldMouseDown(e: React.MouseEvent<HTMLTableHeaderCellElement>) {
     const { onMove } = this.props;
     const rootFieldSet = this.props.fieldSet;
+
+    this.setState({draggingColumn: true});
 
     e.persist();
     const target = e.currentTarget;
@@ -97,6 +101,7 @@ export default class GridHeader extends React.Component<ListViewProps & {
         }
       },
       () => {
+        this.setState({draggingColumn: false});
         if(onMove) {
           tr.classList.remove(movingClassName);
           if(currentHover) {
@@ -177,8 +182,9 @@ export default class GridHeader extends React.Component<ListViewProps & {
     const { fieldSet, pinnedRows } = this.props;
     const rows = getLevels(fieldSet);
     const colCount = rows[0].reduce((r, i) => r + i.colSpan, 0);
+    const className = this.state.draggingColumn ? 'dragging' : null;
     return (
-      <thead>
+      <thead className={className}>
         {rows.map((row: FieldHeader[], r: number) => {
           return (
             <tr key={r}>

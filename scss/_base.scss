@@ -11,11 +11,14 @@ $sort-direction-color: royalblue;
 }
 
 .rvt thead {
-  tr {
-    &.field-moving th .grid-header-cell .header {
-      cursor: grabbing;
-      cursor: -webkit-grabbing;
-    }
+  &.dragging {
+    cursor: grabbing;
+    cursor: -webkit-grabbing;
+  }
+
+  &:not(.dragging) .header {
+    cursor: grab;
+    cursor: -webkit-grab;
   }
 
   th {
@@ -27,8 +30,6 @@ $sort-direction-color: royalblue;
       display: flex;
 
       .header {
-        cursor: grab;
-        cursor: -webkit-grab;
         align-self: flex-end;
         flex: 1 100%;
         flex-grow: 1;
