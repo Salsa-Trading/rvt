@@ -48,7 +48,7 @@
       "check-finally",
       "check-whitespace"
     ],
-    "quotemark": false,
+    "quotemark": [true, "single", "avoid-escape", "jsx-single"],
     "radix": false,
     "semicolon": [true, "always"],
     "trailing-comma": [true, {
