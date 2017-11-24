@@ -21,11 +21,8 @@ export class FieldSet extends FieldBase {
   constructor(props: FieldSetProps, fieldDefaults: FieldDefaults, fields: FieldSetDisplay) {
     super(props, fields);
 
-    const children = React.Children.map(props.children || [], (c: any) => {
-      let field: FieldDisplay;
-      if(fields) {
-        field = fields.children.find(cd => cd.name === c.props.name);
-      }
+    this.children = React.Children.map(props.children || [], (c: any) => {
+      let field = ((fields && fields.children) || []).find(cd => cd.name === c.props.name) || {name: c.name};
       if(c.type.name === 'FieldSetDefinition') {
         return new FieldSet(c.props, fieldDefaults, field as FieldSetDisplay);
       }
@@ -33,14 +30,6 @@ export class FieldSet extends FieldBase {
         return new Field({...fieldDefaults, ...c.props}, field);
       }
     });
-    if(!fields || !fields.children || fields.children.length === 0) {
-      fields = {
-        name: this.name,
-        hidden: false,
-        children: children.map(c => ({name: c.name, hidden: false}))
-      };
-    }
-    this.children = fields.children.map(cd => children.find(c => cd.name === c.name));
   }
 
   public getFields(): Field[] {
