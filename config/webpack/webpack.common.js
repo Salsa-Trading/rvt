@@ -112,7 +112,6 @@ function entry() {
         'webpack-dev-server/client?http://localhost:4000',
         'webpack/hot/only-dev-server',
         'react-hot-loader/patch',
-        'bootstrap-loader',
         'font-awesome-loader',
         path.join(projectRoot, 'docs/demo.scss'),
         path.join(projectRoot, 'docs/index.tsx')
@@ -122,7 +121,6 @@ function entry() {
   else if (env == 'production') {
     return {
       index: [
-        'bootstrap-loader',
         path.join(projectRoot, 'docs/index.tsx')
       ],
     };

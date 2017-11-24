@@ -1,30 +1,40 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { MenuItem, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import {
+  UncontrolledDropdown,
+  DropdownItem,
+  DropdownMenu,
+  Navbar,
+  NavbarBrand,
+  NavbarToggler,
+  Collapse,
+  Nav,
+  DropdownToggle
+} from 'reactstrap';
+import { autobind } from 'core-decorators';
 
-export default class NavBar extends React.Component<{
-}, {}> {
-
+export default class NavBar extends React.Component<
+  {},
+  {}
+> {
   public render() {
     return (
-      <Navbar fluid>
-        <Navbar.Header>
-          <Navbar.Brand>
-            <Link to='/'>React-Virtual-Table</Link>
-          </Navbar.Brand>
-          <Navbar.Toggle />
-        </Navbar.Header>
-        <Navbar.Collapse>
-          <Nav>
-            <NavDropdown title='Examples' id='examples-dropdown'>
-              <MenuItem href='/examples/virtualTable'>Virtual Table</MenuItem>
-              <MenuItem href='/examples/style'>Style</MenuItem>
-              <MenuItem href='/examples/grid'>Grid</MenuItem>
-              <MenuItem href='/examples/virtualGrid'>Virtual Grid</MenuItem>
-              <MenuItem href='/examples/customGrid'>Custom Grid</MenuItem>
-            </NavDropdown>
-          </Nav>
-        </Navbar.Collapse>
+      <Navbar light={true} color='light'>
+        <NavbarBrand href='/'>
+          React-Virtual-Table
+        </NavbarBrand>
+        <Nav navbar>
+          <UncontrolledDropdown>
+            <DropdownToggle caret>Examples</DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem href='/examples/virtualTable'>Virtual Table</DropdownItem>
+              <DropdownItem href='/examples/style'>Style</DropdownItem>
+              <DropdownItem href='/examples/grid'>Grid</DropdownItem>
+              <DropdownItem href='/examples/virtualGrid'>Virtual Grid</DropdownItem>
+              <DropdownItem href='/examples/customGrid'>Custom Grid</DropdownItem>
+            </DropdownMenu>
+          </UncontrolledDropdown>
+        </Nav>
       </Navbar>
     );
   }
