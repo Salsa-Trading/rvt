@@ -53,7 +53,7 @@ $sort-direction-color: royalblue;
     }
   }
 
-  th:last-child {
+  tr:first-child th:last-child {
     .filter-pane {
       right: 0;
     }
