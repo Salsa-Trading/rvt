@@ -1,4 +1,5 @@
 $white: #fff;
+$gray: #868e96;
 $filter-pane-bg-color: transparentize($white, .2);
 $filter-pane-border: 1px solid lightgray;
 
@@ -18,12 +19,23 @@ $filter-pane-border: 1px solid lightgray;
     position: absolute;
 
     padding: 1rem;
-    border-radius: 1rem;
-    border: $filter-pane-border;
-    background-color: $filter-pane-bg-color;
 
+    .btn-group,
     input {
       width: 100%;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .sort-controls {
+      display: flex;
+      flex-direction: row;
+
+      button {
+        flex: 1 0;
+      }
     }
 
     .form-actions {

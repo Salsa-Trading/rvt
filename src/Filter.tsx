@@ -21,6 +21,8 @@ class DefaultFilter extends React.Component<FilterControlProps, {}> {
     return (
       <input
         type='search'
+        className='form-control'
+        placeholder='Filter'
         value={filter}
         onChange={this.handleFilterChanged}
         autoFocus={true}
@@ -118,22 +120,28 @@ export default class Filter extends React.Component<{
     });
 
     return (
-      <div className='filter-pane'>
-        <div>
-          <button onClick={this.sortAscFn}>
-            {sortDirection === SortDirection.asc ? <span className='checked'/> : null}
-            Ascending
-          </button>
-          <button onClick={this.sortDescFn}>
-            {sortDirection === SortDirection.desc ? <span className='checked'/> : null}
-            Descending
-          </button>
+      <div className='card filter-pane'>
+        <div className='form-group'>
+          <div className='btn-group sort-controls'>
+            <button className='btn' onClick={this.sortAscFn}>
+              {sortDirection === SortDirection.asc ? <span className='checked'/> : null}
+              Ascending
+            </button>
+            <button className='btn' onClick={this.sortDescFn}>
+              {sortDirection === SortDirection.desc ? <span className='checked'/> : null}
+              Descending
+            </button>
+          </div>
         </div>
         <form onSubmit={this.handleOk}>
-          {filterElement}
-          <div className='form-actions'>
-            <button type='reset' onClick={this.handleCancel}>Cancel</button>
-            <button type='submit'>Ok</button>
+          <div className='form-group'>
+            {filterElement}
+          </div>
+          <div className='form-group'>
+            <div className='form-actions'>
+              <button className='btn btn-secondary' type='reset' onClick={this.handleCancel}>Cancel</button>
+              <button className='btn btn-primary' type='submit'>Ok</button>
+            </div>
           </div>
         </form>
       </div>
