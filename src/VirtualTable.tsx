@@ -116,12 +116,17 @@ const propTypes = {
       return;
     }
     throw new Error('row must be a Stateless Functional Component or extend React.Component');
-  }
+  },
+  /**
+   * Window events that should trigger a recalculation of visibleTableRows if autoResize is true
+   */
+  windowResizeEvents: PropTypes.arrayOf(PropTypes.string)
 };
 
 const defaultProps = {
   width: '100%',
-  scrollWheelRows: 5
+  scrollWheelRows: 5,
+  windowResizeEvents: ['resize']
 };
 
 export type Row = {
@@ -147,6 +152,7 @@ export type VirtualTableBaseProps = {
   containerStyle?: React.CSSProperties;
   className?: string;
   style?: React.CSSProperties;
+  windowResizeEvents?: string[]
 };
 
 export type VirtualTableProps = VirtualTableBaseProps & {
@@ -263,24 +269,26 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
 
   /**
    * If the calculator is rendered on mount, calculate heights
-   * Listen for window resize if 'autoResize' is enabled
+   * Listen for window resizes if 'autoResize' is enabled
    */
   public componentDidMount() {
     if (this.state.calculatingHeights) {
       setTimeout(() => this.calculateHeights(), 250);
     }
 
-    if (this.props.autoResize) {
-      window.addEventListener('resize', this.calculateHeights);
+    const {autoResize, windowResizeEvents} = this.props;
+    if (autoResize) {
+      (windowResizeEvents || []).forEach(event => window.addEventListener(event, this.calculateHeights));
     }
   }
 
   /**
-   * Remove window listener if 'autoResize' is enabled
+   * Remove window listeners if 'autoResize' is enabled
    */
   public componentWillUnmount() {
-    if (this.props.autoResize) {
-      window.removeEventListener('resize', this.calculateHeights);
+    const {autoResize, windowResizeEvents} = this.props;
+    if (autoResize) {
+      (windowResizeEvents || []).forEach(event => window.removeEventListener(event, this.calculateHeights));
     }
   }
 
