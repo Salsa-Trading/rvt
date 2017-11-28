@@ -34,3 +34,7 @@ export {
 export {
   default as VirtualTable
 } from './VirtualTable';
+
+export {
+  default as Scroller
+} from './Scroller';

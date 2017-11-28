@@ -3,29 +3,30 @@ import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
 
 export type ScrollerProps = {
-  top: number;
-  height: number;
-  viewPortHeight: number;
-  visible: boolean;
+  margin?: number;
+  size: number;
+  virtualSize: number;
+  visible?: boolean;
   onScroll: (scrollTop: number) => void;
-  scrollTop: number;
+  scrollOffset: number;
+  orientation?: 'vertical'|'horizontal';
 };
 
 export default class Scroller extends React.Component<ScrollerProps, {}> {
 
   public static propTypes = {
     /**
-     * The top offset of the Scroller, used to place the scroller below the table header
+     * The top/left offset of the Scroller, used to place the scroller below the table header
      */
-    top: PropTypes.number,
+    margin: PropTypes.number,
     /**
-     * The height of the Scroller, typically the rowHeight * maxVisibleRows
+     * The length of the Scroller, typically the rowHeight * maxVisibleRows
      */
-    height: PropTypes.number,
+    size: PropTypes.number,
     /**
-     * The viewPortHeight is the number of total rows * the row height
+     * The viewPortHeight is the number of total rows * the row length
      */
-    viewPortHeight: PropTypes.number,
+    viewPortSize: PropTypes.number,
     /**
      * Show or hide the scrollbar
      */
@@ -37,15 +38,22 @@ export default class Scroller extends React.Component<ScrollerProps, {}> {
     /**
      * The scrollTop value of the scroller div
      */
-    scrollTop: PropTypes.number
+    scrollOffset: PropTypes.number,
+    /**
+     * The orientation of the scroll bar
+     */
+    orientation: PropTypes.oneOf(['vertical', 'horizontal'])
   };
 
   public static defaultProps = {
-    scrollTop: 0
+    scrollOffset: 0,
+    margin: 0,
+    visible: true,
+    orientation: 'vertical'
   };
 
-  private scrollTop = null;
-  private scrollerRef: any;
+  private scrollOffset: number = null;
+  private scrollerRef: HTMLDivElement;
 
   constructor(props) {
     super(props);
@@ -55,41 +63,52 @@ export default class Scroller extends React.Component<ScrollerProps, {}> {
   private onScroll() {
     const { onScroll } = this.props;
     if (onScroll) {
-      onScroll(this.scrollerRef.scrollTop);
+      if(this.props.orientation === 'vertical') {
+        onScroll(this.scrollerRef.scrollTop);
+      }
+      else {
+        onScroll(this.scrollerRef.scrollLeft);
+      }
     }
   }
 
-  private setScrollTop(scrollTop: number) {
-    if(this.scrollTop === scrollTop) {
+  private setScrollOffset(scrollOffset: number) {
+    if(this.scrollOffset === scrollOffset) {
       return;
     }
-    this.scrollTop = scrollTop;
+    this.scrollOffset = scrollOffset;
     if (this.scrollerRef) {
-      this.scrollerRef.scrollTop = scrollTop;
+      if(this.props.orientation === 'vertical') {
+        this.scrollerRef.scrollTop = scrollOffset;
+      }
+      else {
+        this.scrollerRef.scrollLeft = scrollOffset;
+      }
     }
   }
 
   public shouldComponentUpdate(nextProps: ScrollerProps) {
-    const { top, height, visible, viewPortHeight, scrollTop } = this.props;
-    if(nextProps.top !== top ||
-       nextProps.height !== height ||
+    const { margin, visible, size, virtualSize, scrollOffset, orientation } = this.props;
+    if(nextProps.margin !== margin ||
        nextProps.visible !== visible ||
-       nextProps.viewPortHeight !== viewPortHeight) {
+       nextProps.orientation !== orientation ||
+       nextProps.size !== size ||
+       nextProps.virtualSize !== virtualSize) {
       return true;
     }
 
-    if(nextProps.scrollTop !== scrollTop) {
-      this.setScrollTop(nextProps.scrollTop);
+    if(nextProps.scrollOffset !== scrollOffset) {
+      this.setScrollOffset(nextProps.scrollOffset);
     }
     return false;
   }
 
   public componentDidMount() {
-    this.setScrollTop(this.props.scrollTop);
+    this.setScrollOffset(this.props.scrollOffset);
   }
 
   public componentDidUpdate() {
-    this.setScrollTop(this.props.scrollTop);
+    this.setScrollOffset(this.props.scrollOffset);
   }
 
   @autobind
@@ -98,25 +117,48 @@ export default class Scroller extends React.Component<ScrollerProps, {}> {
   }
 
   public render() {
-    const { top, height, visible, viewPortHeight } = this.props;
-    const style: React.CSSProperties = {
+    const { margin, visible, size, virtualSize, orientation } = this.props;
+    let scrollerStyle: React.CSSProperties = {
       position: 'absolute',
-      right: '0px',
-      top: `${top}px`,
-      height: `${height}px`,
-      overflowY: 'scroll' as any,
-      overflowX: 'hidden' as any,
-      width: '15px',
       display: visible ? 'block' : 'none'
     };
+    let viewPortStyle: React.CSSProperties;
+    if(orientation === 'vertical') {
+      scrollerStyle = {...scrollerStyle,
+        right: '0px',
+        top: `${margin}px`,
+        height: `${size}px`,
+        overflowY: 'scroll' as any,
+        overflowX: 'hidden' as any,
+        width: '15px'
+      };
+      viewPortStyle = {
+        width: '1px',
+        height: `${virtualSize}px`
+      };
+    }
+    else {
+      scrollerStyle = {...scrollerStyle,
+        bottom: '0px',
+        left: `${margin}px`,
+        width: `${size}px`,
+        overflowX: 'scroll' as any,
+        overflowY: 'hidden' as any,
+        height: '15px'
+      };
+      viewPortStyle = {
+        height: '1px',
+        width: `${virtualSize}px`
+      };
+    }
     return (
       <div
         className='virtual-table-scroller'
         onScroll={this.onScroll}
         ref={this.setScrollerRef}
-        style={style}
+        style={scrollerStyle}
       >
-        <div style={{width: '1px', height: `${viewPortHeight}px`}}/>
+        <div style={viewPortStyle} />
       </div>
     );
   }

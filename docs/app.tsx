@@ -12,6 +12,7 @@ import Layout from './examples/Layout';
 import Style from './examples/Style';
 import VirtualTable from './examples/VirtualTable';
 import Grid from './examples/Grid';
+import VirtualScroller from './examples/VirtualScroller';
 
 export default class App extends React.Component<{}, {}> {
 
@@ -34,6 +35,7 @@ export default class App extends React.Component<{}, {}> {
             <Route path='/examples/grid' component={Grid} />
             <Route path='/examples/virtualGrid' component={VirtualGrid} />
             <Route path='/examples/customGrid' component={CustomGrid} />
+            <Route path='/examples/virtualScroller' component={VirtualScroller} />
           </main>
         </div>
       </BrowserRouter>

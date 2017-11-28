@@ -32,6 +32,7 @@ export default class NavBar extends React.Component<
               <DropdownItem href='/examples/grid'>Grid</DropdownItem>
               <DropdownItem href='/examples/virtualGrid'>Virtual Grid</DropdownItem>
               <DropdownItem href='/examples/customGrid'>Custom Grid</DropdownItem>
+              <DropdownItem href='/examples/virtualScroller'>Virtual Scroller</DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
         </Nav>

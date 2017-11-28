@@ -433,11 +433,11 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
         </div>
         <Scroller
           onScroll={this.onScroll}
-          scrollTop={topRow * rowHeight}
-          top={(headerHeight || 0)}
-          height={this.visibleRows() * rowHeight}
+          scrollOffset={topRow * rowHeight}
+          margin={(headerHeight || 0)}
+          size={this.visibleRows() * rowHeight}
           visible={rowCount > this.state.maxVisibleRows}
-          viewPortHeight={rowHeight * rowCount}
+          virtualSize={rowHeight * rowCount}
         />
       </div>
     );
