@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { VirtualTable } from '../../src/index';
+import { VirtualTable, RowData } from '../../src/index';
 import { generateData } from '../../test/dataUtils';
+import { autobind } from 'core-decorators';
 
 const Head = () => (
   <thead>
@@ -37,16 +38,19 @@ export default class Style extends React.Component<{}, {
     };
   }
 
-  private getRow(index) {
-    return {
-      data: this.state.rows[index]
-    };
+  @autobind
+  private getRows(index: number, length: number): RowData[] {
+    return this.state.rows.slice(index, index + length).map((data, index) => {
+      return {
+        data
+      };
+    });
   }
 
   public render() {
     return (
       <VirtualTable
-        getRow={this.getRow.bind(this)}
+        getRows={this.getRows}
         rowCount={rows.length}
         header={Head}
         row={Row}

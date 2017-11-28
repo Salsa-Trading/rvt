@@ -10,10 +10,10 @@ function Cell({ data, field }: { data: any, field: FieldProps }) {
 }
 
 function Header(props: any) {
-  return <span>props.field.name</span>;
+  return <span>{props.field.name}</span>;
 }
 
-export default class VirtualGridExample extends React.Component<{}, {
+export default class GridExample extends React.Component<{}, {
   originalData?: any[];
   data?: any[]
   listState?: ListState

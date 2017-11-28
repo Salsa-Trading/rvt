@@ -6,7 +6,8 @@ import VirtualTable, { VirtualTableBaseProps } from '../VirtualTable';
 
 
 type VirtualGridProps = {
-  getRow: (rowIndex: number) => RowData;
+  getRows?: (rowIndex: number, length: number) => RowData[];
+  getRow?: (rowIndex: number) => RowData;
   onMouseDown?: VirtualGridMouseEventHandler;
   onClick?: VirtualGridMouseEventHandler;
   pinnedRows?: RowData[];

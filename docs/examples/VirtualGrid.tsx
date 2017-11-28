@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import { VirtualGrid, Field, FieldSet, FieldProps, ListState, ListStateChangeType, isDataChange, RowData } from '../../src/index';
 import { generateData } from '../../test/dataUtils';
+import { autobind } from 'core-decorators';
 
 import '../../scss/rvt_unicode.scss';
 
@@ -29,14 +30,18 @@ export default class VirtualGridExample extends React.Component<{}, {
     };
   }
 
-  public getRow(index: number): RowData {
-    return {
-      data: this.state.data[index + 2],
-      rowProps: {
-        style: {backgroundColor: index % 2 === 0 ? '' : 'lightgray'}
-      }
-    };
+  @autobind
+  public getRows(index: number, length: number): RowData[] {
+    return this.state.data.slice(index, index + length).map((data, index) => {
+      return {
+        data,
+        rowProps: {
+          style: {backgroundColor: index % 2 === 0 ? '' : 'lightgray'}
+        }
+      };
+    });
   }
+
 
   private onListStateChanged(listState: ListState, changeType: ListStateChangeType) {
     if(!isDataChange(changeType)) {
@@ -62,7 +67,7 @@ export default class VirtualGridExample extends React.Component<{}, {
     const { listState } = this.state;
     return (
       <VirtualGrid
-        getRow={this.getRow.bind(this)}
+        getRows={this.getRows}
         rowCount={this.state.data.length - 2}
         listState={listState}
         onListStateChanged={this.onListStateChanged.bind(this)}

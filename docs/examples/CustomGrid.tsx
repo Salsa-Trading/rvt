@@ -27,7 +27,7 @@ class Body extends React.Component<{
 
 }
 
-export default class VirtualGridExample extends React.Component<{}, {
+export default class CustomExample extends React.Component<{}, {
   originalData?: any[];
   data?: any[]
   listState?: ListState
@@ -39,15 +39,6 @@ export default class VirtualGridExample extends React.Component<{}, {
     this.state = {
       originalData,
       data: originalData
-    };
-  }
-
-  public getRow(index: number): RowData {
-    return {
-      data: this.state.data[index],
-      rowProps: {
-        style: {backgroundColor: index % 2 === 0 ? '' : 'lightgray'}
-      }
     };
   }
 
