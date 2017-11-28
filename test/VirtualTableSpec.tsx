@@ -1,7 +1,6 @@
 /* tslint:disable:no-unused-expression */
 
 import * as React from 'react';
-import * as _ from 'lodash';
 import { expect } from 'chai';
 import { spy } from 'sinon';
 import { shallow, mount } from 'enzyme';
@@ -23,7 +22,13 @@ describe('<Table />', () => {
   describe('getRows to getRow', () => {
 
     it('should log warning if getRow', () => {
-      const props = {..._.omit(defaultProps, 'getRows')} as any;
+
+      const props = {
+        getRow: () => { return null; },
+        rowCount: 0,
+        header: () => { return null; },
+        row: () => { return null; }
+      } as any;
       spy(console, 'warn');
       shallow(<VirtualTable {...props} />);
       expect(console.warn).to.have.be.called;

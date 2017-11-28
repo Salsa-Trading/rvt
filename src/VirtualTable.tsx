@@ -19,17 +19,20 @@ const propTypes = {
     if(!(typeof getRow === 'function')) {
       throw new Error('getRow must be a function');
     }
+    if(getRow) {
+      console.warn('ReactVirtualTable: getRow is deprecated use getRows instead');
+    }
   },
   /**
    *  The height of the table. If a number it is provided it assumed to be px, strings can be any valid height css value
    */
   getRows: (props) => {
     const {getRow, getRows} = props;
+    if(!getRows) {
+      return;
+    }
     if(!(typeof getRows === 'function')) {
       throw new Error('getRows must be a function');
-    }
-    if(getRow) {
-      console.warn('ReactVirtualTable: getRow is deprecated use getRows instead');
     }
     if(getRow && getRows) {
       throw new Error('getRow and getRows can not both be defined');
@@ -121,10 +124,13 @@ const defaultProps = {
   scrollWheelRows: 5
 };
 
-export type RowProps = {
+export type Row = {
   data: object;
-  index: number;
   [k: string]: any;
+};
+
+export type RowProps = Row & {
+  index: number;
 };
 
 export type VirtualTableBaseProps = {
@@ -146,8 +152,8 @@ export type VirtualTableBaseProps = {
 export type VirtualTableProps = VirtualTableBaseProps & {
   header: React.ComponentType<any>|React.ReactElement<any>;
   row: React.ComponentType<RowProps>|React.ReactElement<RowProps>;
-  getRow?: (rowIndex: number) => {data: any, [k: string]: any};
-  getRows?: (topRowIndex: number, count: number) => {data: any, [k: string]: any}[];
+  getRow?: (rowIndex: number) => Row;
+  getRows?: (topRowIndex: number, count: number) => Row[];
 };
 
 export default class VirtualTable extends React.PureComponent<VirtualTableProps, {
@@ -223,16 +229,6 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
     else {
       this.setState({topRow});
     }
-  }
-
-  /**
-   * Get the row data for the visibleRowIndex based on topRow
-   * @private
-   */
-  private getRowProps(topRow: number, visibleRowIndex: number): RowProps {
-    const { getRow } = this.props;
-    const index = topRow + visibleRowIndex;
-    return Object.assign({}, {index}, getRow(index));
   }
 
   /**
@@ -338,24 +334,44 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
   }
 
   /**
-   * Build the <tr> elements for rows by cloning the rowElement
+   * Build rowProps from getRows or getRow
    * @private
    */
-  private buildRows() {
-    const { row } = this.props;
+  private getRows(): RowProps[] {
+    const { getRow, getRows } = this.props;
+
     const topRow = this.getTopRow();
     let rowCount = this.visibleRows();
     if(!rowCount) {
       return [];
     }
 
-    const rowElement = React.isValidElement(row) ? row : React.createElement(row as React.ComponentType<RowProps>);
-    const rows = new Array(rowCount);
-    for (let i = 0; i < rowCount; i++) {
-      let props: RowProps = Object.assign({}, this.getRowProps(topRow, i), { key: i});
-      rows[i] = React.cloneElement(rowElement, props);
+    let rowProps: RowProps[];
+    if(getRows) {
+      rowProps = getRows(topRow, rowCount).map((row, index) => {
+        return Object.assign({}, row, {index: topRow + index, key: index});
+      });
+      if(rowProps.length > rowCount) {
+        rowProps = rowProps.slice(0, rowCount);
+      }
     }
-    return rows;
+    else {
+      rowProps = new Array(rowCount);
+      for (let i = 0; i < rowCount; i++) {
+        rowProps[i] = Object.assign({}, getRow(topRow + i), {index: topRow + i, key: i});
+      }
+    }
+    return rowProps;
+  }
+
+  /**
+   * Build the <tr> elements for rows by cloning the rowElement
+   * @private
+   */
+  private buildRows() {
+    const { row } = this.props;
+    const rowElement = React.isValidElement(row) ? row : React.createElement(row as React.ComponentType<RowProps>);
+    return this.getRows().map(props => React.cloneElement(rowElement, props));
   }
 
   @autobind
