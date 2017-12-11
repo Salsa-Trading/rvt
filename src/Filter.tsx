@@ -119,20 +119,24 @@ export default class Filter extends React.Component<{
       onFilterChange: this.handleFilterChanged.bind(this)
     });
 
+    const sortElement = field.sortable ? (
+      <div className='form-group'>
+        <div className='btn-group sort-controls'>
+          <button className='btn' onClick={this.sortAscFn}>
+            {sortDirection === SortDirection.asc ? <span className='checked'/> : null}
+            Ascending
+          </button>
+          <button className='btn' onClick={this.sortDescFn}>
+            {sortDirection === SortDirection.desc ? <span className='checked'/> : null}
+            Descending
+          </button>
+        </div>
+      </div>
+    ) : null;
+
     return (
       <div className='card filter-pane'>
-        <div className='form-group'>
-          <div className='btn-group sort-controls'>
-            <button className='btn' onClick={this.sortAscFn}>
-              {sortDirection === SortDirection.asc ? <span className='checked'/> : null}
-              Ascending
-            </button>
-            <button className='btn' onClick={this.sortDescFn}>
-              {sortDirection === SortDirection.desc ? <span className='checked'/> : null}
-              Descending
-            </button>
-          </div>
-        </div>
+        {sortElement}
         <form onSubmit={this.handleOk}>
           <div className='form-group'>
             {filterElement}
