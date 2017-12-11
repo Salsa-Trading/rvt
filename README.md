@@ -17,6 +17,12 @@ See the [documentation][documentation] with live editable examples.
   for file changes as you work. Simply refresh the page to see the updates.
 - Build with `npm run build`
 
+## Releases
+
+```bash
+gulp deploy && npm version patch && npm publish && git push
+```
+
 ## Contributions
 
 Yes please! See the [contributing guidelines][contributing] for details.
