@@ -19,9 +19,6 @@ const propTypes = {
     if(!(typeof getRow === 'function')) {
       throw new Error('getRow must be a function');
     }
-    if(getRow) {
-      console.warn('ReactVirtualTable: getRow is deprecated use getRows instead');
-    }
   },
   /**
    *  The height of the table. If a number it is provided it assumed to be px, strings can be any valid height css value
