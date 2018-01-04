@@ -10,6 +10,7 @@ type VirtualGridProps = {
   getRow?: (rowIndex: number) => RowData;
   onMouseDown?: VirtualGridMouseEventHandler;
   onClick?: VirtualGridMouseEventHandler;
+  onDoubleClick?: VirtualGridMouseEventHandler;
   pinnedRows?: RowData[];
 };
 
@@ -33,6 +34,7 @@ class VirtualGrid extends React.Component<VirtualTableBaseProps & ListViewProps 
       onHiddenChange,
       onMouseDown,
       onClick,
+      onDoubleClick,
       pinnedRows,
       ...rest
     } = this.props;
@@ -43,6 +45,7 @@ class VirtualGrid extends React.Component<VirtualTableBaseProps & ListViewProps 
         fields={fields}
         onMouseDown={onMouseDown}
         onClick={onClick}
+        onDoubleClick={onDoubleClick}
       />
     );
 
