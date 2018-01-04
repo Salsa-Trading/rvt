@@ -18,6 +18,7 @@ class DefaultFilter extends React.Component<FilterControlProps, {}> {
 
   public render() {
     const { filter } = this.props;
+
     return (
       <input
         type='search'
@@ -31,22 +32,25 @@ class DefaultFilter extends React.Component<FilterControlProps, {}> {
   }
 }
 
-export default class Filter extends React.Component<{
+export type FilterProps = {
   field: Field
   onSortSelection?: (sortDirection: SortDirection) => void;
   onFilterChanged: (filter: any) => void;
-}, {
+};
+
+export default class Filter extends React.Component<FilterProps, {
   showFilter: boolean;
   filter: any;
 }> {
 
   private mouseDownHandler: () => void;
 
-  constructor(props, context) {
+  constructor(props: FilterProps, context) {
     super(props, context);
+
     this.state = {
       showFilter: false,
-      filter: props.filter || ''
+      filter: props.field.filter || ''
     };
   }
 

@@ -138,7 +138,13 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
 
     let sortFilterControl;
     if(filterable) {
-      sortFilterControl = <Filter field={field} onSortSelection={sortSelectionHandler} onFilterChanged={filterChangedHandler} />;
+      sortFilterControl = (
+        <Filter
+          field={field}
+          onSortSelection={sortSelectionHandler}
+          onFilterChanged={filterChangedHandler}
+        />
+      );
     }
     else if(sortable) {
       sortFilterControl = (
