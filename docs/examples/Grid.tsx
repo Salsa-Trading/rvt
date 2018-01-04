@@ -66,6 +66,7 @@ export default class GridExample extends React.Component<{}, {
         fieldDefaults={{sortable: true, filterable: true}}
         className='table table-bordered table-condensed'
         data={data.map(this.getRow.bind(this))}
+        onDoubleClick={() => console.log('Double click event')}
       >
         <FieldSet header='Group 1' name='group1'>
           <Field header={Header} name='col1' sortDirection='asc' />

@@ -7,6 +7,7 @@ class Grid extends React.Component<React.HTMLProps<HTMLTableElement> & ListViewP
   data: RowData[];
   onMouseDown?: VirtualGridMouseEventHandler;
   onClick?: VirtualGridMouseEventHandler;
+  onDoubleClick?: VirtualGridMouseEventHandler;
   pinnedRows?: RowData[];
 }, {}> {
 
@@ -20,6 +21,7 @@ class Grid extends React.Component<React.HTMLProps<HTMLTableElement> & ListViewP
       onHiddenChange,
       onMouseDown,
       onClick,
+      onDoubleClick,
       pinnedRows,
       data,
       ...rest
@@ -36,7 +38,14 @@ class Grid extends React.Component<React.HTMLProps<HTMLTableElement> & ListViewP
         onMove={onMove}
         onHiddenChange={onHiddenChange}
         pinnedRows={pinnedRows}
-        gridRow={<GridRow fields={fields} onMouseDown={onMouseDown} onClick={onClick} />}
+        gridRow={(
+          <GridRow
+            fields={fields}
+            onMouseDown={onMouseDown}
+            onClick={onClick}
+            onDoubleClick={onDoubleClick}
+          />
+        )}
       />
     );
 
@@ -45,7 +54,17 @@ class Grid extends React.Component<React.HTMLProps<HTMLTableElement> & ListViewP
         <table {...rest}>
           {header}
           <tbody>
-            {data.map((d, i) => <GridRow key={i} fields={fields} data={d.data} rowProps={d.rowProps} onMouseDown={onMouseDown} onClick={onClick} />)}
+            {data.map((d, i) => (
+              <GridRow
+                key={i}
+                fields={fields}
+                data={d.data}
+                rowProps={d.rowProps}
+                onMouseDown={onMouseDown}
+                onClick={onClick}
+                onDoubleClick={onDoubleClick}
+              />
+            ))}
           </tbody>
         </table>
       </div>

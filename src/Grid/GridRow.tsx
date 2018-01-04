@@ -17,6 +17,7 @@ export default class GridRow extends React.Component<{
   rowProps?: React.HTMLProps<HTMLTableRowElement>;
   onMouseDown?: VirtualGridMouseEventHandler;
   onClick?: VirtualGridMouseEventHandler;
+  onDoubleClick?: VirtualGridMouseEventHandler;
 }, {}> {
 
   public static propTypes = {
@@ -54,10 +55,15 @@ export default class GridRow extends React.Component<{
   }
 
   public render() {
-    const { data, fields, rowProps, onClick, onMouseDown } = this.props;
+    const { data, fields, rowProps, onClick, onDoubleClick, onMouseDown } = this.props;
 
     return (
-      <tr onClick={onClick && this.onMouseEvent.bind(this, onClick)} onMouseDown={onMouseDown  && this.onMouseEvent.bind(this, onMouseDown)} {...rowProps}>
+      <tr
+        onClick={onClick && this.onMouseEvent.bind(this, onClick)}
+        onDoubleClick={onDoubleClick && this.onMouseEvent.bind(this, onDoubleClick)}
+        onMouseDown={onMouseDown && this.onMouseEvent.bind(this, onMouseDown)}
+        {...rowProps}
+      >
         {(fields || []).map(field => {
           const dataSet = {'data-field': field.name};
           return (
