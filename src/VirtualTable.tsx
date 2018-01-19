@@ -320,7 +320,17 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
     const scrollHeights = Array.prototype.slice.call(div.querySelectorAll('table > tbody > tr')).map(e => e.scrollHeight);
     const rowHeight = Math.max.apply(Math, scrollHeights);
 
-    this.setState(Object.assign({}, this.state, this.calculateHeightStateValues(height, headerHeight, rowHeight)));
+    this.setState({
+      ...this.state,
+      ...this.calculateHeightStateValues(height, headerHeight, rowHeight)
+    }, this.scrollToTopIfAllRowsVisible);
+  }
+
+  @autobind
+  private scrollToTopIfAllRowsVisible() {
+    if (this.visibleRows() >= this.props.rowCount) {
+      this.setTopRow(0);
+    }
   }
 
   /**
