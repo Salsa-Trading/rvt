@@ -328,7 +328,7 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
 
   @autobind
   private scrollToTopIfAllRowsVisible() {
-    if (this.visibleRows() >= this.props.rowCount) {
+    if (this.visibleRows() >= this.props.rowCount && this.getTopRow() !== 0) {
       this.setTopRow(0);
     }
   }
