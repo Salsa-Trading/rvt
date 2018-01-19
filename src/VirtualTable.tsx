@@ -346,23 +346,23 @@ export default class VirtualTable extends React.PureComponent<VirtualTableProps,
     const { getRow, getRows } = this.props;
 
     const topRow = this.getTopRow();
-    let rowCount = this.visibleRows();
-    if(!rowCount) {
+    let numVisibleRows = this.visibleRows();
+    if(!numVisibleRows) {
       return [];
     }
 
     let rowProps: RowProps[];
     if(getRows) {
-      rowProps = getRows(topRow, rowCount).map((row, index) => {
+      rowProps = getRows(topRow, numVisibleRows).map((row, index) => {
         return Object.assign({}, row, {index: topRow + index, key: index});
       });
-      if(rowProps.length > rowCount) {
-        rowProps = rowProps.slice(0, rowCount);
+      if(rowProps.length > numVisibleRows) {
+        rowProps = rowProps.slice(0, numVisibleRows);
       }
     }
     else {
-      rowProps = new Array(rowCount);
-      for (let i = 0; i < rowCount; i++) {
+      rowProps = new Array(numVisibleRows);
+      for (let i = 0; i < numVisibleRows; i++) {
         rowProps[i] = Object.assign({}, getRow(topRow + i), {index: topRow + i, key: i});
       }
     }
