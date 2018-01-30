@@ -16,7 +16,7 @@ type VirtualGridProps = {
 
 class VirtualGrid extends React.Component<VirtualTableBaseProps & ListViewProps & VirtualGridProps, {}> {
 
-  private virtualTable: VirtualTable;
+  private virtualTable: VirtualTable<any>;
 
   public calculateHeights() {
     if(this.virtualTable) {

@@ -15,7 +15,16 @@ const longString = [
   'amet risus interdum, interdum elit nec, molestie justo.'
 ].join(' ');
 
-export function generateDataForIndex(index: number) {
+export type SampleData = {
+  col1: number;
+  col2: string;
+  col3: boolean;
+  col4: Date;
+  col5: number;
+  col6: string;
+};
+
+export function generateDataForIndex(index: number): SampleData {
   return {
     col1: index,
     col2: (40960 + index).toString(16),
@@ -26,21 +35,11 @@ export function generateDataForIndex(index: number) {
   };
 }
 
-export function generateDataForSlice(index: number, count: number) {
+export function generateDataForSlice(index: number, count: number): SampleData[] {
   return _.range(index, count).map(i => generateDataForIndex(i));
 }
 
-export function generateRowDataForIndex(index: number) {
-  return {
-    data: generateDataForIndex(index)
-  };
-}
-
-export function generateRowDataSlice(index: number, count: number) {
-  return generateDataForSlice(index, count).map(data => ({data}));
-}
-
-export function generateData(rowCount) {
+export function generateData(rowCount): SampleData[] {
   const array = new Array(rowCount);
   for (let i = 0; i < rowCount; i++) {
     array[i] = generateDataForIndex(i);

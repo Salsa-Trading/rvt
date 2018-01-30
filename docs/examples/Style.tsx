@@ -41,9 +41,7 @@ export default class Style extends React.Component<{}, {
   @autobind
   private getRows(index: number, length: number): RowData[] {
     return this.state.rows.slice(index, index + length).map((data, index) => {
-      return {
-        data
-      };
+      return data;
     });
   }
 

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { VirtualTable, RowData } from '../../src/index';
-import { generateData } from '../../test/dataUtils';
+import { generateData, SampleData } from '../../test/dataUtils';
 import { autobind } from 'core-decorators';
+import { RowProps, VirtualTableProps } from '../../src/VirtualTable';
 
 const Head = () => (
   <thead>
@@ -15,18 +16,40 @@ const Head = () => (
   </thead>
 );
 
-const Row = ({data}) => (
-  <tr>
-    <td>{data.col1}</td>
-    <td>{data.col2}</td>
-    <td>{data.col3.toString()}</td>
-    <td>{data.col4.toLocaleString()}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{data.col5.toFixed(5)}</td>
-  </tr>
-);
+const Row = (rowProps: RowProps<SampleData>) => {
+  const {data} = rowProps;
+
+  return (
+    <tr>
+      <td>{data.col1}</td>
+      <td>{data.col2}</td>
+      <td>{data.col3.toString()}</td>
+      <td>{data.col4.toLocaleString()}</td>
+      <td style={{whiteSpace: 'nowrap'}}>{data.col5.toFixed(5)}</td>
+    </tr>
+  );
+}
+
+class Row2 extends React.Component<RowProps<SampleData>> {
+  public render() {
+    const {data} = this.props;
+
+    return (
+      <tr>
+        <td>{data.col1}</td>
+        <td>{data.col2}</td>
+        <td>{data.col3.toString()}</td>
+        <td>{data.col4.toLocaleString()}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{data.col5.toFixed(5)}</td>
+      </tr>
+    );
+  }
+}
+
+class SampleVirtualTable extends VirtualTable<SampleData> { }
 
 export default class Style extends React.Component<{}, {
-  rows: any[];
+  rows: SampleData[];
 }> {
 
   constructor(props, context) {
@@ -37,18 +60,17 @@ export default class Style extends React.Component<{}, {
   }
 
   @autobind
-  private getRows(index: number, length: number): RowData[] {
+  private getRows(index: number, length: number): SampleData[] {
     return this.state.rows.slice(index, index + length).map((data, index) => {
-      return {
-        data
-      };
+      return data;
     });
   }
 
   public render() {
     const { rows } = this.state;
+
     return (
-      <VirtualTable
+      <SampleVirtualTable
         getRows={this.getRows}
         rowCount={rows.length}
         height={486}

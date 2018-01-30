@@ -5,12 +5,12 @@ import { expect } from 'chai';
 import { spy } from 'sinon';
 import { shallow, mount } from 'enzyme';
 import { VirtualTable } from '../src/index';
-import { generateRowDataSlice } from './dataUtils';
+import { generateDataForSlice } from './dataUtils';
 
 describe('<Table />', () => {
 
   const defaultProps = {
-    getRows: generateRowDataSlice,
+    getRows: generateDataForSlice,
     rowCount: 0,
     header: () => { return null; },
     row: () => { return null; }
