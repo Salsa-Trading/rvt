@@ -9,7 +9,7 @@ import GridHeaderCell from './GridHeaderCell';
 import ColumnChooser from './ColumnChooser';
 import ColumnChooserButton from './ColumnChooserButton';
 import safeMouseMove from '../utils/saveMouseMove';
-import { RowData } from './GridRow';
+import { GridRowProps } from './GridRow';
 
 const hoverClassName = 'field-moving-hover';
 const movingClassName = 'field-moving';
@@ -45,8 +45,8 @@ export function getLevels(fieldSet: FieldSet): FieldHeader[][] {
   return fillLevels(fieldSet, maxRows);
 }
 
-export default class GridHeader extends React.Component<ListViewProps & {
-  pinnedRows?: RowData[];
+export default class GridHeader<TData> extends React.Component<ListViewProps & {
+  pinnedRows?: GridRowProps<TData>[];
   gridRow?: React.ComponentClass<any>|React.StatelessComponent<any>|React.ReactElement<any>;
 }, {
   showColumnChooser: boolean;

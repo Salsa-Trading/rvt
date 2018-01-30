@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { Grid, Field, FieldSet, ListState, ListStateChangeType, isDataChange, RowData, FieldProps } from '../../src/index';
-import { generateData } from '../../test/dataUtils';
+import { Grid, Field, FieldSet, ListState, ListStateChangeType, isDataChange, GridRowProps, FieldProps } from '../../src/index';
+import { generateData, SampleData } from '../../test/dataUtils';
 
 import '../../scss/rvt_fa.scss';
 
@@ -28,7 +28,7 @@ export default class GridExample extends React.Component<{}, {
     };
   }
 
-  public getRow(data: any, index: number): RowData {
+  public getRow(data: any, index: number): GridRowProps<SampleData> {
     return {
       data,
       rowProps: {

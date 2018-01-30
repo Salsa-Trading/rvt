@@ -1,14 +1,14 @@
 import * as React from 'react';
 import GridHeader from './GridHeader';
-import GridRow, { VirtualGridMouseEventHandler, RowData } from './GridRow';
+import GridRow, { VirtualGridMouseEventHandler, GridRowProps } from './GridRow';
 import List, { ListProps, ListViewProps } from '../List';
 
-class Grid extends React.Component<React.HTMLProps<HTMLTableElement> & ListViewProps & {
-  data: RowData[];
+class Grid<TData extends object> extends React.Component<React.HTMLProps<HTMLTableElement> & ListViewProps & {
+  data: GridRowProps<TData>[];
   onMouseDown?: VirtualGridMouseEventHandler;
   onClick?: VirtualGridMouseEventHandler;
   onDoubleClick?: VirtualGridMouseEventHandler;
-  pinnedRows?: RowData[];
+  pinnedRows?: GridRowProps<TData>[];
 }, {}> {
 
   public render() {

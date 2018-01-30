@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { VirtualTable, RowData } from '../../src/index';
-import { generateData } from '../../test/dataUtils';
+import { VirtualTable, GridRowProps } from '../../src/index';
+import { generateData, SampleData } from '../../test/dataUtils';
 import { autobind } from 'core-decorators';
 
 const Head = () => (
@@ -25,10 +25,10 @@ const Row = ({data, index}) => (
   </tr>
 );
 
-const rows = generateData(500000);
+const rows: SampleData[] = generateData(500000);
 
 export default class Style extends React.Component<{}, {
-  rows: any[];
+  rows: SampleData[];
 }> {
 
   constructor(props, context) {
@@ -39,9 +39,9 @@ export default class Style extends React.Component<{}, {
   }
 
   @autobind
-  private getRows(index: number, length: number): RowData[] {
+  private getRows(index: number, length: number): GridRowProps<SampleData>[] {
     return this.state.rows.slice(index, index + length).map((data, index) => {
-      return data;
+      return {data};
     });
   }
 

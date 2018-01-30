@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { VirtualGrid, Field, FieldSet, FieldProps, ListState, ListStateChangeType, isDataChange, RowData } from '../../src/index';
-import { generateData } from '../../test/dataUtils';
+import { VirtualGrid, Field, FieldSet, FieldProps, ListState, ListStateChangeType, isDataChange, GridRowProps } from '../../src/index';
+import { generateData, SampleData } from '../../test/dataUtils';
 import { autobind } from 'core-decorators';
 
 import '../../scss/rvt_unicode.scss';
@@ -31,7 +31,7 @@ export default class VirtualGridExample extends React.Component<{}, {
   }
 
   @autobind
-  public getRows(index: number, length: number): RowData[] {
+  public getRows(index: number, length: number): {data: SampleData, rowProps: React.HTMLProps<HTMLTableRowElement>}[] {
     return this.state.data.slice(index, index + length).map((data, index) => {
       return {
         data,

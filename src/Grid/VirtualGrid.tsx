@@ -1,22 +1,22 @@
 import * as React from 'react';
-import GridRow, { VirtualGridMouseEventHandler, RowData } from './GridRow';
+import GridRow, { VirtualGridMouseEventHandler, GridRowProps } from './GridRow';
 import GridHeader from './GridHeader';
 import List, { ListProps, ListViewProps } from '../List';
 import VirtualTable, { VirtualTableBaseProps } from '../VirtualTable';
 
 
-type VirtualGridProps = {
-  getRows?: (rowIndex: number, length: number) => RowData[];
-  getRow?: (rowIndex: number) => RowData;
+export type VirtualGridProps<TData> = {
+  getRows?: (rowIndex: number, length: number) => GridRowProps<TData>[];
+  getRow?: (rowIndex: number) => GridRowProps<TData>;
   onMouseDown?: VirtualGridMouseEventHandler;
   onClick?: VirtualGridMouseEventHandler;
   onDoubleClick?: VirtualGridMouseEventHandler;
-  pinnedRows?: RowData[];
+  pinnedRows?: GridRowProps<TData>[];
 };
 
-class VirtualGrid extends React.Component<VirtualTableBaseProps & ListViewProps & VirtualGridProps, {}> {
+export class VirtualGrid<TData extends object> extends React.Component<VirtualTableBaseProps & ListViewProps & VirtualGridProps<TData>, {}> {
 
-  private virtualTable: VirtualTable<any>;
+  private virtualTable: VirtualTable<TData>;
 
   public calculateHeights() {
     if(this.virtualTable) {
@@ -74,4 +74,16 @@ class VirtualGrid extends React.Component<VirtualTableBaseProps & ListViewProps 
   }
 }
 
-export default List(VirtualGrid) as React.ComponentClass<VirtualTableBaseProps & ListProps & VirtualGridProps>;
+export default class WrappedVirtualGrid<TData extends object> extends React.Component<
+  VirtualTableBaseProps & ListProps & VirtualGridProps<TData>
+, {}> {
+  private Component = List(VirtualGrid);
+
+  public render(): React.ReactElement<any> {
+    const {Component} = this;
+
+    return (
+      <Component {...this.props}/>
+    );
+  }
+}

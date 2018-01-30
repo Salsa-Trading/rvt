@@ -20,7 +20,7 @@ export {
 } from './Grid/VirtualGrid';
 
 export {
-  RowData
+  GridRowProps
 } from './Grid/GridRow';
 
 export {

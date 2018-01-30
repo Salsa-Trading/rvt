@@ -3,17 +3,18 @@ import * as PropTypes from 'prop-types';
 import { Field } from '../List/Field';
 import * as get from 'lodash.get';
 import isNil from '../utils/isNil';
+import { TableRowProps } from '../VirtualTable';
 
 export type VirtualGridMouseEventHandler = (e: React.MouseEvent<any>, data: any, fieldName: string) => void;
 
-export type RowData = {
-  data: any;
+export type GridRowProps<TData> = {
+  data: TData;
   rowProps?: React.HTMLProps<HTMLTableRowElement>;
 };
 
-export default class GridRow extends React.Component<{
+export default class GridRow<TData> extends React.Component<{
   fields: Field[];
-  data?: any;
+  data?: TData;
   rowProps?: React.HTMLProps<HTMLTableRowElement>;
   onMouseDown?: VirtualGridMouseEventHandler;
   onClick?: VirtualGridMouseEventHandler;
@@ -30,7 +31,7 @@ export default class GridRow extends React.Component<{
     super(props, context);
   }
 
-  private renderTableCell(field: Field, data: any) {
+  private renderTableCell(field: Field, data: TData) {
     if(field.cell) {
       if(React.isValidElement(field.cell)) {
         return React.cloneElement(field.cell as any, {field, data});
