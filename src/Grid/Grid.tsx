@@ -3,13 +3,19 @@ import GridHeader from './GridHeader';
 import GridRow, { VirtualGridMouseEventHandler, GridRowProps } from './GridRow';
 import List, { ListProps, ListViewProps } from '../List';
 
-class Grid<TData extends object> extends React.Component<React.HTMLProps<HTMLTableElement> & ListViewProps & {
+export type Diff<T extends string, U extends string> = ({[P in T]: P } & {[P in U]: never } & { [x: string]: never })[T];  
+export type Omit<T, K extends keyof T> = Pick<T, Diff<keyof T, K>>;
+export type TablePropsWithoutData = Omit<React.HTMLProps<HTMLTableElement>, 'data'>;
+
+export type GridProps<TData extends object> = TablePropsWithoutData & {
   data: GridRowProps<TData>[];
   onMouseDown?: VirtualGridMouseEventHandler;
   onClick?: VirtualGridMouseEventHandler;
   onDoubleClick?: VirtualGridMouseEventHandler;
   pinnedRows?: GridRowProps<TData>[];
-}, {}> {
+};
+
+class Grid<TData extends object> extends React.Component<GridProps<TData> & ListViewProps, {}> {
 
   public render() {
     const {
@@ -72,7 +78,20 @@ class Grid<TData extends object> extends React.Component<React.HTMLProps<HTMLTab
   }
 }
 
-export default List(Grid) as React.ComponentClass<React.HTMLProps<HTMLTableElement> & ListProps & {
-  data: any;
-}>;
+// export default List(Grid) as React.ComponentClass<React.HTMLProps<HTMLTableElement> & ListProps & {
+//   data: any;
+// }>;
 
+export default class WrappedGrid<TData extends object> extends React.Component<
+  ListProps & GridProps<TData>
+, {}> {
+  private Component = List(Grid) as any;
+
+  public render(): React.ReactElement<any> {
+    const {Component} = this;
+
+    return (
+      <Component {...this.props}/>
+    );
+  }
+}

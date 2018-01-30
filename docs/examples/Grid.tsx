@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import { Grid, Field, FieldSet, ListState, ListStateChangeType, isDataChange, GridRowProps, FieldProps } from '../../src/index';
 import { generateData, SampleData } from '../../test/dataUtils';
+import { autobind } from 'core-decorators';
 
 import '../../scss/rvt_fa.scss';
 
@@ -28,6 +29,7 @@ export default class GridExample extends React.Component<{}, {
     };
   }
 
+  @autobind
   public getRow(data: any, index: number): GridRowProps<SampleData> {
     return {
       data,
@@ -59,13 +61,15 @@ export default class GridExample extends React.Component<{}, {
 
   public render() {
     const { listState, data } = this.state;
+    const rows: GridRowProps<SampleData>[] = data.map(this.getRow);
+
     return (
       <Grid
         listState={listState}
         onListStateChanged={this.onListStateChanged.bind(this)}
         fieldDefaults={{sortable: true, filterable: true}}
         className='table table-bordered table-condensed'
-        data={data.map(this.getRow.bind(this))}
+        data={rows}
         onDoubleClick={() => console.log('Double click event')}
       >
         <FieldSet header='Group 1' name='group1'>
