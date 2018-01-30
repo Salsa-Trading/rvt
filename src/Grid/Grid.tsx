@@ -78,10 +78,6 @@ class Grid<TData extends object> extends React.Component<GridProps<TData> & List
   }
 }
 
-// export default List(Grid) as React.ComponentClass<React.HTMLProps<HTMLTableElement> & ListProps & {
-//   data: any;
-// }>;
-
 export default class WrappedGrid<TData extends object> extends React.Component<
   ListProps & GridProps<TData>
 , {}> {
