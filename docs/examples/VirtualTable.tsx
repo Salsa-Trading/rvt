@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { VirtualTable, RowData } from '../../src/index';
+import { VirtualTable, GridRowProps } from '../../src/index';
 import { generateData, SampleData } from '../../test/dataUtils';
 import { autobind } from 'core-decorators';
-import { RowProps, VirtualTableProps } from '../../src/VirtualTable';
+import { TableRowProps, VirtualTableProps } from '../../src/VirtualTable';
 
 const Head = () => (
   <thead>
@@ -16,7 +16,7 @@ const Head = () => (
   </thead>
 );
 
-const Row = (rowProps: RowProps<SampleData>) => {
+const Row = (rowProps: TableRowProps<SampleData>) => {
   const {data} = rowProps;
 
   return (
@@ -30,7 +30,7 @@ const Row = (rowProps: RowProps<SampleData>) => {
   );
 }
 
-class Row2 extends React.Component<RowProps<SampleData>> {
+class Row2 extends React.Component<TableRowProps<SampleData>> {
   public render() {
     const {data} = this.props;
 
@@ -60,9 +60,9 @@ export default class Style extends React.Component<{}, {
   }
 
   @autobind
-  private getRows(index: number, length: number): SampleData[] {
+  private getRows(index: number, length: number): TableRowProps<SampleData>[] {
     return this.state.rows.slice(index, index + length).map((data, index) => {
-      return data;
+      return {data};
     });
   }
 

@@ -126,9 +126,10 @@ const defaultProps = {
   windowResizeEvents: ['resize']
 };
 
-export type RowProps<TData> = {
+export type Indexed<T> = T & {index: number};
+
+export type TableRowProps<TData> = {
   data: TData;
-  index: number;
 };
 
 export type VirtualTableBaseProps = {
@@ -150,9 +151,9 @@ export type VirtualTableBaseProps = {
 
 export type VirtualTableProps<TData extends object> = VirtualTableBaseProps & {
   header: React.ComponentType<any>|React.ReactElement<any>;
-  row: React.ComponentType<RowProps<TData>> | React.ReactElement<RowProps<TData>>;
-  getRow?: (rowIndex: number) => TData;
-  getRows?: (topRowIndex: number, count: number) => TData[];
+  row: React.ComponentType<TableRowProps<TData>> | React.ReactElement<TableRowProps<TData>>;
+  getRow?: (rowIndex: number) => TableRowProps<TData>;
+  getRows?: (topRowIndex: number, count: number) => TableRowProps<TData>[];
 };
 
 export default class VirtualTable<TData extends object> extends React.PureComponent<VirtualTableProps<TData>, {
@@ -348,7 +349,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * Build rowProps from getRows or getRow
    * @private
    */
-  private getRows(): RowProps<TData>[] {
+  private getRows(): Indexed<TableRowProps<TData>>[] {
     const { getRow, getRows, rowCount } = this.props;
 
     const topRow = this.getTopRow();
@@ -361,15 +362,13 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       return [];
     }
 
-    let rowProps: RowProps<TData>[];
+    let rowProps: Indexed<TableRowProps<TData>>[];
     if(getRows) {
-      rowProps = getRows(topRow, numRows).map((data: TData, i: number) => {
-        const rowData: RowProps<TData> = {
-          data,
+      rowProps = getRows(topRow, numRows).map((rowProps: TableRowProps<TData>, i: number) => {
+        return {
+          data: rowProps.data,
           index: topRow + i
         };
-
-        return rowData;
       });
     
     }
@@ -377,7 +376,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       rowProps = new Array(numRows);
       for (let i = 0; i < numRows; i++) {
         rowProps[i] = {
-          data: getRow(topRow + i),
+          data: getRow(topRow + i).data,
           index: topRow + i
         };
       }
@@ -392,8 +391,8 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   private buildRows() {
     const { row } = this.props;
     const rowElement = React.isValidElement(row)
-      ? row as React.ReactElement<RowProps<TData> & {key: number}>
-      : React.createElement(row as React.ComponentType<RowProps<TData> & {key: number}>);
+      ? row as React.ReactElement<Indexed<TableRowProps<TData>> & {key: number}>
+      : React.createElement(row as React.ComponentType<Indexed<TableRowProps<TData> & {key: number}>>);
     return this.getRows().map((props, i) => React.cloneElement(rowElement, {...props, key: i}));
   }
 

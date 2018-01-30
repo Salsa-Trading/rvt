@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import {TableRowProps} from '../src/VirtualTable';
 
 const longString = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas interdum',
@@ -45,4 +46,14 @@ export function generateData(rowCount): SampleData[] {
     array[i] = generateDataForIndex(i);
   }
   return array;
+}
+
+export function generateRowDataForIndex(index: number): TableRowProps<SampleData>  {
+  return {
+    data: generateDataForIndex(index)
+  };
+}
+
+export function generateRowDataSlice(index: number, count: number): TableRowProps<SampleData>[] {
+  return generateDataForSlice(index, count).map(data => ({data}));
 }

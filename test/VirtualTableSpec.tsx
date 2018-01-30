@@ -5,12 +5,13 @@ import { expect } from 'chai';
 import { spy } from 'sinon';
 import { shallow, mount } from 'enzyme';
 import { VirtualTable } from '../src/index';
-import { generateDataForSlice } from './dataUtils';
+import { generateDataForSlice, SampleData, generateRowDataSlice } from './dataUtils';
+import { VirtualTableProps } from '../src/VirtualTable';
 
 describe('<Table />', () => {
 
   const defaultProps = {
-    getRows: generateDataForSlice,
+    getRows: generateRowDataSlice,
     rowCount: 0,
     header: () => { return null; },
     row: () => { return null; }
@@ -38,7 +39,7 @@ describe('<Table />', () => {
   describe('root element', () => {
 
     beforeEach(() => {
-      const props = Object.assign({}, defaultProps, {
+      const props: VirtualTableProps<SampleData> = Object.assign({}, defaultProps, {
         rowCount: 0,
         width: 500,
         height: 500,
