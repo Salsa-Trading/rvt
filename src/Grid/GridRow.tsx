@@ -6,6 +6,24 @@ import isNil from '../utils/isNil';
 import { TableRowProps } from '../VirtualTable';
 import {GridRowProps, GridRowComponentProps, VirtualGridMouseEventHandler} from './types';
 
+export function renderGridCell<TData>(field: Field, data: TData) {
+  if(field.cell) {
+    if(React.isValidElement(field.cell)) {
+      return React.cloneElement(field.cell as any, {field, data});
+    }
+    else {
+      return React.createElement(field.cell as any, {field, data});
+    }
+  }
+  else if(field.format) {
+    return field.format(data, field);
+  }
+  else {
+    const value = get(data, field.name);
+    return isNil(value) ? value : value.toString();
+  }
+}
+
 export default class GridRow<TData> extends React.Component<GridRowComponentProps<TData>, {}> {
 
   public static propTypes = {
@@ -16,24 +34,6 @@ export default class GridRow<TData> extends React.Component<GridRowComponentProp
 
   constructor(props, context) {
     super(props, context);
-  }
-
-  private renderTableCell(field: Field, data: TData) {
-    if(field.cell) {
-      if(React.isValidElement(field.cell)) {
-        return React.cloneElement(field.cell as any, {field, data});
-      }
-      else {
-        return React.createElement(field.cell as any, {field, data});
-      }
-    }
-    else if(field.format) {
-      return field.format(data, field);
-    }
-    else {
-      const value = get(data, field.name);
-      return isNil(value) ? value : value.toString();
-    }
   }
 
   private onMouseEvent(eventHandler: VirtualGridMouseEventHandler, e: React.MouseEvent<any>) {
@@ -56,7 +56,7 @@ export default class GridRow<TData> extends React.Component<GridRowComponentProp
           const dataSet = {'data-field': field.name};
           return (
             <td key={field.name} style={{width: field.width}} {...dataSet}>
-              {this.renderTableCell(field, data)}
+              {renderGridCell(field, data)}
             </td>
           );
         })}

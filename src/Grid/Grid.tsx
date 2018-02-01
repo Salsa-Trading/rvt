@@ -27,6 +27,7 @@ class Grid<TData extends object> extends React.Component<GridProps<TData> & List
       onDoubleClick,
       pinnedRows,
       data,
+      rowComponent,
       ...rest
     } = this.props;
 
@@ -52,22 +53,25 @@ class Grid<TData extends object> extends React.Component<GridProps<TData> & List
       />
     );
 
+    const row: any = React.createElement(rowComponent || GridRow, {
+      fields: fields,
+      onMouseDown: onMouseDown,
+      onClick: onClick,
+      onDoubleClick: onDoubleClick
+    });
+
     return (
       <div className='rvt'>
         <table {...rest}>
           {header}
           <tbody>
-            {data.map((d, i) => (
-              <GridRow
-                key={i}
-                fields={fields}
-                data={d.data}
-                rowProps={d.rowProps}
-                onMouseDown={onMouseDown}
-                onClick={onClick}
-                onDoubleClick={onDoubleClick}
-              />
-            ))}
+            {data.map((d, i) => {
+              return React.cloneElement(row, {
+                key: i,
+                data: d.data,
+                rowProps: d.rowProps
+              });
+            })}
           </tbody>
         </table>
       </div>

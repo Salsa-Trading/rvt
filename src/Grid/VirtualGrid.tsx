@@ -5,7 +5,6 @@ import GridHeader from './GridHeader';
 import List, { ListProps, ListViewProps } from '../List';
 import VirtualTable, { VirtualTableBaseProps } from '../VirtualTable';
 
-
 export type VirtualGridProps<TData extends object> = BaseGridProps<TData> & {
   getRows?: (rowIndex: number, length: number) => GridRowProps<TData>[];
   getRow?: (rowIndex: number) => GridRowProps<TData>;
@@ -33,18 +32,17 @@ export class VirtualGrid<TData extends object> extends React.Component<VirtualTa
       onClick,
       onDoubleClick,
       pinnedRows,
+      rowComponent,
       ...rest
     } = this.props;
 
     const fields = fieldSet.getFields();
-    const row = (
-      <GridRow
-        fields={fields}
-        onMouseDown={onMouseDown}
-        onClick={onClick}
-        onDoubleClick={onDoubleClick}
-      />
-    );
+    const row: any = React.createElement(rowComponent || GridRow, {
+      fields: fields,
+      onMouseDown: onMouseDown,
+      onClick: onClick,
+      onDoubleClick: onDoubleClick
+    });
 
     const header = (
       <GridHeader

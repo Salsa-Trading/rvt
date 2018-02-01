@@ -20,5 +20,6 @@ export type BaseGridProps<TData extends object> = {
   onMouseDown?: VirtualGridMouseEventHandler;
   onClick?: VirtualGridMouseEventHandler;
   onDoubleClick?: VirtualGridMouseEventHandler;
-  pinnedRows?: GridRowProps<TData>[]
+  pinnedRows?: GridRowProps<TData>[];
+  rowComponent?: React.ComponentClass<GridRowComponentProps<TData>>;
 };
