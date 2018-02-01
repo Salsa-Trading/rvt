@@ -25,6 +25,11 @@ export {
 } from './Grid/types';
 
 export {
+  default as GridRow,
+  renderGridCell
+} from './Grid/GridRow';
+
+export {
   default as CustomGrid
 } from './Grid/CustomGrid';
 
