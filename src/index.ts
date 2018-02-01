@@ -20,8 +20,9 @@ export {
 } from './Grid/VirtualGrid';
 
 export {
-  GridRowProps
-} from './Grid/GridRow';
+  GridRowProps,
+  GridRowComponentProps
+} from './Grid/types';
 
 export {
   default as CustomGrid

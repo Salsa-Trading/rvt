@@ -4,22 +4,9 @@ import { Field } from '../List/Field';
 import * as get from 'lodash.get';
 import isNil from '../utils/isNil';
 import { TableRowProps } from '../VirtualTable';
+import {GridRowProps, GridRowComponentProps, VirtualGridMouseEventHandler} from './types';
 
-export type VirtualGridMouseEventHandler = (e: React.MouseEvent<any>, data: any, fieldName: string) => void;
-
-export type GridRowProps<TData> = {
-  data: TData;
-  rowProps?: React.HTMLProps<HTMLTableRowElement>;
-};
-
-export default class GridRow<TData> extends React.Component<{
-  fields: Field[];
-  data?: TData;
-  rowProps?: React.HTMLProps<HTMLTableRowElement>;
-  onMouseDown?: VirtualGridMouseEventHandler;
-  onClick?: VirtualGridMouseEventHandler;
-  onDoubleClick?: VirtualGridMouseEventHandler;
-}, {}> {
+export default class GridRow<TData> extends React.Component<GridRowComponentProps<TData>, {}> {
 
   public static propTypes = {
     fields: PropTypes.any,

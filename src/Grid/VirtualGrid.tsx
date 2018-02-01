@@ -1,17 +1,14 @@
 import * as React from 'react';
-import GridRow, { VirtualGridMouseEventHandler, GridRowProps } from './GridRow';
+import { VirtualGridMouseEventHandler, GridRowProps, BaseGridProps } from './types';
+import GridRow from './GridRow';
 import GridHeader from './GridHeader';
 import List, { ListProps, ListViewProps } from '../List';
 import VirtualTable, { VirtualTableBaseProps } from '../VirtualTable';
 
 
-export type VirtualGridProps<TData> = {
+export type VirtualGridProps<TData extends object> = BaseGridProps<TData> & {
   getRows?: (rowIndex: number, length: number) => GridRowProps<TData>[];
   getRow?: (rowIndex: number) => GridRowProps<TData>;
-  onMouseDown?: VirtualGridMouseEventHandler;
-  onClick?: VirtualGridMouseEventHandler;
-  onDoubleClick?: VirtualGridMouseEventHandler;
-  pinnedRows?: GridRowProps<TData>[];
 };
 
 export class VirtualGrid<TData extends object> extends React.Component<VirtualTableBaseProps & ListViewProps & VirtualGridProps<TData>, {}> {

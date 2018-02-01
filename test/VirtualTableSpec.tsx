@@ -20,22 +20,6 @@ describe('<Table />', () => {
   let wrapper;
   let mounted;
 
-  describe('getRows to getRow', () => {
-
-    it('should log warning if getRow', () => {
-
-      const props = {
-        getRow: () => { return null; },
-        rowCount: 0,
-        header: () => { return null; },
-        row: () => { return null; }
-      } as any;
-      spy(console, 'warn');
-      shallow(<VirtualTable {...props} />);
-      expect(console.warn).to.have.be.called;
-    });
-  });
-
   describe('root element', () => {
 
     beforeEach(() => {

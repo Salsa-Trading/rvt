@@ -1,18 +1,15 @@
 import * as React from 'react';
 import GridHeader from './GridHeader';
-import GridRow, { VirtualGridMouseEventHandler, GridRowProps } from './GridRow';
+import { VirtualGridMouseEventHandler, GridRowProps, BaseGridProps } from './types';
+import GridRow from './GridRow';
 import List, { ListProps, ListViewProps } from '../List';
 
-export type Diff<T extends string, U extends string> = ({[P in T]: P } & {[P in U]: never } & { [x: string]: never })[T];  
+export type Diff<T extends string, U extends string> = ({[P in T]: P } & {[P in U]: never } & { [x: string]: never })[T];
 export type Omit<T, K extends keyof T> = Pick<T, Diff<keyof T, K>>;
 export type TablePropsWithoutData = Omit<React.HTMLProps<HTMLTableElement>, 'data'>;
 
-export type GridProps<TData extends object> = TablePropsWithoutData & {
+export type GridProps<TData extends object> = TablePropsWithoutData & BaseGridProps<TData> & {
   data: GridRowProps<TData>[];
-  onMouseDown?: VirtualGridMouseEventHandler;
-  onClick?: VirtualGridMouseEventHandler;
-  onDoubleClick?: VirtualGridMouseEventHandler;
-  pinnedRows?: GridRowProps<TData>[];
 };
 
 class Grid<TData extends object> extends React.Component<GridProps<TData> & ListViewProps, {}> {

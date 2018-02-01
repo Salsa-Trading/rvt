@@ -9,7 +9,7 @@ import GridHeaderCell from './GridHeaderCell';
 import ColumnChooser from './ColumnChooser';
 import ColumnChooserButton from './ColumnChooserButton';
 import safeMouseMove from '../utils/saveMouseMove';
-import { GridRowProps } from './GridRow';
+import { GridRowProps } from './types';
 
 const hoverClassName = 'field-moving-hover';
 const movingClassName = 'field-moving';
