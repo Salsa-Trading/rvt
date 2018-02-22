@@ -130,6 +130,7 @@ export type Indexed<T> = T & {index: number};
 
 export type TableRowProps<TData> = {
   data: TData;
+  key?: string|number;
 };
 
 export type VirtualTableBaseProps = {
@@ -370,7 +371,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
           index: topRow + i
         };
       });
-    
+
     }
     else {
       rowProps = new Array(numRows);
@@ -391,9 +392,9 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   private buildRows() {
     const { row } = this.props;
     const rowElement = React.isValidElement(row)
-      ? row as React.ReactElement<Indexed<TableRowProps<TData>> & {key: number}>
-      : React.createElement(row as React.ComponentType<Indexed<TableRowProps<TData> & {key: number}>>);
-    return this.getRows().map((props, i) => React.cloneElement(rowElement, {...props, key: i}));
+      ? row as React.ReactElement<Indexed<TableRowProps<TData>> & {key: string|number}>
+      : React.createElement(row as React.ComponentType<Indexed<TableRowProps<TData> & {key: string|number}>>);
+    return this.getRows().map((props, i) => React.cloneElement(rowElement, {key: i, ...props}));
   }
 
   @autobind

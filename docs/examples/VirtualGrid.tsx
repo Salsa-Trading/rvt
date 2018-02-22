@@ -38,6 +38,8 @@ export default class VirtualGridExample extends React.Component<{}, {
         rowProps: {
           style: {backgroundColor: index % 2 === 0 ? '' : 'lightgray'}
         }
+        // ,
+        // key: data.col1
       };
     });
   }

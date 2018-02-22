@@ -5,6 +5,7 @@ export type VirtualGridMouseEventHandler = (e: React.MouseEvent<any>, data: any,
 export type GridRowProps<TData> = {
   data: TData;
   rowProps?: React.HTMLProps<HTMLTableRowElement>;
+  key?: string|number;
 };
 
 export type GridRowComponentProps<TData> = {
