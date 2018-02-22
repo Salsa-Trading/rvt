@@ -21,14 +21,28 @@ export class FieldSet extends FieldBase {
   constructor(props: FieldSetProps, fieldDefaults: FieldDefaults, fields: FieldSetDisplay) {
     super(props, fields);
 
+    let subFields = (fields && fields.children) || [];
+
     this.children = React.Children.map(props.children || [], (c: any) => {
-      let field = ((fields && fields.children) || []).find(cd => cd.name === c.props.name) || {name: c.name};
+      let field = subFields.find(cd => cd.name === c.props.name) || {name: c.name};
       if(c.type.name === 'FieldSetDefinition') {
         return new FieldSet(c.props, fieldDefaults, field as FieldSetDisplay);
       }
       if(c.type.name === 'FieldDefinition') {
         return new Field({...fieldDefaults, ...c.props}, field);
       }
+    });
+    // Sort defined fields by order in fields.chilren, if the defined field is not found place at the end
+    this.children.sort((a, b) => {
+      let aIndex = subFields.findIndex(f => f.name === a.name);
+      if(aIndex < 0) {
+        aIndex = Number.MAX_VALUE;
+      }
+      let bIndex = subFields.findIndex(f => f.name === b.name);
+      if(bIndex < 0) {
+        bIndex = Number.MAX_VALUE;
+      }
+      return aIndex - bIndex;
     });
   }
 

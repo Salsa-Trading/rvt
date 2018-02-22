@@ -71,6 +71,19 @@ describe('<FieldSet />', () => {
       expect(fieldSet.children.map(c => c.name)).to.deep.equal(['col1', 'col2']);
     });
 
+    it('should preserve fieldDisplay order', () => {
+      const fields: FieldSetDisplay = {
+        name: 'group1',
+        hidden: false,
+        children: [
+          {name: 'col2', hidden: false},
+          {name: 'col1', hidden: false}
+        ]
+      };
+      const fieldSet = new FieldSet(defs.props, null, fields);
+      expect(fieldSet.children.map(c => c.name)).to.deep.equal(['col2', 'col1']);
+    });
+
   });
 
 
