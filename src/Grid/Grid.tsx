@@ -6,7 +6,7 @@ import List, { ListProps, ListViewProps } from '../List';
 
 export type Diff<T extends string, U extends string> = ({[P in T]: P } & {[P in U]: never } & { [x: string]: never })[T];
 export type Omit<T, K extends keyof T> = Pick<T, Diff<keyof T, K>>;
-export type TablePropsWithoutData = Omit<React.HTMLProps<HTMLTableElement>, 'data'>;
+export type TablePropsWithoutData = Omit<React.HTMLProps<HTMLTableElement>, 'data' | 'onClick' | 'onDoubleClick' | 'onMouseDown'>;
 
 export type GridProps<TData extends object> = TablePropsWithoutData & BaseGridProps<TData> & {
   data: GridRowProps<TData>[];
@@ -32,6 +32,13 @@ class Grid<TData extends object> extends React.Component<GridProps<TData> & List
     } = this.props;
 
     const fields = fieldSet.getFields();
+    const row: any = React.createElement(rowComponent || GridRow, {
+      fields: fields,
+      onMouseDown: onMouseDown,
+      onClick: onClick,
+      onDoubleClick: onDoubleClick
+    });
+
 
     const header = (
       <GridHeader
@@ -42,23 +49,9 @@ class Grid<TData extends object> extends React.Component<GridProps<TData> & List
         onMove={onMove}
         onHiddenChange={onHiddenChange}
         pinnedRows={pinnedRows}
-        gridRow={(
-          <GridRow
-            fields={fields}
-            onMouseDown={onMouseDown}
-            onClick={onClick}
-            onDoubleClick={onDoubleClick}
-          />
-        )}
+        gridRow={row}
       />
     );
-
-    const row: any = React.createElement(rowComponent || GridRow, {
-      fields: fields,
-      onMouseDown: onMouseDown,
-      onClick: onClick,
-      onDoubleClick: onDoubleClick
-    });
 
     return (
       <div className='rvt'>
