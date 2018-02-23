@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
 import Scroller from './Scroller';
-import { difference, omit, zipObject, map } from 'lodash';
+import { difference, omit, zipObject, map, debounce } from 'lodash';
 
 const propTypes = {
   /**
@@ -174,6 +174,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   private containerRef: HTMLDivElement;
   private dataKeyToRowKeyMap: {[dataKey: string]: number} = {};
   private rowKeyCounter = 1;
+  private debouncedOnWindowResize: () => void;
 
   constructor(props, context) {
     super(props, context);
@@ -270,13 +271,15 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * Listen for window resizes if 'autoResize' is enabled
    */
   public componentDidMount() {
+    this.debouncedOnWindowResize = debounce(() => this.calculateHeights(), 100);
+
     if (this.state.calculatingHeights) {
       setTimeout(() => this.calculateHeights(), 250);
     }
 
     const {autoResize, windowResizeEvents} = this.props;
     if (autoResize) {
-      (windowResizeEvents || []).forEach(event => window.addEventListener(event, this.calculateHeights));
+      (windowResizeEvents || []).forEach(event => window.addEventListener(event, this.debouncedOnWindowResize));
     }
   }
 
@@ -286,7 +289,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   public componentWillUnmount() {
     const {autoResize, windowResizeEvents} = this.props;
     if (autoResize) {
-      (windowResizeEvents || []).forEach(event => window.removeEventListener(event, this.calculateHeights));
+      (windowResizeEvents || []).forEach(event => window.removeEventListener(event, this.debouncedOnWindowResize));
     }
   }
 
@@ -313,7 +316,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * Call this method when the window or container size changed
    */
   @autobind
-  public calculateHeights() {
+  private calculateHeights() {
     const div = this.containerRef;
     const height = this.props.height ? div.clientHeight : (div.parentElement.clientHeight) - 6;
     const header = div.querySelector('table > thead');

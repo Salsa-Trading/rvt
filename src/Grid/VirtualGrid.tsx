@@ -14,12 +14,6 @@ export class VirtualGrid<TData extends object> extends React.Component<VirtualTa
 
   private virtualTable: VirtualTable<TData>;
 
-  public calculateHeights() {
-    if(this.virtualTable) {
-      this.virtualTable.calculateHeights();
-    }
-  }
-
   public render() {
     const {
       fieldSet,
