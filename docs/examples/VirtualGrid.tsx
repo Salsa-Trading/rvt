@@ -15,6 +15,14 @@ function CustomCell({label, data, field}: {label: string, data?: any, field?: Fi
   );
 }
 
+const whiteRowProps = {
+  style: {}
+};
+
+const grayRowProps = {
+  style: {backgroundColor: 'lightgray'}
+};
+
 export default class VirtualGridExample extends React.Component<{}, {
   originalData?: any[];
   data?: any[]
@@ -30,16 +38,14 @@ export default class VirtualGridExample extends React.Component<{}, {
     };
   }
 
+
   @autobind
-  public getRows(index: number, length: number): {data: SampleData, rowProps: React.HTMLProps<HTMLTableRowElement>}[] {
+  public getRows(index: number, length: number): {data: SampleData, rowProps?: React.HTMLProps<HTMLTableRowElement>}[] {
     return this.state.data.slice(index, index + length).map((data, index) => {
       return {
         data,
-        rowProps: {
-          style: {backgroundColor: index % 2 === 0 ? '' : 'lightgray'}
-        }
-        // ,
-        // key: data.col1
+        rowProps: data.col1 % 2 === 0 ? grayRowProps : whiteRowProps,
+        key: data.col2
       };
     });
   }

@@ -24,7 +24,7 @@ export function renderGridCell<TData>(field: Field, data: TData) {
   }
 }
 
-export default class GridRow<TData> extends React.Component<GridRowComponentProps<TData>, {}> {
+export default class GridRow<TData> extends React.PureComponent<GridRowComponentProps<TData>, {}> {
 
   public static propTypes = {
     fields: PropTypes.any,

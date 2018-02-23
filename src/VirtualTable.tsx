@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
 import Scroller from './Scroller';
+import { difference, omit, zipObject, map } from 'lodash';
 
 const propTypes = {
   /**
@@ -130,7 +131,7 @@ export type Indexed<T> = T & {index: number};
 
 export type TableRowProps<TData> = {
   data: TData;
-  key?: string|number;
+  key?: string;
 };
 
 export type VirtualTableBaseProps = {
@@ -147,7 +148,7 @@ export type VirtualTableBaseProps = {
   containerStyle?: React.CSSProperties;
   className?: string;
   style?: React.CSSProperties;
-  windowResizeEvents?: string[]
+  windowResizeEvents?: string[];
 };
 
 export type VirtualTableProps<TData extends object> = VirtualTableBaseProps & {
@@ -171,6 +172,8 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   public static defaultProps = defaultProps;
 
   private containerRef: HTMLDivElement;
+  private dataKeyToRowKeyMap: {[dataKey: string]: number} = {};
+  private rowKeyCounter = 1;
 
   constructor(props, context) {
     super(props, context);
@@ -391,10 +394,47 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    */
   private buildRows() {
     const { row } = this.props;
+    const { dataKeyToRowKeyMap } = this;
+    const rows = this.getRows();
+
+    // Re-compute row keys for all visible elements
+    const previousDataKeys: string[] = Object.keys(dataKeyToRowKeyMap);
+    const newDataKeys: string[] = rows.map((row, i) => {
+      return row.key;
+    });
+
+    if (newDataKeys.every(Boolean)) {
+      const removedDataKeys: string[] = difference(previousDataKeys, newDataKeys);
+      const removedRowKeys: number[] = removedDataKeys.map((dataKey) => dataKeyToRowKeyMap[dataKey]);
+
+      const addedDataKeys: string[] = difference(newDataKeys, previousDataKeys);
+
+      // Create new dataKeyToRowKeyMap object
+      const previousRowKeyDictionaryEntries = omit(dataKeyToRowKeyMap, removedDataKeys);
+      const newRowKeyDictionaryEntries = zipObject(addedDataKeys, [
+        // re-use old keys where applicable so component doesn't have to re-mount
+        ...removedRowKeys,
+
+        // Generate new row keys if no row had been created
+        ...map(Array(Math.max(
+          0,
+          addedDataKeys.length - removedRowKeys.length
+        )), () => this.rowKeyCounter++)
+      ]);
+      this.dataKeyToRowKeyMap = {
+        ...previousRowKeyDictionaryEntries,
+        ...newRowKeyDictionaryEntries
+      };
+    }
+
     const rowElement = React.isValidElement(row)
-      ? row as React.ReactElement<Indexed<TableRowProps<TData>> & {key: string|number}>
-      : React.createElement(row as React.ComponentType<Indexed<TableRowProps<TData> & {key: string|number}>>);
-    return this.getRows().map((props, i) => React.cloneElement(rowElement, {key: i, ...props}));
+      ? row as React.ReactElement<Indexed<TableRowProps<TData>> & {key: number}>
+      : React.createElement(row as React.ComponentType<Indexed<TableRowProps<TData> & {key: number}>>);
+
+    return rows.map((props, i) => React.cloneElement(rowElement, {
+      ...props,
+      key: this.dataKeyToRowKeyMap[props.key] || i,
+    }));
   }
 
   @autobind
