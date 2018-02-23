@@ -37,7 +37,7 @@ export function generateDataForIndex(index: number): SampleData {
 }
 
 export function generateDataForSlice(index: number, count: number): SampleData[] {
-  return _.range(index, count).map(i => generateDataForIndex(i));
+  return _.range(index, index + count).map(i => generateDataForIndex(i));
 }
 
 export function generateData(rowCount): SampleData[] {

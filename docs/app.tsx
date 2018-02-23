@@ -13,6 +13,7 @@ import VirtualTable from './examples/VirtualTable';
 import Grid from './examples/Grid';
 import VirtualScroller from './examples/VirtualScroller';
 import StreamingTable from './examples/StreamingTable';
+import StreamingGrid from './examples/StreamingGrid';
 
 export default class App extends React.Component<{}, {}> {
 
@@ -36,6 +37,7 @@ export default class App extends React.Component<{}, {}> {
             <Route path='/examples/customGrid' component={CustomGrid} />
             <Route path='/examples/virtualScroller' component={VirtualScroller} />
             <Route path='/examples/streamingTable' component={StreamingTable} />
+            <Route path='/examples/streamingGrid' component={StreamingGrid} />
           </main>
         </div>
       </BrowserRouter>
