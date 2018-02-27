@@ -45,7 +45,7 @@ export function getLevels(fieldSet: FieldSet): FieldHeader[][] {
   return fillLevels(fieldSet, maxRows);
 }
 
-export default class GridHeader<TData> extends React.Component<ListViewProps & {
+export default class GridHeader<TData> extends React.PureComponent<ListViewProps & {
   pinnedRows?: GridRowProps<TData>[];
   gridRow?: React.ComponentClass<any>|React.StatelessComponent<any>|React.ReactElement<any>;
 }, {

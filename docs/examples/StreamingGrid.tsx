@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as _ from 'lodash';
+import { CellProps } from '../../src/List/Field';
 import { VirtualGrid, Field, FieldSet, FieldProps, ListState, ListStateChangeType, isDataChange, GridRowProps } from '../../src/index';
 import { generateData, SampleData, generateDataForSlice } from '../../test/dataUtils';
 import { autobind } from 'core-decorators';
 
 import '../../scss/rvt_unicode.scss';
-import { CellProps } from '../../src/List/Field';
 
 function CustomCell({label, data, field}: {label: string, data?: any, field?: FieldProps }) {
   return (

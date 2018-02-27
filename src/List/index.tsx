@@ -1,9 +1,11 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
+import { autobind } from 'core-decorators';
 import { FieldSet, RootFieldSet } from './FieldSet';
 import { Field, SortDirection, FieldDefaults, FieldDisplay } from './Field';
 import strEnum from '../utils/strEnum';
 import isNil from '../utils/isNil';
+import { isEqual } from 'lodash';
 
 export type SortState = {fieldName: string, direction: SortDirection}[];
 export type FilterState = {[fieldName: string]: any };
@@ -29,7 +31,6 @@ export type ListProps = {
   onListStateChanged: (newListState: ListState, changeType: ListStateChangeType, fieldName?: string) => void;
   listState?: ListState;
   fieldDefaults?: FieldDefaults;
-  viewRef?: (ref: any) => void;
 };
 
 export type ListViewProps = {
@@ -69,15 +70,25 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
 
     constructor(props, context) {
       super(props, context);
+
       this.state = {
         fieldSet: this.createFields(props)
       };
     }
 
+    public componentWillMount() {
+      this.onSortSelection = this.onSortSelection.bind(this);
+      this.onFilterChanged = this.onFilterChanged.bind(this);
+      this.onWidthChanged = this.onWidthChanged.bind(this);
+      this.onMove = this.onMove.bind(this);
+      this.onHiddenChange = this.onHiddenChange.bind(this);
+    }
+
     public componentWillReceiveProps(nextProps: React.Props<ListProps> & ListProps) {
-      if(this.props.children !== nextProps.children || this.props.listState.fields !== nextProps.listState.fields) {
+      const fieldSet = this.createFields(nextProps);
+      if(!isEqual(fieldSet, this.state.fieldSet) || !isEqual(this.props.listState.fields, nextProps.listState.fields)) {
         this.setState({
-          fieldSet: this.createFields(nextProps)
+          fieldSet
         });
       }
     }
@@ -181,17 +192,16 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       const { fieldSet } = this.state;
 
       /* tslint:disable:no-unused-variable */
-      const { listState, onListStateChanged, fieldDefaults, viewRef, ...ownProps } = this.props;
+      const { listState, onListStateChanged, fieldDefaults, ...ownProps } = this.props;
       /* tslint:enable:no-unused-variable */
 
       const props = {
         fieldSet,
-        onSortSelection: this.onSortSelection.bind(this),
-        onFilterChanged: this.onFilterChanged.bind(this),
-        onWidthChanged: this.onWidthChanged.bind(this),
-        onMove: this.onMove.bind(this),
-        onHiddenChange: this.onHiddenChange.bind(this),
-        ref: viewRef
+        onSortSelection: this.onSortSelection,
+        onFilterChanged: this.onFilterChanged,
+        onWidthChanged: this.onWidthChanged,
+        onMove: this.onMove,
+        onHiddenChange: this.onHiddenChange
       };
 
       return (

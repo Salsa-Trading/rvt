@@ -12,10 +12,9 @@ export type VirtualGridProps<TData extends object> = BaseGridProps<TData> & {
 
 export class VirtualGrid<TData extends object> extends React.Component<VirtualTableBaseProps & ListViewProps & VirtualGridProps<TData>, {}> {
 
-  private virtualTable: VirtualTable<TData>;
-
   public render() {
     const {
+      children,
       fieldSet,
       onSortSelection,
       onFilterChanged,
@@ -51,13 +50,11 @@ export class VirtualGrid<TData extends object> extends React.Component<VirtualTa
       />
     );
 
-    const setRef = (ref) => this.virtualTable = ref;
     return (
       <VirtualTable
         {...rest}
         header={header}
         row={row}
-        ref={setRef}
       />
     );
   }
