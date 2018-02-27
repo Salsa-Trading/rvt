@@ -81,10 +81,11 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
       onDoubleClick,
       pinnedRows,
       data,
+      rowComponent,
       ...rest
     } = this.props;
 
-    const {rowComponent} = this.state;
+    const {rowComponent: row} = this.state;
 
     const header = (
       <GridHeader
@@ -95,7 +96,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
         onMove={onMove}
         onHiddenChange={onHiddenChange}
         pinnedRows={pinnedRows}
-        gridRow={rowComponent}
+        gridRow={row}
       />
     );
 
@@ -105,7 +106,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
           {header}
           <tbody>
             {data.map((d, i) => {
-              return React.cloneElement(rowComponent, {
+              return React.cloneElement(row, {
                 key: i,
                 data: d.data,
                 rowProps: d.rowProps

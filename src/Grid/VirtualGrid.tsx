@@ -79,10 +79,11 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
       onClick,
       onDoubleClick,
       pinnedRows,
+      rowComponent,
       ...rest
     } = this.props;
 
-    const {rowComponent} = this.state;
+    const {rowComponent: row} = this.state;
 
     const header = (
       <GridHeader
@@ -93,7 +94,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
         onMove={onMove}
         onHiddenChange={onHiddenChange}
         pinnedRows={pinnedRows}
-        gridRow={rowComponent}
+        gridRow={row}
       />
     );
 
@@ -101,7 +102,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
       <VirtualTable
         {...rest}
         header={header}
-        row={rowComponent}
+        row={row}
       />
     );
   }
