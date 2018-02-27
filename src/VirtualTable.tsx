@@ -356,7 +356,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * Build rowProps from getRows or getRow
    * @private
    */
-  private getRows(): Indexed<TableRowProps<TData>>[] {
+  private getRows(): TableRowProps<TData>[] {
     const { getRow, getRows, rowCount } = this.props;
 
     const topRow = this.getTopRow();
@@ -369,23 +369,14 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       return [];
     }
 
-    let rowProps: Indexed<TableRowProps<TData>>[];
+    let rowProps: TableRowProps<TData>[];
     if(getRows) {
-      rowProps = getRows(topRow, numRows).map((rowProps: TableRowProps<TData>, i: number) => {
-        return {
-          ...rowProps,
-          index: topRow + i
-        };
-      });
-
+      rowProps = getRows(topRow, numRows)
     }
     else {
       rowProps = new Array(numRows);
       for (let i = 0; i < numRows; i++) {
-        rowProps[i] = {
-          ...getRow(topRow + i),
-          index: topRow + i
-        };
+        rowProps[i] = getRow(topRow + i);
       }
     }
     return rowProps;

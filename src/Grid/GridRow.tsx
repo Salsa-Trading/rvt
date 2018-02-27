@@ -39,7 +39,8 @@ export default class GridRow<TData> extends React.Component<GridRowComponentProp
   }
 
   public shouldComponentUpdate(nextProps, nextState) {
-    return !isEqual(this.props, nextProps);
+    const shouldRender = !isEqual(this.props, nextProps);
+    return shouldRender;
   }
 
   @autobind

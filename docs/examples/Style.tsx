@@ -15,8 +15,8 @@ const Head = () => (
   </thead>
 );
 
-const Row = ({data, index}) => (
-  <tr style={{backgroundColor: index % 2 === 0 ? '' : 'lightgray'}}>
+const Row = ({data}) => (
+  <tr style={{backgroundColor: data.col1 % 2 === 0 ? '' : 'lightgray'}}>
     <td>{data.col1}</td>
     <td>{data.col2}</td>
     <td>{data.col3.toString()}</td>

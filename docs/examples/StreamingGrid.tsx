@@ -55,8 +55,8 @@ export default class VirtualGridExample extends React.Component<{}, {
 
     this.setState({
       rows: [
-        ...rows,
-        ...generateDataForSlice(rows.length, 5)
+        ...generateDataForSlice(rows.length, 5),
+        ...rows
       ]
     });
   }
