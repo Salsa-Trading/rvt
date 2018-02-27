@@ -55,7 +55,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
       onClick,
       onDoubleClick,
       rowComponent,
-    } = this.props;
+    } = props;
 
     const fields = fieldSet.getFields();
     return React.createElement(rowComponent || GridRow, {

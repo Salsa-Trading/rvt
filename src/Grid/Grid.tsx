@@ -57,7 +57,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
       onClick,
       onDoubleClick,
       rowComponent,
-    } = this.props;
+    } = props;
 
     const fields = fieldSet.getFields();
     return React.createElement(rowComponent || GridRow, {
