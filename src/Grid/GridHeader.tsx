@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
+import { isEqual } from 'lodash';
 
 import { Field, FieldBase } from '../List/Field';
 import { FieldSet, isVisible } from '../List/FieldSet';
@@ -45,10 +46,12 @@ export function getLevels(fieldSet: FieldSet): FieldHeader[][] {
   return fillLevels(fieldSet, maxRows);
 }
 
-export default class GridHeader<TData> extends React.PureComponent<ListViewProps & {
+export type GridHeaderProps<TData> = ListViewProps & {
   pinnedRows?: GridRowProps<TData>[];
   gridRow?: React.ComponentClass<any>|React.StatelessComponent<any>|React.ReactElement<any>;
-}, {
+};
+
+export default class GridHeader<TData> extends React.Component<GridHeaderProps<TData>, {
   showColumnChooser: boolean;
   draggingColumn: boolean;
 }> {
@@ -62,12 +65,21 @@ export default class GridHeader<TData> extends React.PureComponent<ListViewProps
     onHiddenChange: PropTypes.func
   };
 
-  constructor(props, context) {
+  constructor(props: GridHeaderProps<TData>, context) {
     super(props, context);
     this.state = {
       showColumnChooser: false,
       draggingColumn: false
     };
+  }
+
+  public shouldComponentUpdate(nextProps: GridHeaderProps<TData>) {
+    const shouldRender = !isEqual(this.props, nextProps);
+    if (shouldRender) {
+      const eq = isEqual;
+      debugger
+    }
+    return shouldRender;
   }
 
   @autobind
