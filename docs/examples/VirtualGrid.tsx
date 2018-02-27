@@ -59,7 +59,7 @@ export default class VirtualGridExample extends React.Component<{}, {
     });
   }
 
-
+  @autobind
   private onListStateChanged(listState: ListState, changeType: ListStateChangeType) {
     if(!isDataChange(changeType)) {
       return this.setState({listState});
@@ -95,9 +95,9 @@ export default class VirtualGridExample extends React.Component<{}, {
     return (
       <VirtualGrid
         getRows={this.getRows}
-        rowCount={this.state.data.length - 2}
+        rowCount={this.state.data.length}
         listState={listState}
-        onListStateChanged={this.onListStateChanged.bind(this)}
+        onListStateChanged={this.onListStateChanged}
         className='table table-bordered table-condensed'
         fieldDefaults={{sortable: true, filterable: true}}
         autoResize={true}
