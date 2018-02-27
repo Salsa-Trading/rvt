@@ -74,12 +74,7 @@ export default class GridHeader<TData> extends React.Component<GridHeaderProps<T
   }
 
   public shouldComponentUpdate(nextProps: GridHeaderProps<TData>) {
-    const shouldRender = !isEqual(this.props, nextProps);
-    if (shouldRender) {
-      const eq = isEqual;
-      debugger
-    }
-    return shouldRender;
+    return !isEqual(this.props, nextProps);
   }
 
   @autobind
