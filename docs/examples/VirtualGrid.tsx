@@ -25,8 +25,9 @@ const grayRowProps = {
 
 export default class VirtualGridExample extends React.Component<{}, {
   originalData?: any[];
-  data?: any[]
-  listState?: ListState
+  data?: SampleData[];
+  listState?: ListState;
+  pinnedRows: GridRowProps<SampleData>[];
 }> {
 
   constructor(props, context) {
@@ -34,7 +35,15 @@ export default class VirtualGridExample extends React.Component<{}, {
     const originalData = generateData(500);
     this.state = {
       originalData,
-      data: originalData
+      data: originalData,
+      pinnedRows: originalData.slice(0, 2).map(d => ({
+        data: d,
+        rowProps: {
+          style: {
+            backgroundColor: 'red'
+          }
+        }
+      }))
     };
   }
 
@@ -71,8 +80,18 @@ export default class VirtualGridExample extends React.Component<{}, {
     this.setState({listState, data});
   }
 
+  @autobind
+  private onMouseDown(e: React.MouseEvent<any>, d: SampleData, f: string) {
+    console.log('mouse down', e, d, f);
+  }
+
+  @autobind
+  private onClick(e: React.MouseEvent<any>, d: SampleData, f: string) {
+    console.log('click', e, d, f);
+  }
+
   public render() {
-    const { listState } = this.state;
+    const { listState, pinnedRows } = this.state;
     return (
       <VirtualGrid
         getRows={this.getRows}
@@ -82,9 +101,9 @@ export default class VirtualGridExample extends React.Component<{}, {
         className='table table-bordered table-condensed'
         fieldDefaults={{sortable: true, filterable: true}}
         autoResize={true}
-        onMouseDown={(e, d, f) => console.log('mouse down', e, d, f)}
-        onClick={(e, d, f) => console.log('click', e, d, f)}
-        pinnedRows={this.state.data.slice(0, 2).map(d => ({data: d, rowProps: { style: { backgroundColor: 'red'}} }))}
+        onMouseDown={this.onMouseDown}
+        onClick={this.onClick}
+        pinnedRows={pinnedRows}
       >
         <FieldSet header='Group 1' name='group1'>
           <FieldSet header='Group 2' name='group2'>

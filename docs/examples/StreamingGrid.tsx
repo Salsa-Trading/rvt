@@ -5,6 +5,7 @@ import { generateData, SampleData, generateDataForSlice } from '../../test/dataU
 import { autobind } from 'core-decorators';
 
 import '../../scss/rvt_unicode.scss';
+import { CellProps } from '../../src/List/Field';
 
 function CustomCell({label, data, field}: {label: string, data?: any, field?: FieldProps }) {
   return (
@@ -44,7 +45,7 @@ export default class VirtualGridExample extends React.Component<{}, {
   public componentWillUnmount() {
     if(this.interval) {
       window.clearInterval(this.interval);
-      this.interval = null
+      this.interval = null;
     }
   }
 
@@ -69,8 +70,9 @@ export default class VirtualGridExample extends React.Component<{}, {
         key: data.col2
       };
     });
-  } 
+  }
 
+  @autobind
   private onListStateChanged(listState: ListState, changeType: ListStateChangeType) {
     if(!isDataChange(changeType)) {
       return this.setState({listState});
@@ -79,19 +81,48 @@ export default class VirtualGridExample extends React.Component<{}, {
     this.setState({listState});
   }
 
+  @autobind
+  private onMouseDown(e: React.MouseEvent<any>, d: SampleData, f: string) {
+    console.log('mouse down', e, d, f);
+  }
+
+  @autobind
+  private onClick(e: React.MouseEvent<any>, d: SampleData, f: string) {
+    console.log('click', e, d, f);
+  }
+
+  @autobind
+  private col3Formatter(cellProps: CellProps): React.ReactElement<any> {
+    const data: SampleData = cellProps.data;
+
+    return (
+      <input type='checkbox' defaultChecked={data.col3} />
+    );
+  }
+
+  @autobind
+  private col4Formatter(data: SampleData): string {
+    return data.col4.toString();
+  }
+
+  private col5Formatter: React.ReactElement<any> = (
+    <CustomCell label='test' />
+  );
+
   public render() {
     const { listState } = this.state;
+
     return (
       <VirtualGrid
         getRows={this.getRows}
         rowCount={this.state.rows.length}
         listState={listState}
-        onListStateChanged={this.onListStateChanged.bind(this)}
+        onListStateChanged={this.onListStateChanged}
         className='table table-bordered table-condensed'
         fieldDefaults={{sortable: true, filterable: true}}
         autoResize={true}
-        onMouseDown={(e, d, f) => console.log('mouse down', e, d, f)}
-        onClick={(e, d, f) => console.log('click', e, d, f)}
+        onMouseDown={this.onMouseDown}
+        onClick={this.onClick}
       >
         <FieldSet header='Group 1' name='group1'>
           <FieldSet header='Group 2' name='group2'>
@@ -100,9 +131,9 @@ export default class VirtualGridExample extends React.Component<{}, {
           </FieldSet>
         </FieldSet>
         <FieldSet header='Group 3' name='group3'>
-          <Field header='Col 3' name='col3' cell={({data}) => <input type='checkbox' defaultChecked={data.col3} />} />
-          <Field header='Col 4' name='col4' format={d => d.col4.toString()} />
-          <Field header='Col 5' name='col5' cell={<CustomCell label='test' />} />
+          <Field header='Col 3' name='col3' cell={this.col3Formatter}/>
+          <Field header='Col 4' name='col4' format={this.col4Formatter} />
+          <Field header='Col 5' name='col5' cell={this.col5Formatter} />
         </FieldSet>
       </VirtualGrid>
     );
