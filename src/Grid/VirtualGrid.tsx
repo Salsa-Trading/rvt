@@ -21,7 +21,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
     super(props, context);
     this.state = {
       rowComponent: this.generateRowComponent(props)
-    }
+    };
   }
 
   public componentWillReceiveProps(nextProps: WrappedVirtualGridProps<TData>) {
@@ -44,7 +44,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
     if(!isEqual(currentRowComponentProps, nextRowComponentProps)) {
       this.setState({
         rowComponent: this.generateRowComponent(nextProps)
-      })
+      });
     }
   }
 
@@ -54,7 +54,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
       onMouseDown,
       onClick,
       onDoubleClick,
-      rowComponent,
+      rowComponent
     } = props;
 
     const fields = fieldSet.getFields();

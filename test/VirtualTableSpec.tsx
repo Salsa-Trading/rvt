@@ -2,10 +2,9 @@
 
 import * as React from 'react';
 import { expect } from 'chai';
-import { spy } from 'sinon';
 import { shallow, mount } from 'enzyme';
 import { VirtualTable } from '../src/index';
-import { generateDataForSlice, SampleData, generateRowDataSlice } from './dataUtils';
+import { SampleData, generateRowDataSlice } from './dataUtils';
 import { VirtualTableProps } from '../src/VirtualTable';
 
 describe('<Table />', () => {

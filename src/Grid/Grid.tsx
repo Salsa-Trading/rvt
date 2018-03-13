@@ -23,7 +23,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
     super(props, context);
     this.state = {
       rowComponent: this.generateRowComponent(props)
-    }
+    };
   }
 
   public componentWillReceiveProps(nextProps: WrappedGridProps<TData>) {
@@ -46,7 +46,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
     if(!isEqual(currentRowComponentProps, nextRowComponentProps)) {
       this.setState({
         rowComponent: this.generateRowComponent(nextProps)
-      })
+      });
     }
   }
 
@@ -56,7 +56,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
       onMouseDown,
       onClick,
       onDoubleClick,
-      rowComponent,
+      rowComponent
     } = props;
 
     const fields = fieldSet.getFields();

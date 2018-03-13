@@ -113,7 +113,7 @@ export default class Filter extends React.Component<FilterProps, {
   }
 
   private renderFilterPane() {
-    const { field, onSortSelection } = this.props;
+    const { field } = this.props;
     const { sortDirection } = field;
 
     const { filter } = this.state;

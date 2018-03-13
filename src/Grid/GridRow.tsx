@@ -4,8 +4,7 @@ import { Field } from '../List/Field';
 import * as get from 'lodash.get';
 import { isEqual } from 'lodash';
 import isNil from '../utils/isNil';
-import { TableRowProps } from '../VirtualTable';
-import {GridRowProps, GridRowComponentProps, VirtualGridMouseEventHandler} from './types';
+import { GridRowComponentProps, VirtualGridMouseEventHandler } from './types';
 import { autobind } from 'core-decorators';
 
 export function renderGridCell<TData>(field: Field, data: TData) {
@@ -41,13 +40,6 @@ export default class GridRow<TData> extends React.Component<GridRowComponentProp
   public shouldComponentUpdate(nextProps, nextState) {
     const shouldRender = !isEqual(this.props, nextProps);
     return shouldRender;
-  }
-
-  @autobind
-  private onMouseEvent(eventHandler: VirtualGridMouseEventHandler, e: React.MouseEvent<any>) {
-    const { data } = this.props;
-    const td = (e.target as any).closest('td');
-    eventHandler(e, data, td.dataset['field']);
   }
 
   @autobind

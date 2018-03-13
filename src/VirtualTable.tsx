@@ -371,7 +371,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
 
     let rowProps: TableRowProps<TData>[];
     if(getRows) {
-      rowProps = getRows(topRow, numRows)
+      rowProps = getRows(topRow, numRows);
     }
     else {
       rowProps = new Array(numRows);
@@ -427,7 +427,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
 
     return rows.map((props, i) => React.cloneElement(rowElement, {
       ...props,
-      key: this.dataKeyToRowKeyMap[props.key] || i,
+      key: this.dataKeyToRowKeyMap[props.key] || i
     }));
   }
 
