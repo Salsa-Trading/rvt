@@ -1,6 +1,6 @@
 {
   "name": "react-virtual-table",
-  "version": "0.5.48",
+  "version": "0.5.49",
   "description": "",
   "scripts": {
     "start": "./node_modules/.bin/webpack --config config/webpack/webpack.vendor.dev.js && ./node_modules/.bin/webpack-dev-server --config config/webpack/webpack.dev.js",
