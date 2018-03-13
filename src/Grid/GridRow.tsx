@@ -4,26 +4,9 @@ import { Field } from '../List/Field';
 import * as get from 'lodash.get';
 import { isEqual } from 'lodash';
 import isNil from '../utils/isNil';
-import { GridRowComponentProps, VirtualGridMouseEventHandler } from './types';
+import { GridRowComponentProps, VirtualGridMouseEventHandler, GridRowHeaderProps } from './types';
 import { autobind } from 'core-decorators';
-
-export function renderGridCell<TData>(field: Field, data: TData) {
-  if(field.cell) {
-    if(React.isValidElement(field.cell)) {
-      return React.cloneElement(field.cell as any, {field, data});
-    }
-    else {
-      return React.createElement(field.cell as any, {field, data});
-    }
-  }
-  else if(field.format) {
-    return field.format(data, field);
-  }
-  else {
-    const value = get(data, field.name);
-    return isNil(value) ? value : value.toString();
-  }
-}
+import { renderGridCell, renderGridRowHeader } from './helpers';
 
 export default class GridRow<TData> extends React.Component<GridRowComponentProps<TData>, {}> {
 
@@ -67,7 +50,7 @@ export default class GridRow<TData> extends React.Component<GridRowComponentProp
   }
 
   public render() {
-    const { data, fields, rowProps, onClick, onDoubleClick, onMouseDown } = this.props;
+    const { data, fields, rowProps, onClick, onDoubleClick, onMouseDown, rowHeaderComponent } = this.props;
 
     return (
       <tr
@@ -76,6 +59,7 @@ export default class GridRow<TData> extends React.Component<GridRowComponentProp
         onMouseDown={onMouseDown && this.onMouseDown}
         {...rowProps}
       >
+        {renderGridRowHeader(rowHeaderComponent, data)}
         {(fields || []).map(field => {
           const dataSet = {'data-field': field.name};
           return (

@@ -8,6 +8,10 @@ export type GridRowProps<TData> = {
   key?: string;
 };
 
+export type GridRowHeaderProps<TData> = {
+  data: TData;
+};
+
 export type GridRowComponentProps<TData> = {
   fields: Field[];
   data?: TData;
@@ -15,6 +19,7 @@ export type GridRowComponentProps<TData> = {
   onMouseDown?: VirtualGridMouseEventHandler;
   onClick?: VirtualGridMouseEventHandler;
   onDoubleClick?: VirtualGridMouseEventHandler;
+  rowHeaderComponent?: any; // React.ComponentType<GridRowHeaderProps<TData>>;
 };
 
 export type BaseGridProps<TData extends object> = {
@@ -22,5 +27,6 @@ export type BaseGridProps<TData extends object> = {
   onClick?: VirtualGridMouseEventHandler;
   onDoubleClick?: VirtualGridMouseEventHandler;
   pinnedRows?: GridRowProps<TData>[];
-  rowComponent?: React.ComponentClass<GridRowComponentProps<TData>>;
+  rowComponent?: React.ComponentType<GridRowComponentProps<TData>>;
+  rowHeaderComponent?: any; // React.ComponentType<GridRowHeaderProps<TData>>;
 };

@@ -25,8 +25,7 @@ export {
 } from './Grid/types';
 
 export {
-  default as GridRow,
-  renderGridCell
+  default as GridRow
 } from './Grid/GridRow';
 
 export {

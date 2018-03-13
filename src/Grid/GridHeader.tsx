@@ -10,7 +10,8 @@ import GridHeaderCell from './GridHeaderCell';
 import ColumnChooser from './ColumnChooser';
 import ColumnChooserButton from './ColumnChooserButton';
 import safeMouseMove from '../utils/saveMouseMove';
-import { GridRowProps } from './types';
+import { GridRowProps, GridRowComponentProps, GridRowHeaderProps } from './types';
+import { renderGridRowHeader} from './helpers';
 
 const hoverClassName = 'field-moving-hover';
 const movingClassName = 'field-moving';
@@ -46,12 +47,13 @@ export function getLevels(fieldSet: FieldSet): FieldHeader[][] {
   return fillLevels(fieldSet, maxRows);
 }
 
-export type GridHeaderProps<TData> = ListViewProps & {
+export type GridHeaderProps<TData extends object> = ListViewProps & {
   pinnedRows?: GridRowProps<TData>[];
-  gridRow?: React.ComponentClass<any>|React.StatelessComponent<any>|React.ReactElement<any>;
+  gridRow?: React.ComponentType<GridRowComponentProps<TData>>|React.ReactElement<GridRowComponentProps<TData>>;
+  rowHeader?: React.ComponentType<GridRowHeaderProps<TData>>;
 };
 
-export default class GridHeader<TData> extends React.Component<GridHeaderProps<TData>, {
+export default class GridHeader<TData extends object> extends React.Component<GridHeaderProps<TData>, {
   showColumnChooser: boolean;
   draggingColumn: boolean;
 }> {
@@ -186,7 +188,7 @@ export default class GridHeader<TData> extends React.Component<GridHeaderProps<T
   }
 
   public render() {
-    const { fieldSet, pinnedRows } = this.props;
+    const { fieldSet, pinnedRows, rowHeader } = this.props;
     const rows = getLevels(fieldSet);
     const colCount = rows[0].reduce((r, i) => r + i.colSpan, 0);
     const className = this.state.draggingColumn ? 'dragging' : null;
@@ -195,6 +197,7 @@ export default class GridHeader<TData> extends React.Component<GridHeaderProps<T
         {rows.map((row: FieldHeader[], r: number) => {
           return (
             <tr key={r}>
+              {r === 0 && renderGridRowHeader(rowHeader, null, rows.length)}
               {row.map(this.renderHeaderRow.bind(this, rows.length, colCount, r))}
             </tr>
           );

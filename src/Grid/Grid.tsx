@@ -56,7 +56,8 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
       onMouseDown,
       onClick,
       onDoubleClick,
-      rowComponent
+      rowComponent,
+      rowHeaderComponent
     } = props;
 
     const fields = fieldSet.getFields();
@@ -64,7 +65,8 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
       fields: fields,
       onMouseDown: onMouseDown,
       onClick: onClick,
-      onDoubleClick: onDoubleClick
+      onDoubleClick: onDoubleClick,
+      rowHeaderComponent
     });
   }
 
@@ -82,6 +84,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
       pinnedRows,
       data,
       rowComponent,
+      rowHeaderComponent,
       ...rest
     } = this.props;
 
@@ -97,6 +100,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
         onHiddenChange={onHiddenChange}
         pinnedRows={pinnedRows}
         gridRow={row}
+        rowHeader={rowHeaderComponent}
       />
     );
 
