@@ -21,7 +21,9 @@ export {
 
 export {
   GridRowProps,
-  GridRowComponentProps
+  GridRowComponentProps,
+  GridRowHeaderProps,
+  GridSecondaryHeaderProps
 } from './Grid/types';
 
 export {
