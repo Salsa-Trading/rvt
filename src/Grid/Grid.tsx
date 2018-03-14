@@ -85,6 +85,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
       data,
       rowComponent,
       rowHeaderComponent,
+      secondaryHeaderComponent,
       ...rest
     } = this.props;
 
@@ -99,6 +100,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
         onMove={onMove}
         onHiddenChange={onHiddenChange}
         pinnedRows={pinnedRows}
+        secondaryHeader={secondaryHeaderComponent}
         gridRow={row}
         rowHeader={rowHeaderComponent}
       />

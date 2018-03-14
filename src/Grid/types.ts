@@ -19,14 +19,19 @@ export type GridRowComponentProps<TData> = {
   onMouseDown?: VirtualGridMouseEventHandler;
   onClick?: VirtualGridMouseEventHandler;
   onDoubleClick?: VirtualGridMouseEventHandler;
-  rowHeaderComponent?: any; // React.ComponentType<GridRowHeaderProps<TData>>;
+  rowHeaderComponent?: React.ComponentType<GridRowHeaderProps<TData>>
+};
+
+export type GridSecondaryHeaderProps = {
+  fields: Field[];
 };
 
 export type BaseGridProps<TData extends object> = {
   onMouseDown?: VirtualGridMouseEventHandler;
   onClick?: VirtualGridMouseEventHandler;
   onDoubleClick?: VirtualGridMouseEventHandler;
+  secondaryHeaderComponent?: React.ComponentType<GridSecondaryHeaderProps>;
   pinnedRows?: GridRowProps<TData>[];
   rowComponent?: React.ComponentType<GridRowComponentProps<TData>>;
-  rowHeaderComponent?: any; // React.ComponentType<GridRowHeaderProps<TData>>;
+  rowHeaderComponent?: React.ComponentType<GridRowHeaderProps<TData>>;
 };

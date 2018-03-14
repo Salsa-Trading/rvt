@@ -10,7 +10,7 @@ import GridHeaderCell from './GridHeaderCell';
 import ColumnChooser from './ColumnChooser';
 import ColumnChooserButton from './ColumnChooserButton';
 import safeMouseMove from '../utils/saveMouseMove';
-import { GridRowProps, GridRowComponentProps, GridRowHeaderProps } from './types';
+import { GridRowProps, GridRowComponentProps, GridRowHeaderProps, GridSecondaryHeaderProps } from './types';
 import { renderGridRowHeader} from './helpers';
 
 const hoverClassName = 'field-moving-hover';
@@ -51,6 +51,7 @@ export type GridHeaderProps<TData extends object> = ListViewProps & {
   pinnedRows?: GridRowProps<TData>[];
   gridRow?: React.ComponentType<GridRowComponentProps<TData>>|React.ReactElement<GridRowComponentProps<TData>>;
   rowHeader?: React.ComponentType<GridRowHeaderProps<TData>>;
+  secondaryHeader?: React.ComponentType<GridSecondaryHeaderProps>;
 };
 
 export default class GridHeader<TData extends object> extends React.Component<GridHeaderProps<TData>, {
@@ -181,10 +182,21 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
   }
 
   public renderPinnedRows() {
-    const { pinnedRows, gridRow } = this.props;
+    const { pinnedRows, gridRow, secondaryHeader, fieldSet } = this.props;
+    let headerRowElements = [];
 
-    const rowElement = React.isValidElement(gridRow) ? gridRow : React.createElement(gridRow as any);
-    return pinnedRows.map((r, i) => React.cloneElement(rowElement as any, {...r, key: i}));
+    if(secondaryHeader) {
+      headerRowElements = [
+        React.createElement(secondaryHeader, {fields: fieldSet.getFields()})
+      ];
+    }
+
+    if(pinnedRows) {
+      const rowElement = React.isValidElement(gridRow) ? gridRow : React.createElement(gridRow as any);
+      headerRowElements = [...headerRowElements, ...pinnedRows.map((r, i) => React.cloneElement(rowElement as any, {...r, key: i}))];
+    }
+
+    return headerRowElements;
   }
 
   public render() {
@@ -202,7 +214,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
             </tr>
           );
         })}
-        {pinnedRows && this.renderPinnedRows()}
+        {this.renderPinnedRows()}
       </thead>
     );
   }

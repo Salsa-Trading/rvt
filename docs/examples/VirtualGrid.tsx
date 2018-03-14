@@ -23,6 +23,16 @@ const grayRowProps = {
   style: {backgroundColor: 'lightgray'}
 };
 
+function secondaryHeader({fields}: {fields: any[]}) {
+  return (
+    <tr>
+      <th colSpan={fields.length} style={{textAlign: 'center', backgroundColor: 'lightblue'}}>
+        SECONDARY HEADER
+      </th>
+    </tr>
+  );
+}
+
 export default class VirtualGridExample extends React.Component<{}, {
   originalData?: any[];
   data?: SampleData[];
@@ -104,6 +114,7 @@ export default class VirtualGridExample extends React.Component<{}, {
         onMouseDown={this.onMouseDown}
         onClick={this.onClick}
         pinnedRows={pinnedRows}
+        secondaryHeaderComponent={secondaryHeader}
       >
         <FieldSet header='Group 1' name='group1'>
           <FieldSet header='Group 2' name='group2'>

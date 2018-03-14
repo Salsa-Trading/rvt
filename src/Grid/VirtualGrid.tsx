@@ -83,6 +83,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
       pinnedRows,
       rowComponent,
       rowHeaderComponent,
+      secondaryHeaderComponent,
       ...rest
     } = this.props;
 
@@ -97,6 +98,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
         onMove={onMove}
         onHiddenChange={onHiddenChange}
         pinnedRows={pinnedRows}
+        secondaryHeader={secondaryHeaderComponent}
         rowHeader={rowHeaderComponent}
         gridRow={row}
       />
