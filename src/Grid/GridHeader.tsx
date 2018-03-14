@@ -187,7 +187,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
 
     if(secondaryHeader) {
       headerRowElements = [
-        React.createElement(secondaryHeader, {fields: fieldSet.getFields()})
+        React.createElement(secondaryHeader, {fields: fieldSet.getFields(), key: 'secondary-header'})
       ];
     }
 
