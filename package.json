@@ -90,6 +90,7 @@
     "mocha": "4.0.1",
     "node-sass": "4.7.2",
     "postcss-loader": "2.0.8",
+    "prettier-eslint": "^8.2.2",
     "prop-types": "15.6.0",
     "react": "16.1.1",
     "react-dom": "16.1.1",
@@ -117,7 +118,6 @@
   },
   "dependencies": {
     "lodash.get": "4.4.2",
-    "prettier-eslint": "^8.2.2",
     "prop-types": "^15.6.0"
   },
   "vendored": [
