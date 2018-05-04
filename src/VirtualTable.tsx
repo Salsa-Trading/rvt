@@ -318,6 +318,9 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   @autobind
   private calculateHeights() {
     const div = this.containerRef;
+    if(!div) {
+      return;
+    }
     const height = this.props.height ? div.clientHeight : (div.parentElement.clientHeight) - 6;
     const header = div.querySelector('table > thead');
     const headerHeight = header ? header.scrollHeight : 0;
@@ -325,7 +328,6 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     const rowHeight = Math.max.apply(Math, scrollHeights);
 
     this.setState({
-      ...this.state,
       ...this.calculateHeightStateValues(height, headerHeight, rowHeight)
     }, this.scrollToTopIfAllRowsVisible);
   }
