@@ -444,7 +444,6 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     const header = this.buildHeader();
     const rows = this.buildRows();
     const tableClassName = this.props.className;
-    const containerClassName = this.props.containerClassName;
     const tableStyle = Object.assign({ width: '100%' }, this.props.style);
     const containerStyle = Object.assign({
       position: 'relative',
@@ -453,16 +452,16 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       width
     }, this.props.containerStyle);
     if (calculatingHeights) {
-      return this.renderCalculator(header, rows, containerClassName, containerStyle, tableClassName, tableStyle);
+      return this.renderCalculator(header, rows, containerStyle, tableClassName, tableStyle);
     }
-    return this.renderTable(header, rows, containerClassName, containerStyle, tableClassName, tableStyle);
+    return this.renderTable(header, rows, containerStyle, tableClassName, tableStyle);
   }
 
   /**
    * Render the table
    * @private
    */
-  private renderTable(header, rows, containerClassName, containerStyle, tableClassName, tableStyle) {
+  private renderTable(header, rows, containerStyle, tableClassName, tableStyle) {
     const { rowCount } = this.props;
     const { headerHeight, rowHeight } = this.state;
     const topRow = this.getTopRow();
@@ -471,7 +470,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       <div
         onWheel={this.onWheel}
         ref={this.setContainerRef}
-        className={`rvt ${containerClassName ? containerClassName : ''}`}
+        className={this.className}
         style={containerStyle}
       >
         <div style={{overflowX: 'auto', overflowY: 'hidden'}}>
@@ -498,10 +497,10 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * Render the table calculator to determine heights
    * @private
    */
-  private renderCalculator(header, rows, containerClassName, containerStyle, tableClassName, tableStyle) {
+  private renderCalculator(header, rows, containerStyle, tableClassName, tableStyle) {
     return (
       <div
-        className={`${containerClassName} calculator`}
+        className={`${this.className} calculator`}
         ref={this.setContainerRef}
         style={Object.assign({}, containerStyle, {visibility: 'hidden'})}
       >
@@ -515,5 +514,10 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
         </div>
       </div>
     );
+  }
+
+  private get className(): string {
+    const {containerClassName} = this.props;
+    return `rvt ${containerClassName ? containerClassName : ''}`;
   }
 }
