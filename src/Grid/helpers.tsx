@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Field } from '../List/Field';
 import * as get from 'lodash.get';
-import { isEqual } from 'lodash';
 import isNil from '../utils/isNil';
 import { GridRowHeaderProps } from './types';
 

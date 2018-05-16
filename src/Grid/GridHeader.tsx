@@ -206,7 +206,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
   }
 
   public render() {
-    const { fieldSet, pinnedRows, rowHeader } = this.props;
+    const { fieldSet, rowHeader } = this.props;
     const rows = getLevels(fieldSet);
     const colCount = rows[0].reduce((r, i) => r + i.colSpan, 0);
     const className = this.state.draggingColumn ? 'dragging' : null;
@@ -237,7 +237,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
           </tr>
           {this.renderPinnedRows()}
         </thead>
-      )
+      );
     }
   }
 }

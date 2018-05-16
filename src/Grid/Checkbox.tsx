@@ -3,7 +3,7 @@ import {autobind} from 'core-decorators';
 
 export type CheckboxProps = React.InputHTMLAttributes<HTMLInputElement> & {
   indeterminate?: boolean;
-}
+};
 
 export class Checkbox extends React.Component<CheckboxProps, {
 }> {
