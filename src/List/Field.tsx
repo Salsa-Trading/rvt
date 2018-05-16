@@ -63,12 +63,11 @@ export abstract class FieldBase implements FieldPropsBase {
   public filterable?: boolean;
   public sortDirection?: SortDirection;
   public filter?: any;
-  public hidden?: boolean;
+  public abstract hidden?: boolean;
   public showAlways?: boolean;
 
   constructor(props: FieldPropsBase, fieldDisplay: FieldDisplay) {
     Object.assign(this, props);
-    this.hidden = fieldDisplay && !isNil(fieldDisplay.hidden) ? fieldDisplay.hidden : props.hidden;
     this.width = fieldDisplay && !isNil(fieldDisplay.width) ? fieldDisplay.width : props.width;
   }
 
@@ -100,12 +99,13 @@ export class Field extends FieldBase implements FieldProps {
 
   public format?: FormatType;
   public cell?: CellType;
+  public hidden?: boolean;
 
   constructor(props: FieldProps, fieldDisplay: FieldDisplay) {
     super(props, fieldDisplay);
+    this.hidden = fieldDisplay && !isNil(fieldDisplay.hidden) ? fieldDisplay.hidden : props.hidden;
     this.cell = props.cell;
   }
-
 }
 
 export const FieldBasePropTypes = {

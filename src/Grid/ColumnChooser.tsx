@@ -64,7 +64,7 @@ export default class ColumnChooser extends React.Component<ColumnChooserProps, {
                   type='checkbox'
                   id={field.name}
                   checked={!field.hidden}
-                  disabled={field.showAlways || field.sortDirection || field.filter}
+                  disabled={!field.hidden && field.showAlways}
                   onChange={this.onChange.bind(this, field)}
                 />
                 {name}

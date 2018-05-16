@@ -14,7 +14,6 @@ export class FieldSet extends FieldBase {
 
   public name: string;
   public header: JSX.Element|string;
-  public hidden?: boolean;
   public width?: number|string;
   public children: FieldBase[];
 
@@ -44,6 +43,22 @@ export class FieldSet extends FieldBase {
       }
       return aIndex - bIndex;
     });
+  }
+
+  public get hidden(): boolean {
+    return this.children.every(f => f.hidden);
+  }
+
+  public set hidden(hide: boolean) {
+    this.children.forEach(f => {
+      if(!(f.showAlways && hide)) {
+        f.hidden = hide;
+      }
+    });
+  }
+
+  public get partiallyHidden(): boolean {
+    return this.children.some(c => c.hidden) && this.children.some(c => !c.hidden);
   }
 
   public getFields(): Field[] {
