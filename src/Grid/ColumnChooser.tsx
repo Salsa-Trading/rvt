@@ -3,6 +3,7 @@ import * as PropTypes from 'prop-types';
 import { Field, FieldBase } from '../List/Field';
 import { FieldSet, isFieldSet } from '../List/FieldSet';
 import safeMouseDown from '../utils/safeMouseDown';
+import { Checkbox } from './Checkbox';
 
 export type ColumnChooserProps = {
   fieldSet: FieldSet;
@@ -60,12 +61,12 @@ export default class ColumnChooser extends React.Component<ColumnChooserProps, {
             }
             return <li key={field.name}>
               <label>
-                <input
-                  type='checkbox'
+                <Checkbox
                   id={field.name}
                   checked={!field.hidden}
                   disabled={!field.hidden && field.showAlways}
                   onChange={this.onChange.bind(this, field)}
+                  indeterminate={isFieldSet(field) ? field.partiallyHidden : false}
                 />
                 {name}
               </label>
@@ -109,7 +110,7 @@ export default class ColumnChooser extends React.Component<ColumnChooserProps, {
 
     return (
       <div className='column-chooser-pane'>
-        <div className='btn-group'>
+        <div className='btn-group' style={{width: '100%'}}>
           <label className='btn btn-sm btn-secondary'>
             <input
               type='checkbox'

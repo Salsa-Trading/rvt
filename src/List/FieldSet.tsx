@@ -58,7 +58,10 @@ export class FieldSet extends FieldBase {
   }
 
   public get partiallyHidden(): boolean {
-    return this.children.some(c => c.hidden) && this.children.some(c => !c.hidden);
+    const someHidden = this.children.some(c => c.hidden);
+    const someVisible = this.children.some(c => !c.hidden);
+    const somePartial = this.children.filter(isFieldSet).some(c => c.partiallyHidden);
+    return (someHidden && someVisible) || somePartial;
   }
 
   public getFields(): Field[] {
