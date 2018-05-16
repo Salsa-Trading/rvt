@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import { Field } from '../List/Field';
-import { FieldSet } from '../List/FieldSet';
+import { Field, FieldBase } from '../List/Field';
+import { FieldSet, isFieldSet } from '../List/FieldSet';
 import safeMouseDown from '../utils/safeMouseDown';
 
 export type ColumnChooserProps = {
@@ -47,32 +47,59 @@ export default class ColumnChooser extends React.Component<ColumnChooserProps, {
 
   private renderFieldSet(fieldSet: FieldSet) {
     return (
-      <ul>
-        {fieldSet.children.map(field => {
-          let children;
-          if(field instanceof FieldSet) {
-            children = this.renderFieldSet(field);
-          }
-          let name = field.name;
-          if(typeof field.header === 'string' || field.header instanceof String) {
-            name = field.header as string;
-          }
-          return <li key={field.name}>
-            <label>
-              <input
-                type='checkbox'
-                id={field.name}
-                checked={!field.hidden}
-                disabled={field.showAlways || field.sortDirection || field.filter}
-                onChange={this.onChange.bind(this, field)}
-              />
-              {name}
-            </label>
-            {children}
-          </li>;
-        })}
-      </ul>
+      <div>
+        <ul>
+          {fieldSet.children.map(field => {
+            let children;
+            if(field instanceof FieldSet) {
+              children = this.renderFieldSet(field);
+            }
+            let name = field.name;
+            if(typeof field.header === 'string' || field.header instanceof String) {
+              name = field.header as string;
+            }
+            return <li key={field.name}>
+              <label>
+                <input
+                  type='checkbox'
+                  id={field.name}
+                  checked={!field.hidden}
+                  disabled={field.showAlways || field.sortDirection || field.filter}
+                  onChange={this.onChange.bind(this, field)}
+                />
+                {name}
+              </label>
+              {children}
+            </li>;
+          })}
+        </ul>
+      </div>
     );
+  }
+
+  private every(fieldSet: FieldSet, shouldBeVisible: boolean): boolean {
+    const parentIsVisible = !fieldSet.hidden;
+    const parentState = parentIsVisible === shouldBeVisible;
+    const childrenState = fieldSet.children.every((f) => {
+      if (isFieldSet(f)) {
+        return this.every(f, shouldBeVisible);
+      } else {
+        const childIsVisisble = !f.hidden;
+        return childIsVisisble === shouldBeVisible;
+      }
+    });
+    return parentState && childrenState;
+  }
+
+  private setAll(fieldSet: FieldSet, shouldBeVisible: boolean): void {
+    this.props.onHiddenChange(!shouldBeVisible, fieldSet);
+    fieldSet.children.forEach((f: FieldBase) => {
+      if(isFieldSet(f)) {
+        this.setAll(f, shouldBeVisible);
+      } else {
+        this.props.onHiddenChange(!shouldBeVisible, f);
+      }
+    });
   }
 
   public render() {
@@ -82,6 +109,24 @@ export default class ColumnChooser extends React.Component<ColumnChooserProps, {
 
     return (
       <div className='column-chooser-pane'>
+        <div className='btn-group'>
+          <label className='btn btn-sm btn-secondary'>
+            <input
+              type='checkbox'
+              checked={this.every(fieldSet, true)}
+              onChange={() => this.setAll(fieldSet, true)}
+            />
+            All
+          </label>
+          <label className='btn btn-sm btn-secondary'>
+            <input
+              type='checkbox'
+              checked={this.every(fieldSet, false)}
+              onChange={() => this.setAll(fieldSet, false)}
+            />
+            None
+          </label>
+        </div>
         {this.renderFieldSet(fieldSet)}
       </div>
     );

@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { autobind } from 'core-decorators';
+import { ColumnChooserProps } from './ColumnChooser';
 
 export default class Filter extends React.Component<{
-  columnChooser: any;
+  columnChooser: React.ReactElement<ColumnChooserProps>;
   showColumnChooser: boolean;
   onToggleVisibility: (isVisible: boolean) => void;
 }, {}> {

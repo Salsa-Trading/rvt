@@ -174,3 +174,7 @@ export class FieldSetDefinition extends React.Component<FieldSetProps, {}> {
     return null;
   }
 }
+
+export function isFieldSet(field: FieldBase): field is FieldSet {
+  return Array.isArray(field['children']);
+}

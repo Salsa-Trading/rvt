@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
-import { isEqual } from 'lodash';
+import { isEqual, flatten } from 'lodash';
 
 import { Field, FieldBase } from '../List/Field';
 import { FieldSet, isVisible } from '../List/FieldSet';
@@ -132,10 +132,8 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
   }
 
   private renderHeaderRow(rowCount: number, colCount: number, rowIndex: number, fieldHeader: FieldHeader, colIndex: number, fieldHeadersOnRow: FieldHeader[]) {
-    const { showColumnChooser } = this.state;
     const { field, colSpan, rowSpan } = fieldHeader;
-    const { fieldSet, onSortSelection, onFilterChanged, onWidthChanged, onHiddenChange } = this.props;
-    let columnChooser, columnChooserButton;
+    const { fieldSet, onSortSelection, onFilterChanged, onWidthChanged } = this.props;
 
     const isFirstRow = rowIndex === 0;
     const isLastRow = ((rowIndex + rowSpan) === rowCount);
@@ -147,22 +145,9 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     let isLastCol = colSum === colCount;
 
     // place ColumnChooser in the last column of the first row
-    if(isFirstRow && isLastCol) {
-      columnChooser = (
-        <ColumnChooser
-          fieldSet={fieldSet}
-          onHiddenChange={onHiddenChange}
-          onToggleVisibility={this.onToggleColumnChooserVisibility}
-        />
-      );
-      columnChooserButton = (
-        <ColumnChooserButton
-          columnChooser={columnChooser}
-          onToggleVisibility={this.onToggleColumnChooserVisibility}
-          showColumnChooser={showColumnChooser}
-        />
-      );
-    }
+    const columnChooserButton = isFirstRow && isLastCol
+      ? this.renderColumnChooserButton()
+      : null;
 
     return (
       <GridHeaderCell
@@ -177,6 +162,27 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
         onMouseDown={this.onFieldMouseDown}
         canResize={isLastRow && !isLastCol}
         columnChooserButton={columnChooserButton}
+      />
+    );
+  }
+
+  private renderColumnChooserButton(): React.ReactElement<any> {
+    const { fieldSet, onHiddenChange } = this.props;
+    const { showColumnChooser } = this.state;
+
+    const columnChooser = (
+      <ColumnChooser
+        fieldSet={fieldSet}
+        onHiddenChange={onHiddenChange}
+        onToggleVisibility={this.onToggleColumnChooserVisibility}
+      />
+    );
+
+    return (
+      <ColumnChooserButton
+        columnChooser={columnChooser}
+        onToggleVisibility={this.onToggleColumnChooserVisibility}
+        showColumnChooser={showColumnChooser}
       />
     );
   }
@@ -204,18 +210,34 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     const rows = getLevels(fieldSet);
     const colCount = rows[0].reduce((r, i) => r + i.colSpan, 0);
     const className = this.state.draggingColumn ? 'dragging' : null;
-    return (
-      <thead className={className}>
-        {rows.map((row: FieldHeader[], r: number) => {
-          return (
-            <tr key={r}>
-              {r === 0 && renderGridRowHeader(rowHeader, null, rows.length)}
-              {row.map(this.renderHeaderRow.bind(this, rows.length, colCount, r))}
-            </tr>
-          );
-        })}
-        {this.renderPinnedRows()}
-      </thead>
-    );
+
+    if(flatten(rows).length >= 1) {
+      return (
+        <thead className={className}>
+          {rows.map((row: FieldHeader[], r: number) => {
+            return (
+              <tr key={r}>
+                {r === 0 && renderGridRowHeader(rowHeader, null, rows.length)}
+                {row.map(this.renderHeaderRow.bind(this, rows.length, colCount, r))}
+              </tr>
+            );
+          })}
+          {this.renderPinnedRows()}
+        </thead>
+      );
+    } else {
+      return (
+        <thead className={className}>
+          <tr>
+            <th>
+              <span style={{float: 'right'}}>
+                {this.renderColumnChooserButton()}
+              </span>
+            </th>
+          </tr>
+          {this.renderPinnedRows()}
+        </thead>
+      )
+    }
   }
 }
