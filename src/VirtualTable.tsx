@@ -465,6 +465,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     const { rowCount } = this.props;
     const { headerHeight, rowHeight } = this.state;
     const topRow = this.getTopRow();
+    const scrollerVisible = rowCount > this.state.maxVisibleRows;
 
     return (
       <div
@@ -476,7 +477,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
         <div style={{overflowX: 'auto', overflowY: 'hidden'}}>
           <table className={tableClassName} style={tableStyle}>
             {header}
-            <tbody>
+            <tbody className={scrollerVisible ? 'rvt-scroller' : ''}>
               {rows}
             </tbody>
           </table>
@@ -486,7 +487,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
           scrollOffset={topRow * rowHeight}
           margin={(headerHeight || 0)}
           size={this.visibleRows() * rowHeight}
-          visible={rowCount > this.state.maxVisibleRows}
+          visible={scrollerVisible}
           virtualSize={rowHeight * rowCount}
         />
       </div>
