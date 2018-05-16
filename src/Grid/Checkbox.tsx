@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {autobind} from 'core-decorators';
+import { autobind } from 'core-decorators';
+import { omit } from 'lodash';
 
 export type CheckboxProps = React.InputHTMLAttributes<HTMLInputElement> & {
   indeterminate?: boolean;
@@ -25,9 +26,11 @@ export class Checkbox extends React.Component<CheckboxProps, {
   }
 
   public render(): React.ReactNode {
+    const props = omit(this.props, 'indeterminate');
+
     return (
       <input
-        {...this.props}
+        {...props}
         type='checkbox'
         ref={this.refFn}
       />
