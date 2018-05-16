@@ -94,13 +94,6 @@ export default class ColumnChooser extends React.Component<ColumnChooserProps, {
 
   private setAll(fieldSet: FieldSet, shouldBeVisible: boolean): void {
     this.props.onHiddenChange(!shouldBeVisible, fieldSet);
-    fieldSet.children.forEach((f: FieldBase) => {
-      if(isFieldSet(f)) {
-        this.setAll(f, shouldBeVisible);
-      } else {
-        this.props.onHiddenChange(!shouldBeVisible, f);
-      }
-    });
   }
 
   public render() {
