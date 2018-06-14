@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import { Field, FieldBase } from '../List/Field';
+import { Field } from '../List/Field';
 import { FieldSet, isFieldSet } from '../List/FieldSet';
 import safeMouseDown from '../utils/safeMouseDown';
 import { Checkbox } from './Checkbox';

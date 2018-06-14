@@ -4,7 +4,13 @@ import { autobind } from 'core-decorators';
 import Scroller from './Scroller';
 import { difference, omit, zipObject, map, debounce } from 'lodash';
 
-const propTypes = {
+type TableStyles = {
+  container: React.CSSProperties;
+  table: React.CSSProperties;
+  tbody: React.CSSProperties;
+};
+
+const propTypes: {[K in keyof VirtualTableProps<any>]: any} = {
   /**
     * The total number of rows in the data set, used to calculate the scrollbar thumb size & scroll range
     */
@@ -85,7 +91,11 @@ const propTypes = {
   /**
    *  Style attributes to apply to the table element
    */
-  style: PropTypes.any,
+  tableStyle: PropTypes.object,
+  /**
+   *  Style attributes to apply to the tbody element
+   */
+  tbodyStyle: PropTypes.object,
   /**
    *  The React Component or React Stateless function to render the header (must render a <thead> root element
    */
@@ -145,9 +155,10 @@ export type VirtualTableBaseProps = {
   rowHeight?: number;
   headerHeight?: number;
   containerClassName?: string;
-  containerStyle?: React.CSSProperties;
   className?: string;
-  style?: React.CSSProperties;
+  containerStyle?: React.CSSProperties;
+  tableStyle?: React.CSSProperties;
+  tbodyStyle?: React.CSSProperties;
   windowResizeEvents?: string[];
 };
 
@@ -439,31 +450,44 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   }
 
   public render() {
-    const { height, width } = this.props;
+    const { height, width, containerStyle = {}, tableStyle = {}, tbodyStyle = {} } = this.props;
     const { calculatingHeights } = this.state;
     const header = this.buildHeader();
     const rows = this.buildRows();
     const tableClassName = this.props.className;
-    const tableStyle = Object.assign({ width: '100%' }, this.props.style);
-    const containerStyle = Object.assign({
-      position: 'relative',
-      display: 'inline-block',
-      height,
-      width
-    }, this.props.containerStyle);
+
+    const styles: TableStyles = {
+      container: {
+        position: 'relative',
+        display: 'inline-block',
+        height,
+        width,
+        ...containerStyle
+      },
+      table: {
+        width: '100%',
+        ...tableStyle
+      },
+      tbody: tbodyStyle
+    };
+
     if (calculatingHeights) {
-      return this.renderCalculator(header, rows, containerStyle, tableClassName, tableStyle);
+      return this.renderCalculator(header, rows, tableClassName, styles);
     }
-    return this.renderTable(header, rows, containerStyle, tableClassName, tableStyle);
+
+    return this.renderTable(header, rows, tableClassName, styles);
   }
 
   /**
    * Render the table
    * @private
    */
-  private renderTable(header, rows, containerStyle, tableClassName, tableStyle) {
+  private renderTable(header, rows, tableClassName: string, styles: TableStyles) {
     const { rowCount } = this.props;
     const { headerHeight, rowHeight } = this.state;
+    const tableStyle: React.CSSProperties = styles.table || {};
+    const containerStyle: React.CSSProperties = styles.table || {};
+    const tbodyStyle: React.CSSProperties = styles.table || {};
     const topRow = this.getTopRow();
     const scrollerVisible = rowCount > this.state.maxVisibleRows;
 
@@ -477,7 +501,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
         <div style={{overflowX: 'auto', overflowY: 'hidden'}}>
           <table className={tableClassName} style={tableStyle}>
             {header}
-            <tbody className={scrollerVisible ? 'rvt-scroller' : ''}>
+            <tbody className={scrollerVisible ? 'rvt-scroller' : ''} style={tbodyStyle}>
               {rows}
             </tbody>
           </table>
@@ -498,17 +522,17 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * Render the table calculator to determine heights
    * @private
    */
-  private renderCalculator(header, rows, containerStyle, tableClassName, tableStyle) {
+  private renderCalculator(header, rows, tableClassName, styles: TableStyles) {
     return (
       <div
         className={`${this.className} calculator`}
         ref={this.setContainerRef}
-        style={Object.assign({}, containerStyle, {visibility: 'hidden'})}
+        style={{...styles.container, visibility: 'hidden'}}
       >
         <div style={{overflowX: 'auto', overflowY: 'hidden'}}>
-          <table className={tableClassName} style={tableStyle}>
+          <table className={tableClassName} style={styles.table}>
             {header}
-            <tbody>
+            <tbody style={styles.tbody}>
               {rows}
             </tbody>
           </table>

@@ -37,12 +37,6 @@ describe('<Table />', () => {
       expect(wrapper.first().is('div')).to.be.true;
     });
 
-    it('should have a root DIV with position:relative & display:inline-block ', () => {
-      const div = wrapper.first();
-      expect(div).to.have.style('position', 'relative');
-      expect(div).to.have.style('display', 'inline-block');
-    });
-
     it('should contain 1 TABLE element', () => {
       expect(wrapper).to.have.exactly(1).descendants('table');
     });
