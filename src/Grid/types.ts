@@ -34,4 +34,6 @@ export type BaseGridProps<TData extends object> = {
   pinnedRows?: GridRowProps<TData>[];
   rowComponent?: React.ComponentType<GridRowComponentProps<TData>>;
   rowHeaderComponent?: React.ComponentType<GridRowHeaderProps<TData>>;
+  tableStyle?: React.CSSProperties;
+  tbodyStyle?: React.CSSProperties;
 };

@@ -7,7 +7,7 @@ import { isEqual } from 'lodash';
 
 export type Diff<T extends string, U extends string> = ({[P in T]: P } & {[P in U]: never } & { [x: string]: never })[T];
 export type Omit<T, K extends keyof T> = Pick<T, Diff<keyof T, K>>;
-export type TablePropsWithoutData = Omit<React.HTMLProps<HTMLTableElement>, 'data' | 'onClick' | 'onDoubleClick' | 'onMouseDown'>;
+export type TablePropsWithoutData = Omit<React.HTMLProps<HTMLTableElement>, 'data' | 'onClick' | 'onDoubleClick' | 'onMouseDown' | 'style'>;
 
 export type GridProps<TData extends object> = TablePropsWithoutData & BaseGridProps<TData> & {
   data: GridRowProps<TData>[];
@@ -86,6 +86,8 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
       rowComponent,
       rowHeaderComponent,
       secondaryHeaderComponent,
+      tableStyle,
+      tbodyStyle,
       ...rest
     } = this.props;
 
@@ -108,9 +110,9 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
 
     return (
       <div className='rvt'>
-        <table {...rest}>
+        <table {...rest} style={tableStyle}>
           {header}
-          <tbody>
+          <tbody style={tbodyStyle}>
             {data.map((d, i) => {
               return React.cloneElement(row, {
                 key: i,
