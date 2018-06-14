@@ -486,8 +486,8 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     const { rowCount } = this.props;
     const { headerHeight, rowHeight } = this.state;
     const tableStyle: React.CSSProperties = styles.table || {};
-    const containerStyle: React.CSSProperties = styles.table || {};
-    const tbodyStyle: React.CSSProperties = styles.table || {};
+    const containerStyle: React.CSSProperties = styles.container || {};
+    const tbodyStyle: React.CSSProperties = styles.tbody || {};
     const topRow = this.getTopRow();
     const scrollerVisible = rowCount > this.state.maxVisibleRows;
 
