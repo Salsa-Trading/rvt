@@ -166,7 +166,7 @@ export type VirtualTableProps<TData extends object> = VirtualTableBaseProps & {
   header: React.ComponentType<any>|React.ReactElement<any>;
   row: React.ComponentType<TableRowProps<TData>> | React.ReactElement<TableRowProps<TData>>;
   getRow?: (rowIndex: number) => TableRowProps<TData>;
-  getRows?: (topRowIndex: number, count: number) => TableRowProps<TData>[];
+  getRows?: (topRowIndex: number, count: number, maxVisibleRows: number) => TableRowProps<TData>[];
 };
 
 export default class VirtualTable<TData extends object> extends React.PureComponent<VirtualTableProps<TData>, {
@@ -384,7 +384,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
 
     let rowProps: TableRowProps<TData>[];
     if(getRows) {
-      rowProps = getRows(topRow, numRows);
+      rowProps = getRows(topRow, numRows, this.state.maxVisibleRows);
     }
     else {
       rowProps = new Array(numRows);
