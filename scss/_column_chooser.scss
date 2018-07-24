@@ -3,39 +3,44 @@ $column-chooser-pane-bg-color: $white;
 $column-chooser-pane-border: 1px solid lightgray;
 
 .rvt thead th {
+  .column-chooser {
+    position: relative;
+  }
+
   button.column-chooser-btn {
     @extend %button;
     white-space: nowrap;
-    position: relative;
+  }
 
-    .column-chooser-pane {
-      position: absolute;
-      z-index: 100;
-      right: 5px;
+  .column-chooser-pane {
+    position: absolute;
+    z-index: 100;
+    right: 5px;
 
-      padding: 1.5rem;
-      border-radius: 1rem;
-      border: $column-chooser-pane-border;
-      background-color: $column-chooser-pane-bg-color;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: $column-chooser-pane-border;
+    background-color: $column-chooser-pane-bg-color;
 
-      ul {
-        padding: 0;
-        li {
-          list-style: none;
-          ul {
-            padding-left: 1rem;
-          }
+    ul {
+      padding: 0;
+      li {
+        list-style: none;
+
+        ul {
+          padding-left: 1rem;
         }
       }
+    }
 
-      input {
-        vertical-align: text-bottom;
-        margin-right: 0.5rem;
-      }
+    input {
+      vertical-align: text-bottom;
+      margin-right: 0.5rem;
+    }
 
-      label {
-        margin-bottom: 0;
-      }
+    label {
+      margin-bottom: 0;
     }
   }
 }
+

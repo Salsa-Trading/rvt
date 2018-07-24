@@ -24,7 +24,7 @@ export default class Filter extends React.Component<{
   public render() {
     const { columnChooser, showColumnChooser } = this.props;
     return (
-      <div>
+      <div className='column-chooser'>
         <button className='column-chooser-btn' onClick={this.toggleFilterPane} />
         {showColumnChooser && columnChooser}
       </div>
