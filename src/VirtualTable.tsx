@@ -498,7 +498,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
         className={this.className}
         style={containerStyle}
       >
-        <div style={{overflowX: 'auto', overflowY: 'hidden'}}>
+        <div className='rvt-virtual-table-container'>
           <table className={tableClassName} style={tableStyle}>
             {header}
             <tbody className={scrollerVisible ? 'rvt-scroller' : ''} style={tbodyStyle}>
@@ -529,7 +529,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
         ref={this.setContainerRef}
         style={{...styles.container, visibility: 'hidden'}}
       >
-        <div style={{overflowX: 'auto', overflowY: 'hidden'}}>
+        <div className='rvt-virtual-table-container'>
           <table className={tableClassName} style={styles.table}>
             {header}
             <tbody style={styles.tbody}>

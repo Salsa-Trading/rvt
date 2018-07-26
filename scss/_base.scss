@@ -11,6 +11,11 @@ $sort-direction-color: royalblue;
 }
 
 .rvt {
+  .rvt-virtual-table-container {
+    overflow-x: auto;
+    overflow-y: visible;
+  }
+
   thead {
     &.dragging {
       cursor: grabbing;
