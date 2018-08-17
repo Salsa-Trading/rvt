@@ -33,7 +33,7 @@ function moduleObj() {
         exclude: /node_modules/,
         loader: 'ts-loader',
         options: {
-          configFileName: './tsconfig.json',
+          configFile: 'tsconfig.json',
           compilerOptions: {
             declaration: false
           }

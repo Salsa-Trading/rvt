@@ -69,14 +69,14 @@ function moduleObj() {
     }, {
       loader: 'ts-loader',
       options: {
-        configFile: 'tsconfig.json'
+        configFile: `${projectRoot}/tsconfig.json`
       }
     }];
   } else {
     tsLoaders = [{
       loader: 'ts-loader',
       options: {
-        configFile: 'tsconfig.json'
+        configFile: `${projectRoot}/tsconfig.json`
       }
     }];
   }
