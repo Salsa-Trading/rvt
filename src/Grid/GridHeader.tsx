@@ -186,7 +186,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
         showColumnChooser
       }
     } = this;
-    
+
     const columnChooser = (
       <ColumnChooser
         fieldSet={fieldSet}
