@@ -134,8 +134,8 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
   }
 
   @autobind
-  private onToggleColumnChooserVisibility() {
-    this.setState({showColumnChooser: !this.state.showColumnChooser});
+  private onToggleColumnChooserVisibility(showColumnChooser: boolean) {
+    this.setState({showColumnChooser});
   }
 
   private renderHeaderRow(rowCount: number, colCount: number, rowIndex: number, fieldHeader: FieldHeader, colIndex: number, fieldHeadersOnRow: FieldHeader[]) {
