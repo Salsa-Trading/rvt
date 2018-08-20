@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { createPortal } from 'react-dom';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
 import { isEqual, flatten } from 'lodash';
@@ -52,6 +53,9 @@ export type GridHeaderProps<TData extends object> = ListViewProps & {
   gridRow?: React.ComponentType<GridRowComponentProps<TData>>|React.ReactElement<GridRowComponentProps<TData>>;
   rowHeader?: React.ComponentType<GridRowHeaderProps<TData>>;
   secondaryHeader?: React.ComponentType<GridSecondaryHeaderProps>;
+  chooserMountPoint?: HTMLElement,
+  showCustomChooser?: boolean,
+  hideDefaultChooser?: boolean
 };
 
 export default class GridHeader<TData extends object> extends React.Component<GridHeaderProps<TData>, {
@@ -65,7 +69,10 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     onFilterChanged: PropTypes.func,
     onWidthChanged: PropTypes.func,
     onMove: PropTypes.func,
-    onHiddenChange: PropTypes.func
+    onHiddenChange: PropTypes.func,
+    chooserMountPoint: PropTypes.any,
+    showCustomChooser: PropTypes.bool,
+    hideDefaultChooser: PropTypes.bool
   };
 
   constructor(props: GridHeaderProps<TData>, context) {
@@ -76,6 +83,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     };
   }
 
+  private chooserMountPoint;
   public shouldComponentUpdate(nextProps: GridHeaderProps<TData>, nextState) {
     return !(isEqual(this.props, nextProps) && isEqual(this.state, nextState));
   }
@@ -127,8 +135,8 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
   }
 
   @autobind
-  private onToggleColumnChooserVisibility(isVisible: boolean) {
-    this.setState({showColumnChooser: isVisible});
+  private onToggleColumnChooserVisibility() {
+    this.setState({showColumnChooser: !this.state.showColumnChooser});
   }
 
   private renderHeaderRow(rowCount: number, colCount: number, rowIndex: number, fieldHeader: FieldHeader, colIndex: number, fieldHeadersOnRow: FieldHeader[]) {
@@ -166,10 +174,20 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     );
   }
 
-  private renderColumnChooserButton(): React.ReactElement<any> {
-    const { fieldSet, onHiddenChange } = this.props;
-    const { showColumnChooser } = this.state;
-
+  private renderColumnChooserButton(): any {
+    const {
+      props: {
+        fieldSet,
+        onHiddenChange,
+        chooserMountPoint,
+        showCustomChooser,
+        hideDefaultChooser
+      },
+      state: {
+        showColumnChooser
+      }
+    } = this;
+    
     const columnChooser = (
       <ColumnChooser
         fieldSet={fieldSet}
@@ -178,13 +196,19 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
       />
     );
 
-    return (
-      <ColumnChooserButton
-        columnChooser={columnChooser}
-        onToggleVisibility={this.onToggleColumnChooserVisibility}
-        showColumnChooser={showColumnChooser}
-      />
-    );
+    if(chooserMountPoint) {
+      if(showCustomChooser) {
+        return createPortal(columnChooser, chooserMountPoint);
+      }
+    } else if(!hideDefaultChooser) {
+      return (
+        <ColumnChooserButton
+          columnChooser={columnChooser}
+          onToggleVisibility={this.onToggleColumnChooserVisibility}
+          showColumnChooser={showColumnChooser}
+        />
+      );
+    }
   }
 
   public renderPinnedRows() {

@@ -9,6 +9,9 @@ import { isEqual } from 'lodash';
 export type VirtualGridProps<TData extends object> = BaseGridProps<TData> & {
   getRows?: (rowIndex: number, length: number) => GridRowProps<TData>[];
   getRow?: (rowIndex: number) => GridRowProps<TData>;
+  chooserMountPoint?: HTMLElement;
+  showCustomChooser?: boolean;
+  hideDefaultChooser?: boolean;
 };
 
 export type WrappedVirtualGridProps<TData extends object> = VirtualTableBaseProps & ListViewProps & VirtualGridProps<TData>;
@@ -84,6 +87,9 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
       rowComponent,
       rowHeaderComponent,
       secondaryHeaderComponent,
+      chooserMountPoint,
+      showCustomChooser,
+      hideDefaultChooser,
       ...rest
     } = this.props;
 
@@ -101,6 +107,9 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
         secondaryHeader={secondaryHeaderComponent}
         rowHeader={rowHeaderComponent}
         gridRow={row}
+        chooserMountPoint={chooserMountPoint}
+        showCustomChooser={showCustomChooser}
+        hideDefaultChooser={hideDefaultChooser}
       />
     );
 
