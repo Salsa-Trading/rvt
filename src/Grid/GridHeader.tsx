@@ -83,7 +83,6 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     };
   }
 
-  private chooserMountPoint;
   public shouldComponentUpdate(nextProps: GridHeaderProps<TData>, nextState) {
     return !(isEqual(this.props, nextProps) && isEqual(this.state, nextState));
   }
