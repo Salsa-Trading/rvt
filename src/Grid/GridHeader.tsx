@@ -54,7 +54,6 @@ export type GridHeaderProps<TData extends object> = ListViewProps & {
   rowHeader?: React.ComponentType<GridRowHeaderProps<TData>>;
   secondaryHeader?: React.ComponentType<GridSecondaryHeaderProps>;
   chooserMountPoint?: HTMLElement,
-  showCustomChooser?: boolean,
   hideDefaultChooser?: boolean
 };
 
@@ -71,7 +70,6 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     onMove: PropTypes.func,
     onHiddenChange: PropTypes.func,
     chooserMountPoint: PropTypes.any,
-    showCustomChooser: PropTypes.bool,
     hideDefaultChooser: PropTypes.bool
   };
 
@@ -179,7 +177,6 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
         fieldSet,
         onHiddenChange,
         chooserMountPoint,
-        showCustomChooser,
         hideDefaultChooser
       },
       state: {
@@ -196,9 +193,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     );
 
     if(chooserMountPoint) {
-      if(showCustomChooser) {
-        return createPortal(columnChooser, chooserMountPoint);
-      }
+      return createPortal(columnChooser, chooserMountPoint);
     } else if(!hideDefaultChooser) {
       return (
         <ColumnChooserButton
