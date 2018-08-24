@@ -11,6 +11,8 @@ export type TablePropsWithoutData = Omit<React.HTMLProps<HTMLTableElement>, 'dat
 
 export type GridProps<TData extends object> = TablePropsWithoutData & BaseGridProps<TData> & {
   data: GridRowProps<TData>[];
+  chooserMountPoint?: HTMLElement;
+  hideDefaultChooser?: boolean;
 };
 
 export type WrappedGridProps<TData extends object> = GridProps<TData> & ListViewProps;
@@ -88,6 +90,8 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
       secondaryHeaderComponent,
       tableStyle,
       tbodyStyle,
+      chooserMountPoint,
+      hideDefaultChooser,
       ...rest
     } = this.props;
 
@@ -105,6 +109,8 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
         secondaryHeader={secondaryHeaderComponent}
         gridRow={row}
         rowHeader={rowHeaderComponent}
+        chooserMountPoint={chooserMountPoint}
+        hideDefaultChooser={hideDefaultChooser}
       />
     );
 
