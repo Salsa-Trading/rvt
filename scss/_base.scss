@@ -13,12 +13,18 @@ $sort-direction-color: royalblue;
 
 // When fixed layout mode is enabled
 .rvt {
-  width: initial !important;
+  // width: initial !important;
+
+  td,
+  th {
+    white-space: nowrap;
+    width: 10rem;
+  }
 
   table {
     table-layout: fixed !important;
     max-width: none;
-    // min-width: fit-content;
+    width: fit-content !important;
   }
 }
 
