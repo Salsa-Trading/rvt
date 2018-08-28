@@ -10,10 +10,28 @@ $sort-direction-color: royalblue;
   overflow: hidden;
 }
 
+
+// When fixed layout mode is enabled
 .rvt {
+  width: initial !important;
+
+  table {
+    table-layout: fixed !important;
+    max-width: none;
+    // min-width: fit-content;
+  }
+}
+
+.rvt {
+  width: 100%;
+
   .rvt-virtual-table-container {
     overflow-x: auto;
     overflow-y: visible;
+  }
+
+  table {
+    width: initial;
   }
 
   thead {
@@ -28,6 +46,8 @@ $sort-direction-color: royalblue;
     }
 
     th {
+      white-space: nowrap;
+
       &.field-moving-hover {
         background-color: $hover-highlight-color;
       }

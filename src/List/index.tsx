@@ -168,6 +168,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
     private onWidthChanged(width: number, field: Field) {
       const { onListStateChanged } = this.listStateHelper();
       const { fieldSet } = this.state;
+      console.log('width changed', width, field.name)
       field.resize(width);
       onListStateChanged(ListStateChangeType.fields, fieldSet.getFieldDisplay(), field.name);
     }

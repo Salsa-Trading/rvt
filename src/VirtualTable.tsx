@@ -132,7 +132,6 @@ const propTypes: {[K in keyof VirtualTableProps<any>]: any} = {
 };
 
 const defaultProps = {
-  width: '100%',
   scrollWheelRows: 5,
   windowResizeEvents: ['resize']
 };
@@ -465,7 +464,6 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
         ...containerStyle
       },
       table: {
-        width: '100%',
         ...tableStyle
       },
       tbody: tbodyStyle
