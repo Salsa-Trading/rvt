@@ -18,11 +18,18 @@ $sort-direction-color: royalblue;
   td,
   th {
     white-space: nowrap;
-    width: 10rem;
+    width: 20rem;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+
+    &:hover {
+      overflow-x: visible;
+    }
   }
 
   table {
     table-layout: fixed !important;
+    // min-width: 100%;
     max-width: none;
     width: fit-content !important;
   }
