@@ -167,7 +167,12 @@ export class FieldSet extends FieldBase {
   }
 
   public resize(width: number) {
-    // Do nothing, because FieldSets should derive their width from their children
+    const ratio = width / this.width;
+    this.children.forEach((c) => {
+      if(!c.hidden) {
+        c.resize(c.width * ratio);
+      }
+    })
   }
 
 }

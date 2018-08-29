@@ -165,7 +165,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
         onFilterChanged={onFilterChanged}
         onWidthChanged={onWidthChanged}
         onMouseDown={this.onFieldMouseDown}
-        canResize={isLastRow && !isLastCol}
+        canResize={true}
         columnChooserButton={columnChooserButton}
       />
     );

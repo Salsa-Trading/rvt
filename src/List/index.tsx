@@ -198,12 +198,6 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       const { onListStateChanged } = this.listStateHelper();
       const { fieldSet } = this.state;
       
-      const parent = this.findParent(field, fieldSet);
-
-      if(parent) {
-        parent.resize(width);
-      }
-      
       field.resize(width);
       onListStateChanged(ListStateChangeType.fields, fieldSet.getFieldDisplay(), field.name);
     }
