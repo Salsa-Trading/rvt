@@ -4,7 +4,7 @@ import { FieldSet, RootFieldSet } from './FieldSet';
 import { Field, SortDirection, FieldDefaults, FieldDisplay } from './Field';
 import strEnum from '../utils/strEnum';
 import isNil from '../utils/isNil';
-import { isEqual } from 'lodash';
+import { isEqual, find, forEach } from 'lodash';
 
 export type SortState = {fieldName: string, direction: SortDirection}[];
 export type FilterState = {[fieldName: string]: any };
@@ -165,10 +165,44 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       onListStateChanged(ListStateChangeType.filters, filters, field.name);
     }
 
+    private findParent(field: Field, fieldSet): FieldSet {
+      if (!fieldSet) return;
+      let isParent;
+
+      forEach(fieldSet.children, (child) => {
+        if (child.name === field.name) {
+          isParent = true;
+          return false;
+        }
+      });
+
+      let parent;
+      
+      if(isParent) {
+        parent = fieldSet;
+      } else {
+        forEach(fieldSet.children, (child) => {
+          const tmpParent = this.findParent(field, child);
+          if (tmpParent) {
+            // break for loop
+            parent = tmpParent;
+            return false;
+          }
+        });
+      }
+      return parent;
+    }
+
     private onWidthChanged(width: number, field: Field) {
       const { onListStateChanged } = this.listStateHelper();
       const { fieldSet } = this.state;
-      console.log('width changed', width, field.name)
+      
+      const parent = this.findParent(field, fieldSet);
+
+      if(parent) {
+        parent.resize(width);
+      }
+      
       field.resize(width);
       onListStateChanged(ListStateChangeType.fields, fieldSet.getFieldDisplay(), field.name);
     }
