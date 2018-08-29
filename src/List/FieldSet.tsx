@@ -5,11 +5,6 @@ export const RootFieldSet = '_root_';
 
 export interface FieldSetProps extends FieldPropsBase, React.Props<FieldSetProps> {
 }
-
-export interface FieldSetDisplay extends FieldDisplay {
-  children?: FieldDisplay[];
-}
-
 export class FieldSet extends FieldBase {
 
   public name: string;
@@ -17,15 +12,15 @@ export class FieldSet extends FieldBase {
   public width?: number|string;
   public children: FieldBase[];
 
-  constructor(props: FieldSetProps, fieldDefaults: FieldDefaults, fields: FieldSetDisplay) {
+  constructor(props: FieldSetProps, fieldDefaults: FieldDefaults, fields: FieldDisplay) {
     super(props, fields);
 
     let subFields = (fields && fields.children) || [];
 
     this.children = React.Children.map(props.children || [], (c: any) => {
-      let field = subFields.find(cd => cd.name === c.props.name) || {name: c.name};
+      const field = subFields.find(cd => cd.name === c.props.name);
       if(c.type.name === 'FieldSetDefinition') {
-        return new FieldSet(c.props, fieldDefaults, field as FieldSetDisplay);
+        return new FieldSet(c.props, fieldDefaults, field as FieldDisplay);
       }
       if(c.type.name === 'FieldDefinition') {
         return new Field({...fieldDefaults, ...c.props}, field);
@@ -137,7 +132,7 @@ export class FieldSet extends FieldBase {
     return this.children[index];
   }
 
-  public getFieldDisplay(): FieldSetDisplay {
+  public getFieldDisplay(): FieldDisplay {
     return {
       name: this.name,
       width: this.width,

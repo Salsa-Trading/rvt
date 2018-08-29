@@ -103,7 +103,8 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
         c.sortDirection = (sortDirection && sortDirection.direction) || c.sortDirection;
         c.filter = filters[c.name];
       });
-      return fieldSet;
+
+      return setDefaultWidths(fieldSet);
     }
 
     private listStateHelper() {
