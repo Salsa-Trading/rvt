@@ -17,7 +17,7 @@ export type FieldDefaults = {
 
 export interface FieldDisplay {
   name: string;
-  width?: number|string;
+  width?: number;
   hidden?: boolean;
   children?: FieldDisplay[];
 }
@@ -35,7 +35,7 @@ export interface FieldPropsBase {
   name: string;
   header?: HeaderType;
   filterControl?: FilterControlType;
-  width?: number|string;
+  width?: number;
   sortable?: boolean;
   filterable?: boolean;
   sortDirection?: SortDirection;
@@ -58,7 +58,7 @@ export abstract class FieldBase implements FieldPropsBase {
   public name: string;
   public header?: HeaderType;
   public filterControl?: FilterControlType;
-  public width?: number|string;
+  public width?: number;
   public sortable?: boolean;
   public filterable?: boolean;
   public sortDirection?: SortDirection;
@@ -75,7 +75,7 @@ export abstract class FieldBase implements FieldPropsBase {
     if(this.hidden) {
       return [];
     }
-    return [this];
+    return [this as Field];
   }
 
   public getFieldDisplay(): FieldDisplay {
@@ -100,11 +100,13 @@ export class Field extends FieldBase implements FieldProps {
   public format?: FormatType;
   public cell?: CellType;
   public hidden?: boolean;
+  public width?: number;
 
   constructor(props: FieldProps, fieldDisplay: FieldDisplay) {
     super(props, fieldDisplay);
     this.hidden = fieldDisplay && !isNil(fieldDisplay.hidden) ? fieldDisplay.hidden : props.hidden;
     this.cell = props.cell;
+    this.width = fieldDisplay && fieldDisplay.width || 150;
   }
 }
 

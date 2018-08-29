@@ -104,7 +104,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
         c.filter = filters[c.name];
       });
 
-      return setDefaultWidths(fieldSet);
+      return fieldSet;
     }
 
     private listStateHelper() {

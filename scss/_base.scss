@@ -18,7 +18,6 @@ $sort-direction-color: royalblue;
   td,
   th {
     white-space: nowrap;
-    width: 20rem;
     overflow-x: hidden;
     text-overflow: ellipsis;
 
@@ -31,7 +30,7 @@ $sort-direction-color: royalblue;
     table-layout: fixed !important;
     // min-width: 100%;
     max-width: none;
-    width: fit-content !important;
+    // width: fit-content !important;
   }
 }
 

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { FieldBase, FieldPropsBase, FieldDefaults, Field, FieldDisplay, FieldBasePropTypes } from './Field';
+import {sum} from 'lodash';
 
 export const RootFieldSet = '_root_';
 
@@ -9,7 +10,6 @@ export class FieldSet extends FieldBase {
 
   public name: string;
   public header: JSX.Element|string;
-  public width?: number|string;
   public children: FieldBase[];
 
   constructor(props: FieldSetProps, fieldDefaults: FieldDefaults, fields: FieldDisplay) {
@@ -38,6 +38,14 @@ export class FieldSet extends FieldBase {
       }
       return aIndex - bIndex;
     });
+  }
+
+  public get width() {
+    return sum(this.children.filter((c) => !c.hidden).map((c) => c.width));
+  }
+
+  public set width(value: number) {
+    // Do nothing
   }
 
   public get hidden(): boolean {
@@ -159,8 +167,7 @@ export class FieldSet extends FieldBase {
   }
 
   public resize(width: number) {
-    // TODO: Add resize logic for field group
-    this.width = width;
+    // Do nothing, because FieldSets should derive their width from their children
   }
 
 }
