@@ -42,7 +42,7 @@ export interface FieldPropsBase {
   filter?: any;
   hidden?: boolean;
   showAlways?: boolean;
-  flexColumns?: boolean;
+  fixedColumnWidth?: boolean;
 }
 
 export type CellProps = {
@@ -105,11 +105,11 @@ export class Field extends FieldBase implements FieldProps {
 
   constructor(props: FieldProps, fieldDisplay: FieldDisplay) {
     super(props, fieldDisplay);
-    const { cell, hidden, flexColumns } = props;
+    const { cell, hidden, fixedColumnWidth } = props;
     this.hidden = fieldDisplay && !isNil(fieldDisplay.hidden) ? fieldDisplay.hidden : hidden;
     this.cell = cell;
 
-    if (flexColumns) {
+    if (fixedColumnWidth) {
       this.width = (fieldDisplay && fieldDisplay.width) || 150;
     }
   }

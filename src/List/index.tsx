@@ -30,7 +30,7 @@ export type ListProps = {
   onListStateChanged: (newListState: ListState, changeType: ListStateChangeType, fieldName?: string) => void;
   listState?: ListState;
   fieldDefaults?: FieldDefaults;
-  flexColumns?: boolean;
+  fixedColumnWidth?: boolean;
 };
 
 export type ListViewProps = {
@@ -94,10 +94,10 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
     }
 
     private createFields(props: React.Props<ListProps> & ListProps) {
-      const { fieldDefaults, children, flexColumns } = props;
+      const { fieldDefaults, children, fixedColumnWidth } = props;
       const { sorts, filters, fields } = ListContainer.getListState(props.listState);
 
-      const fieldSet = new FieldSet({name: RootFieldSet, children, flexColumns}, fieldDefaults, fields);
+      const fieldSet = new FieldSet({name: RootFieldSet, children, fixedColumnWidth}, fieldDefaults, fields);
       const allFields = fieldSet.getFields();
       allFields.forEach(c => {
         const sortDirection = sorts.find(s => s.fieldName === c.name);

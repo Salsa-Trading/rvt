@@ -13,7 +13,7 @@ $sort-direction-color: royalblue;
 
 // When fixed layout mode is enabled
 .rvt {
-  &.flex-columns {
+  &.fixed-Column-width {
     .rvt-table-container,
     .rvt-virtual-table-container {
       width: max-content;

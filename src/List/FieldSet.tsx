@@ -9,7 +9,7 @@ export interface FieldSetDisplay extends FieldDisplay {
 }
 
 export interface FieldSetProps extends FieldPropsBase, React.Props<FieldSetProps> {
-  flexColumns?: boolean;
+  fixedColumnWidth?: boolean;
 }
 export class FieldSet extends FieldBase {
 
@@ -25,10 +25,10 @@ export class FieldSet extends FieldBase {
     this.children = React.Children.map(props.children || [], (c: any) => {
       const field = subFields.find(cd => cd.name === c.props.name);
       if(c.type.name === 'FieldSetDefinition') {
-        return new FieldSet({...c.props, flexColumns: props.flexColumns}, fieldDefaults, field as FieldDisplay);
+        return new FieldSet({...c.props, fixedColumnWidth: props.fixedColumnWidth}, fieldDefaults, field as FieldDisplay);
       }
       if(c.type.name === 'FieldDefinition') {
-        return new Field({...fieldDefaults, ...c.props, flexColumns: props.flexColumns }, field);
+        return new Field({...fieldDefaults, ...c.props, fixedColumnWidth: props.fixedColumnWidth }, field);
       }
     });
     // Sort defined fields by order in fields.chilren, if the defined field is not found place at the end

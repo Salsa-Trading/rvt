@@ -1,6 +1,6 @@
 import * as React from 'react';
 import GridHeader from './GridHeader';
-import { VirtualGridMouseEventHandler, GridRowProps, BaseGridProps } from './types';
+import { GridRowProps, BaseGridProps } from './types';
 import GridRow from './GridRow';
 import List, { ListProps, ListViewProps } from '../List';
 import { isEqual } from 'lodash';
@@ -13,7 +13,7 @@ export type GridProps<TData extends object> = TablePropsWithoutData & BaseGridPr
   data: GridRowProps<TData>[];
   chooserMountPoint?: HTMLElement;
   hideDefaultChooser?: boolean;
-  flexColumns?: boolean;
+  fixedColumnWidth?: boolean;
 };
 
 export type WrappedGridProps<TData extends object> = GridProps<TData> & ListViewProps;
@@ -93,7 +93,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
       tbodyStyle,
       chooserMountPoint,
       hideDefaultChooser,
-      flexColumns,
+      fixedColumnWidth,
       ...rest
     } = this.props;
 
@@ -117,7 +117,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
     );
 
     return (
-      <div className={`rvt ${flexColumns ? 'flex-columns' : ''}`}>
+      <div className={`rvt ${fixedColumnWidth ? 'fixed-Column-width' : ''}`}>
         <div className='rvt-table-container'>
           <table {...rest} style={tableStyle}>
             {header}
