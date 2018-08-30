@@ -113,7 +113,6 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
         rowHeader={rowHeaderComponent}
         chooserMountPoint={chooserMountPoint}
         hideDefaultChooser={hideDefaultChooser}
-        flexColumns={flexColumns}
       />
     );
 

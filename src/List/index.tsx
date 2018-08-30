@@ -4,7 +4,7 @@ import { FieldSet, RootFieldSet } from './FieldSet';
 import { Field, SortDirection, FieldDefaults, FieldDisplay } from './Field';
 import strEnum from '../utils/strEnum';
 import isNil from '../utils/isNil';
-import { isEqual, find, forEach } from 'lodash';
+import { isEqual } from 'lodash';
 
 export type SortState = {fieldName: string, direction: SortDirection}[];
 export type FilterState = {[fieldName: string]: any };
@@ -30,6 +30,7 @@ export type ListProps = {
   onListStateChanged: (newListState: ListState, changeType: ListStateChangeType, fieldName?: string) => void;
   listState?: ListState;
   fieldDefaults?: FieldDefaults;
+  flexColumns?: boolean;
 };
 
 export type ListViewProps = {
@@ -93,10 +94,10 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
     }
 
     private createFields(props: React.Props<ListProps> & ListProps) {
-      const { fieldDefaults, children } = props;
+      const { fieldDefaults, children, flexColumns } = props;
       const { sorts, filters, fields } = ListContainer.getListState(props.listState);
 
-      const fieldSet = new FieldSet({name: RootFieldSet, children}, fieldDefaults, fields);
+      const fieldSet = new FieldSet({name: RootFieldSet, children, flexColumns}, fieldDefaults, fields);
       const allFields = fieldSet.getFields();
       allFields.forEach(c => {
         const sortDirection = sorts.find(s => s.fieldName === c.name);
@@ -164,34 +165,6 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       }
 
       onListStateChanged(ListStateChangeType.filters, filters, field.name);
-    }
-
-    private findParent(field: Field, fieldSet): FieldSet {
-      if (!fieldSet) return;
-      let isParent;
-
-      forEach(fieldSet.children, (child) => {
-        if (child.name === field.name) {
-          isParent = true;
-          return false;
-        }
-      });
-
-      let parent;
-      
-      if(isParent) {
-        parent = fieldSet;
-      } else {
-        forEach(fieldSet.children, (child) => {
-          const tmpParent = this.findParent(field, child);
-          if (tmpParent) {
-            // break for loop
-            parent = tmpParent;
-            return false;
-          }
-        });
-      }
-      return parent;
     }
 
     private onWidthChanged(width: number, field: Field) {
