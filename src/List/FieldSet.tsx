@@ -4,6 +4,10 @@ import {sum} from 'lodash';
 
 export const RootFieldSet = '_root_';
 
+export interface FieldSetDisplay extends FieldDisplay {
+  children?: FieldDisplay[];
+}
+
 export interface FieldSetProps extends FieldPropsBase, React.Props<FieldSetProps> {
 }
 export class FieldSet extends FieldBase {
