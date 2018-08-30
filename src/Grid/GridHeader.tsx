@@ -54,7 +54,8 @@ export type GridHeaderProps<TData extends object> = ListViewProps & {
   rowHeader?: React.ComponentType<GridRowHeaderProps<TData>>;
   secondaryHeader?: React.ComponentType<GridSecondaryHeaderProps>;
   chooserMountPoint?: HTMLElement,
-  hideDefaultChooser?: boolean
+  hideDefaultChooser?: boolean,
+  flexColumns?: boolean;
 };
 
 export default class GridHeader<TData extends object> extends React.Component<GridHeaderProps<TData>, {

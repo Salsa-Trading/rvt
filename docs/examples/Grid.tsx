@@ -71,6 +71,7 @@ export default class GridExample extends React.Component<{}, {
         className='table table-bordered table-condensed'
         data={rows}
         onDoubleClick={() => console.log('Double click event')}
+        flexColumns={false}
       >
         <FieldSet header='Group 1' name='group1'>
           <Field header={Header} name='col1' sortDirection='asc' />

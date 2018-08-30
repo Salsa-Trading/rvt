@@ -13,6 +13,7 @@ export type GridProps<TData extends object> = TablePropsWithoutData & BaseGridPr
   data: GridRowProps<TData>[];
   chooserMountPoint?: HTMLElement;
   hideDefaultChooser?: boolean;
+  flexColumns?: boolean;
 };
 
 export type WrappedGridProps<TData extends object> = GridProps<TData> & ListViewProps;
@@ -92,6 +93,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
       tbodyStyle,
       chooserMountPoint,
       hideDefaultChooser,
+      flexColumns,
       ...rest
     } = this.props;
 
@@ -111,11 +113,12 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
         rowHeader={rowHeaderComponent}
         chooserMountPoint={chooserMountPoint}
         hideDefaultChooser={hideDefaultChooser}
+        flexColumns={flexColumns}
       />
     );
 
     return (
-      <div className='rvt'>
+      <div className={`rvt ${flexColumns ? 'flex-columns' : ''}`}>
         <div className='rvt-table-container'>
           <table {...rest} style={tableStyle}>
             {header}

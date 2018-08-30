@@ -159,6 +159,7 @@ export type VirtualTableBaseProps = {
   tableStyle?: React.CSSProperties;
   tbodyStyle?: React.CSSProperties;
   windowResizeEvents?: string[];
+  flexColumns?: boolean;
 };
 
 export type VirtualTableProps<TData extends object> = VirtualTableBaseProps & {
@@ -481,7 +482,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * @private
    */
   private renderTable(header, rows, tableClassName: string, styles: TableStyles) {
-    const { rowCount } = this.props;
+    const { rowCount, flexColumns } = this.props;
     const { headerHeight, rowHeight } = this.state;
     const tableStyle: React.CSSProperties = styles.table || {};
     const containerStyle: React.CSSProperties = styles.container || {};
@@ -493,7 +494,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       <div
         onWheel={this.onWheel}
         ref={this.setContainerRef}
-        className={this.className}
+        className={`${this.className} ${flexColumns ? 'flex-columns' : '' }`}
         style={containerStyle}
       >
         <div className='rvt-virtual-table-container'>
