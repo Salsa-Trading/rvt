@@ -13,13 +13,13 @@ $sort-direction-color: royalblue;
 
 // When fixed layout mode is enabled
 .rvt {
-  &.fixed-Column-width {
+  &.fixed-column-width {
     .rvt-table-container,
     .rvt-virtual-table-container {
       width: max-content;
   
       table {
-        table-layout: fixed !important;
+        table-layout: fixed;
         width: initial;
         max-width: none;
   
@@ -59,8 +59,6 @@ $sort-direction-color: royalblue;
     }
 
     th {
-      white-space: nowrap;
-
       &.field-moving-hover {
         background-color: $hover-highlight-color;
       }

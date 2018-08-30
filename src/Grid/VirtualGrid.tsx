@@ -109,6 +109,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
         gridRow={row}
         chooserMountPoint={chooserMountPoint}
         hideDefaultChooser={hideDefaultChooser}
+        fixedColumnWidth={fixedColumnWidth}
       />
     );
 

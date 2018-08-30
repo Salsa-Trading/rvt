@@ -494,7 +494,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       <div
         onWheel={this.onWheel}
         ref={this.setContainerRef}
-        className={`${this.className} ${fixedColumnWidth ? 'fixed-Column-width' : '' }`}
+        className={`${this.className} ${fixedColumnWidth ? 'fixed-column-width' : '' }`}
         style={containerStyle}
       >
         <div className='rvt-virtual-table-container'>

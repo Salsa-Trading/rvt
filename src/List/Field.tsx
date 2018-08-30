@@ -4,6 +4,7 @@ import strEnum from '../utils/strEnum';
 import isNil from '../utils/isNil';
 import { FilterControlProps } from '../Filter';
 
+const DEFAULT_COLUMN_WIDTH = 150;
 export const SortDirection = strEnum([
   'asc',
   'desc'
@@ -110,7 +111,7 @@ export class Field extends FieldBase implements FieldProps {
     this.cell = cell;
 
     if (fixedColumnWidth) {
-      this.width = (fieldDisplay && fieldDisplay.width) || 150;
+      this.width = (fieldDisplay && fieldDisplay.width) || DEFAULT_COLUMN_WIDTH;
     }
   }
 }
