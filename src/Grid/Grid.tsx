@@ -116,18 +116,20 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
 
     return (
       <div className='rvt'>
-        <table {...rest} style={tableStyle}>
-          {header}
-          <tbody style={tbodyStyle}>
-            {data.map((d, i) => {
-              return React.cloneElement(row, {
-                key: i,
-                data: d.data,
-                rowProps: d.rowProps
-              });
-            })}
-          </tbody>
-        </table>
+        <div className='rvt-table-container'>
+          <table {...rest} style={tableStyle}>
+            {header}
+            <tbody style={tbodyStyle}>
+              {data.map((d, i) => {
+                return React.cloneElement(row, {
+                  key: i,
+                  data: d.data,
+                  rowProps: d.rowProps
+                });
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   }

@@ -13,26 +13,28 @@ $sort-direction-color: royalblue;
 
 // When fixed layout mode is enabled
 .rvt {
-  // width: initial !important;
+  .rvt-table-container,
+  .rvt-virtual-table-container {
+    width: max-content;
 
-  td,
-  th {
-    white-space: nowrap;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
+    table {
+      table-layout: fixed !important;
+      max-width: none;
 
-    &:hover {
-      overflow-x: visible;
+      td,
+      th {
+        white-space: nowrap;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+
+        &:hover {
+          overflow-x: visible;
+        }
+      }
     }
   }
-
-  table {
-    table-layout: fixed !important;
-    // min-width: 100%;
-    max-width: none;
-    // width: fit-content !important;
-  }
 }
+
 
 .rvt {
   width: 100%;
