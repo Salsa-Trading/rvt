@@ -35,6 +35,8 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     onFilterChanged: PropTypes.func
   };
 
+  private thRef: HTMLDivElement;
+
   @autobind
   private onResizeHandleMouseDown(e: React.MouseEvent<HTMLDivElement>) {
     if(e.button !== 0) {
@@ -104,6 +106,25 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     return name;
   }
 
+  @autobind
+  private updateHeaderWidth() {
+    this.props.onWidthChanged(this.thRef.clientWidth, this.props.field);
+  }
+  public componentDidMount() {
+    if(!this.props.field.width) {
+      window.addEventListener("load", this.updateHeaderWidth);
+    }
+  }
+
+  public componentWillUnmount() {
+    window.addEventListener("remove", this.updateHeaderWidth);
+  }
+
+  @autobind
+  private setRef(ref) {
+    this.thRef = ref;
+  }
+
   public render() {
     const {
       fieldSet,
@@ -155,8 +176,9 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
       );
     }
     const dataSet = {'data-group': fieldSet.name, 'data-field': name};
+
     return (
-      <th key={name} style={{width, maxWidth: width, padding: 0}} rowSpan={rowSpan} colSpan={colSpan} {...dataSet}>
+      <th key={name} style={{width, maxWidth: width, padding: 0}} rowSpan={rowSpan} colSpan={colSpan} {...dataSet} ref={this.setRef}>
         <div className={`${headerClassName}`}>
           <div className='header' onMouseDown={onMouseDown}>
             <div className='header-text'>

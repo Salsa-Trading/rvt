@@ -106,13 +106,10 @@ export class Field extends FieldBase implements FieldProps {
 
   constructor(props: FieldProps, fieldDisplay: FieldDisplay) {
     super(props, fieldDisplay);
-    const { cell, hidden, fixedColumnWidth } = props;
+    const { cell, hidden } = props;
     this.hidden = fieldDisplay && !isNil(fieldDisplay.hidden) ? fieldDisplay.hidden : hidden;
     this.cell = cell;
-
-    if (fixedColumnWidth) {
-      this.width = (fieldDisplay && fieldDisplay.width) || DEFAULT_COLUMN_WIDTH;
-    }
+    this.width = fieldDisplay && fieldDisplay.width;
   }
 }
 
