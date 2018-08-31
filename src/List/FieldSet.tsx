@@ -177,7 +177,7 @@ export class FieldSet extends FieldBase {
       if(!c.hidden) {
         c.resize(c.width * ratio);
       }
-    })
+    });
   }
 
 }
