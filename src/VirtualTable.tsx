@@ -283,6 +283,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    */
   public componentDidMount() {
     this.debouncedOnWindowResize = debounce(() => this.calculateHeights(), 100);
+    this.debouncedOnWindowResize();
 
     if (this.state.calculatingHeights) {
       setTimeout(() => this.calculateHeights(), 250);

@@ -215,4 +215,3 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
     }
   };
 }
-
