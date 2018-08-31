@@ -44,12 +44,8 @@ $sort-direction-color: royalblue;
   }
 
   .rvt-virtual-table-container {
-    overflow-x: auto;
+    overflow-x: visible;
     overflow-y: visible;
-  }
-
-  table {
-    position: relative;
   }
 
   thead {
