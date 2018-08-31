@@ -4,6 +4,7 @@ import strEnum from '../utils/strEnum';
 import isNil from '../utils/isNil';
 import { FilterControlProps } from '../Filter';
 
+const DEFAULT_COLUMN_WIDTH = 150;
 export const SortDirection = strEnum([
   'asc',
   'desc'
@@ -17,7 +18,7 @@ export type FieldDefaults = {
 
 export interface FieldDisplay {
   name: string;
-  width?: number|string;
+  width?: number;
   hidden?: boolean;
   children?: FieldDisplay[];
 }
@@ -35,13 +36,14 @@ export interface FieldPropsBase {
   name: string;
   header?: HeaderType;
   filterControl?: FilterControlType;
-  width?: number|string;
+  width?: number;
   sortable?: boolean;
   filterable?: boolean;
   sortDirection?: SortDirection;
   filter?: any;
   hidden?: boolean;
   showAlways?: boolean;
+  fixedColumnWidth?: boolean;
 }
 
 export type CellProps = {
@@ -58,7 +60,7 @@ export abstract class FieldBase implements FieldPropsBase {
   public name: string;
   public header?: HeaderType;
   public filterControl?: FilterControlType;
-  public width?: number|string;
+  public width?: number;
   public sortable?: boolean;
   public filterable?: boolean;
   public sortDirection?: SortDirection;
@@ -75,7 +77,7 @@ export abstract class FieldBase implements FieldPropsBase {
     if(this.hidden) {
       return [];
     }
-    return [this];
+    return [this as Field];
   }
 
   public getFieldDisplay(): FieldDisplay {
@@ -100,11 +102,17 @@ export class Field extends FieldBase implements FieldProps {
   public format?: FormatType;
   public cell?: CellType;
   public hidden?: boolean;
+  public width?: number;
 
   constructor(props: FieldProps, fieldDisplay: FieldDisplay) {
     super(props, fieldDisplay);
-    this.hidden = fieldDisplay && !isNil(fieldDisplay.hidden) ? fieldDisplay.hidden : props.hidden;
-    this.cell = props.cell;
+    const { cell, hidden, fixedColumnWidth } = props;
+    this.hidden = fieldDisplay && !isNil(fieldDisplay.hidden) ? fieldDisplay.hidden : hidden;
+    this.cell = cell;
+
+    if (fixedColumnWidth) {
+      this.width = (fieldDisplay && fieldDisplay.width) || DEFAULT_COLUMN_WIDTH;
+    }
   }
 }
 

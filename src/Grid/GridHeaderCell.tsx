@@ -156,7 +156,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     }
     const dataSet = {'data-group': fieldSet.name, 'data-field': name};
     return (
-      <th key={name} style={{width, padding: 0}} rowSpan={rowSpan} colSpan={colSpan} {...dataSet}>
+      <th key={name} style={{width, maxWidth: width, padding: 0}} rowSpan={rowSpan} colSpan={colSpan} {...dataSet}>
         <div className={`${headerClassName}`}>
           <div className='header' onMouseDown={onMouseDown}>
             <div className='header-text'>

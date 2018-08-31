@@ -30,6 +30,7 @@ export type ListProps = {
   onListStateChanged: (newListState: ListState, changeType: ListStateChangeType, fieldName?: string) => void;
   listState?: ListState;
   fieldDefaults?: FieldDefaults;
+  fixedColumnWidth?: boolean;
 };
 
 export type ListViewProps = {
@@ -93,16 +94,17 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
     }
 
     private createFields(props: React.Props<ListProps> & ListProps) {
-      const { fieldDefaults, children } = props;
+      const { fieldDefaults, children, fixedColumnWidth } = props;
       const { sorts, filters, fields } = ListContainer.getListState(props.listState);
 
-      const fieldSet = new FieldSet({name: RootFieldSet, children}, fieldDefaults, fields);
+      const fieldSet = new FieldSet({name: RootFieldSet, children, fixedColumnWidth}, fieldDefaults, fields);
       const allFields = fieldSet.getFields();
       allFields.forEach(c => {
         const sortDirection = sorts.find(s => s.fieldName === c.name);
         c.sortDirection = (sortDirection && sortDirection.direction) || c.sortDirection;
         c.filter = filters[c.name];
       });
+
       return fieldSet;
     }
 
@@ -168,6 +170,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
     private onWidthChanged(width: number, field: Field) {
       const { onListStateChanged } = this.listStateHelper();
       const { fieldSet } = this.state;
+
       field.resize(width);
       onListStateChanged(ListStateChangeType.fields, fieldSet.getFieldDisplay(), field.name);
     }
@@ -212,4 +215,3 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
     }
   };
 }
-

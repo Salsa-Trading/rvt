@@ -1,6 +1,6 @@
 import * as React from 'react';
 import GridHeader from './GridHeader';
-import { VirtualGridMouseEventHandler, GridRowProps, BaseGridProps } from './types';
+import { GridRowProps, BaseGridProps } from './types';
 import GridRow from './GridRow';
 import List, { ListProps, ListViewProps } from '../List';
 import { isEqual } from 'lodash';
@@ -13,6 +13,7 @@ export type GridProps<TData extends object> = TablePropsWithoutData & BaseGridPr
   data: GridRowProps<TData>[];
   chooserMountPoint?: HTMLElement;
   hideDefaultChooser?: boolean;
+  fixedColumnWidth?: boolean;
 };
 
 export type WrappedGridProps<TData extends object> = GridProps<TData> & ListViewProps;
@@ -92,6 +93,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
       tbodyStyle,
       chooserMountPoint,
       hideDefaultChooser,
+      fixedColumnWidth,
       ...rest
     } = this.props;
 
@@ -111,23 +113,26 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
         rowHeader={rowHeaderComponent}
         chooserMountPoint={chooserMountPoint}
         hideDefaultChooser={hideDefaultChooser}
+        fixedColumnWidth={fixedColumnWidth}
       />
     );
 
     return (
-      <div className='rvt'>
-        <table {...rest} style={tableStyle}>
-          {header}
-          <tbody style={tbodyStyle}>
-            {data.map((d, i) => {
-              return React.cloneElement(row, {
-                key: i,
-                data: d.data,
-                rowProps: d.rowProps
-              });
-            })}
-          </tbody>
-        </table>
+      <div className={`rvt ${fixedColumnWidth ? 'fixed-column-width' : ''}`}>
+        <div className='rvt-table-container'>
+          <table {...rest} style={tableStyle}>
+            {header}
+            <tbody style={tbodyStyle}>
+              {data.map((d, i) => {
+                return React.cloneElement(row, {
+                  key: i,
+                  data: d.data,
+                  rowProps: d.rowProps
+                });
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   }

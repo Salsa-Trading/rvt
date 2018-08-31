@@ -1,34 +1,34 @@
 import * as React from 'react';
 import { FieldBase, FieldPropsBase, FieldDefaults, Field, FieldDisplay, FieldBasePropTypes } from './Field';
+import {sum} from 'lodash';
 
 export const RootFieldSet = '_root_';
-
-export interface FieldSetProps extends FieldPropsBase, React.Props<FieldSetProps> {
-}
 
 export interface FieldSetDisplay extends FieldDisplay {
   children?: FieldDisplay[];
 }
 
+export interface FieldSetProps extends FieldPropsBase, React.Props<FieldSetProps> {
+  fixedColumnWidth?: boolean;
+}
 export class FieldSet extends FieldBase {
 
   public name: string;
   public header: JSX.Element|string;
-  public width?: number|string;
   public children: FieldBase[];
 
-  constructor(props: FieldSetProps, fieldDefaults: FieldDefaults, fields: FieldSetDisplay) {
+  constructor(props: FieldSetProps, fieldDefaults: FieldDefaults, fields: FieldDisplay) {
     super(props, fields);
 
     let subFields = (fields && fields.children) || [];
 
     this.children = React.Children.map(props.children || [], (c: any) => {
-      let field = subFields.find(cd => cd.name === c.props.name) || {name: c.name};
+      const field = subFields.find(cd => cd.name === c.props.name);
       if(c.type.name === 'FieldSetDefinition') {
-        return new FieldSet(c.props, fieldDefaults, field as FieldSetDisplay);
+        return new FieldSet({...c.props, fixedColumnWidth: props.fixedColumnWidth}, fieldDefaults, field as FieldDisplay);
       }
       if(c.type.name === 'FieldDefinition') {
-        return new Field({...fieldDefaults, ...c.props}, field);
+        return new Field({...fieldDefaults, ...c.props, fixedColumnWidth: props.fixedColumnWidth }, field);
       }
     });
     // Sort defined fields by order in fields.chilren, if the defined field is not found place at the end
@@ -43,6 +43,14 @@ export class FieldSet extends FieldBase {
       }
       return aIndex - bIndex;
     });
+  }
+
+  public get width() {
+    return sum(this.children.filter((c) => !c.hidden).map((c) => c.width));
+  }
+
+  public set width(value: number) {
+    // Do nothing
   }
 
   public get hidden(): boolean {
@@ -137,7 +145,7 @@ export class FieldSet extends FieldBase {
     return this.children[index];
   }
 
-  public getFieldDisplay(): FieldSetDisplay {
+  public getFieldDisplay(): FieldDisplay {
     return {
       name: this.name,
       width: this.width,
@@ -164,8 +172,12 @@ export class FieldSet extends FieldBase {
   }
 
   public resize(width: number) {
-    // TODO: Add resize logic for field group
-    this.width = width;
+    const ratio = width / this.width;
+    this.children.forEach((c) => {
+      if(!c.hidden) {
+        c.resize(c.width * ratio);
+      }
+    });
   }
 
 }

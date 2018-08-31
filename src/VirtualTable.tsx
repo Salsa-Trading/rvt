@@ -132,7 +132,6 @@ const propTypes: {[K in keyof VirtualTableProps<any>]: any} = {
 };
 
 const defaultProps = {
-  width: '100%',
   scrollWheelRows: 5,
   windowResizeEvents: ['resize']
 };
@@ -160,6 +159,7 @@ export type VirtualTableBaseProps = {
   tableStyle?: React.CSSProperties;
   tbodyStyle?: React.CSSProperties;
   windowResizeEvents?: string[];
+  fixedColumnWidth?: boolean;
 };
 
 export type VirtualTableProps<TData extends object> = VirtualTableBaseProps & {
@@ -283,6 +283,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    */
   public componentDidMount() {
     this.debouncedOnWindowResize = debounce(() => this.calculateHeights(), 100);
+    this.debouncedOnWindowResize();
 
     if (this.state.calculatingHeights) {
       setTimeout(() => this.calculateHeights(), 250);
@@ -465,7 +466,6 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
         ...containerStyle
       },
       table: {
-        width: '100%',
         ...tableStyle
       },
       tbody: tbodyStyle
@@ -483,7 +483,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * @private
    */
   private renderTable(header, rows, tableClassName: string, styles: TableStyles) {
-    const { rowCount } = this.props;
+    const { rowCount, fixedColumnWidth } = this.props;
     const { headerHeight, rowHeight } = this.state;
     const tableStyle: React.CSSProperties = styles.table || {};
     const containerStyle: React.CSSProperties = styles.container || {};
@@ -495,7 +495,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       <div
         onWheel={this.onWheel}
         ref={this.setContainerRef}
-        className={this.className}
+        className={`${this.className} ${fixedColumnWidth ? 'fixed-column-width' : '' }`}
         style={containerStyle}
       >
         <div className='rvt-virtual-table-container'>
@@ -505,15 +505,15 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
               {rows}
             </tbody>
           </table>
+          <Scroller
+            onScroll={this.onScroll}
+            scrollOffset={topRow * rowHeight}
+            margin={(headerHeight || 0)}
+            size={this.visibleRows() * rowHeight}
+            visible={scrollerVisible}
+            virtualSize={rowHeight * rowCount}
+          />
         </div>
-        <Scroller
-          onScroll={this.onScroll}
-          scrollOffset={topRow * rowHeight}
-          margin={(headerHeight || 0)}
-          size={this.visibleRows() * rowHeight}
-          visible={scrollerVisible}
-          virtualSize={rowHeight * rowCount}
-        />
       </div>
     );
   }

@@ -11,6 +11,7 @@ export type VirtualGridProps<TData extends object> = BaseGridProps<TData> & {
   getRow?: (rowIndex: number) => GridRowProps<TData>;
   chooserMountPoint?: HTMLElement;
   hideDefaultChooser?: boolean;
+  fixedColumnWidth?: boolean;
 };
 
 export type WrappedVirtualGridProps<TData extends object> = VirtualTableBaseProps & ListViewProps & VirtualGridProps<TData>;
@@ -88,6 +89,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
       secondaryHeaderComponent,
       chooserMountPoint,
       hideDefaultChooser,
+      fixedColumnWidth,
       ...rest
     } = this.props;
 
@@ -107,6 +109,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
         gridRow={row}
         chooserMountPoint={chooserMountPoint}
         hideDefaultChooser={hideDefaultChooser}
+        fixedColumnWidth={fixedColumnWidth}
       />
     );
 
@@ -114,6 +117,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
       <VirtualTable
         {...rest}
         header={header}
+        fixedColumnWidth={fixedColumnWidth}
         row={row}
       />
     );

@@ -53,8 +53,9 @@ export type GridHeaderProps<TData extends object> = ListViewProps & {
   gridRow?: React.ComponentType<GridRowComponentProps<TData>>|React.ReactElement<GridRowComponentProps<TData>>;
   rowHeader?: React.ComponentType<GridRowHeaderProps<TData>>;
   secondaryHeader?: React.ComponentType<GridSecondaryHeaderProps>;
-  chooserMountPoint?: HTMLElement,
-  hideDefaultChooser?: boolean
+  chooserMountPoint?: HTMLElement
+  hideDefaultChooser?: boolean;
+  fixedColumnWidth?: boolean;
 };
 
 export default class GridHeader<TData extends object> extends React.Component<GridHeaderProps<TData>, {
@@ -138,7 +139,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
 
   private renderHeaderRow(rowCount: number, colCount: number, rowIndex: number, fieldHeader: FieldHeader, colIndex: number, fieldHeadersOnRow: FieldHeader[]) {
     const { field, colSpan, rowSpan } = fieldHeader;
-    const { fieldSet, onSortSelection, onFilterChanged, onWidthChanged } = this.props;
+    const { fieldSet, onSortSelection, onFilterChanged, onWidthChanged, fixedColumnWidth } = this.props;
 
     const isFirstRow = rowIndex === 0;
     const isLastRow = ((rowIndex + rowSpan) === rowCount);
@@ -165,7 +166,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
         onFilterChanged={onFilterChanged}
         onWidthChanged={onWidthChanged}
         onMouseDown={this.onFieldMouseDown}
-        canResize={isLastRow && !isLastCol}
+        canResize={fixedColumnWidth || (isLastRow && !isLastCol)}
         columnChooserButton={columnChooserButton}
       />
     );

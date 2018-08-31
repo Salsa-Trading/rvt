@@ -22,8 +22,7 @@
     "no-arg": true,
     "no-bitwise": false,
     "no-console": [true,
-      "debug",
-      "info",
+      "log",
       "time",
       "timeEnd",
       "trace"
