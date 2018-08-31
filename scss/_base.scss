@@ -31,6 +31,11 @@ $sort-direction-color: royalblue;
 
         th {
           white-space: nowrap;
+
+          .header-text {
+            overflow-x: hidden;
+            text-overflow: ellipsis;
+          }
         }
       }
     }
@@ -68,27 +73,29 @@ $sort-direction-color: royalblue;
       }
 
       .grid-header-cell {
+        width: 100%;
         display: flex;
+        flex-direction: row;
 
         .header {
           align-self: flex-end;
-          flex: 1 100%;
-          flex-grow: 1;
+          flex: 1 1;
           padding: 4px;
+          overflow-x: hidden;
         }
 
         .sort-filter,
         .column-chooser {
           align-self: center;
-          flex: 1 auto;
+          flex: 0 0;
         }
 
         .resize-handle {
           cursor: col-resize;
-          flex: 1 auto;
+          flex: 0 0 10px;
           z-index: 50;
-          width: 12px;
-          margin-right: -6px;
+          width: 10px;
+          margin-right: -5px;
         }
       }
     }
