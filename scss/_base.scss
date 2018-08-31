@@ -23,11 +23,14 @@ $sort-direction-color: royalblue;
         width: auto;
         max-width: none;
   
-        td,
-        th {
+        td {
           white-space: nowrap;
           overflow-x: hidden;
           text-overflow: ellipsis;
+        }
+
+        th {
+          white-space: nowrap;
         }
       }
     }
