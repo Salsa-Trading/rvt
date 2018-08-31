@@ -20,7 +20,7 @@ $sort-direction-color: royalblue;
   
       table {
         table-layout: fixed;
-        width: initial;
+        width: auto;
         max-width: none;
   
         td,
@@ -45,6 +45,10 @@ $sort-direction-color: royalblue;
   .rvt-virtual-table-container {
     overflow-x: auto;
     overflow-y: visible;
+  }
+
+  table {
+    position: relative;
   }
 
   thead {
