@@ -38,6 +38,11 @@ $sort-direction-color: royalblue;
 .rvt {
   width: 100%;
 
+  .rvt-table-container,
+  .rvt-virtual-table-container {
+    position: relative;
+  }
+
   .rvt-virtual-table-container {
     overflow-x: auto;
     overflow-y: visible;

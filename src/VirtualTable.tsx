@@ -504,15 +504,15 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
               {rows}
             </tbody>
           </table>
+          <Scroller
+            onScroll={this.onScroll}
+            scrollOffset={topRow * rowHeight}
+            margin={(headerHeight || 0)}
+            size={this.visibleRows() * rowHeight}
+            visible={scrollerVisible}
+            virtualSize={rowHeight * rowCount}
+          />
         </div>
-        <Scroller
-          onScroll={this.onScroll}
-          scrollOffset={topRow * rowHeight}
-          margin={(headerHeight || 0)}
-          size={this.visibleRows() * rowHeight}
-          visible={scrollerVisible}
-          virtualSize={rowHeight * rowCount}
-        />
       </div>
     );
   }
