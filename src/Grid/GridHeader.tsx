@@ -76,8 +76,8 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
   };
 
   public static defaultProps = {
-    onAllHeaderWidthsSet: () => {},
-  }
+    onAllHeaderWidthsSet: () => {}
+  };
 
   constructor(props: GridHeaderProps<TData>, context) {
     super(props, context);
@@ -234,11 +234,12 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     return every(rows, 'width');
   }
 
-  componentWillReceiveProps(nextProps, props) {
+  public componentWillReceiveProps(nextProps, props) {
     if (!isEqual(nextProps, props) && this.allChildrenHaveWidthSet(nextProps)) {
       this.props.onAllHeaderWidthsSet();
     }
   }
+
   public render() {
     const { fieldSet, rowHeader } = this.props;
     const rows = getLevels(fieldSet);

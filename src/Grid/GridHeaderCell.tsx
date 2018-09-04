@@ -113,12 +113,12 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
 
   public componentDidMount() {
     if(!this.props.field.width) {
-      window.addEventListener("load", this.updateHeaderWidth);
+      window.addEventListener('load', this.updateHeaderWidth);
     }
   }
 
   public componentWillUnmount() {
-    window.addEventListener("remove", this.updateHeaderWidth);
+    window.addEventListener('remove', this.updateHeaderWidth);
   }
 
   @autobind

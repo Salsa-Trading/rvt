@@ -4,7 +4,6 @@ import strEnum from '../utils/strEnum';
 import isNil from '../utils/isNil';
 import { FilterControlProps } from '../Filter';
 
-const DEFAULT_COLUMN_WIDTH = 150;
 export const SortDirection = strEnum([
   'asc',
   'desc'
