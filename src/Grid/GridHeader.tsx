@@ -142,7 +142,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     this.setState({showColumnChooser});
   }
 
-  private renderHeaderRow(rowCount: number, colCount: number, rowIndex: number, fieldHeader: FieldHeader, colIndex?: number, fieldHeadersOnRow?: FieldHeader[]) {
+  private renderHeaderRow(rowCount: number, colCount: number, rowIndex: number, fieldHeader: FieldHeader, colIndex: number, fieldHeadersOnRow: FieldHeader[]) {
     const { field, colSpan, rowSpan } = fieldHeader;
     const { fieldSet, onSortSelection, onFilterChanged, onWidthChanged, fixedColumnWidth } = this.props;
     const isFirstRow = rowIndex === 0;
@@ -253,7 +253,9 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
             return (
               <tr key={r}>
                 {r === 0 && renderGridRowHeader(rowHeader, null, rows.length)}
-                {row.map((fieldHeader: FieldHeader, idx: number) => this.renderHeaderRow(rows.length, colCount, r, fieldHeader))}
+                {row.map((fieldHeader: FieldHeader, idx: number, headers: FieldHeader[]) => (
+                  this.renderHeaderRow(rows.length, colCount, r, fieldHeader, idx, headers))
+                )}
               </tr>
             );
           })}
