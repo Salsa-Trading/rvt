@@ -18,11 +18,11 @@ $sort-direction-color: royalblue;
     .rvt-virtual-table-container {
       width: max-content;
   
-      table {
+      > table {
         table-layout: fixed;
         width: auto;
         max-width: none;
-  
+
         td {
           white-space: nowrap;
           overflow-x: hidden;
