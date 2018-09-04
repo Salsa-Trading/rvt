@@ -5,6 +5,7 @@ import GridHeader from './GridHeader';
 import List, { ListProps, ListViewProps } from '../List';
 import VirtualTable, { VirtualTableBaseProps } from '../VirtualTable';
 import { isEqual } from 'lodash';
+import {autobind} from 'core-decorators';
 
 export type VirtualGridProps<TData extends object> = BaseGridProps<TData> & {
   getRows?: (rowIndex: number, length: number) => GridRowProps<TData>[];
@@ -18,12 +19,14 @@ export type WrappedVirtualGridProps<TData extends object> = VirtualTableBaseProp
 
 export class VirtualGrid<TData extends object> extends React.Component<WrappedVirtualGridProps<TData>, {
   rowComponent: React.ReactElement<any>;
+  allWidthsSet: boolean;
 }> {
 
   constructor(props: WrappedVirtualGridProps<TData>, context) {
     super(props, context);
     this.state = {
-      rowComponent: this.generateRowComponent(props)
+      rowComponent: this.generateRowComponent(props),
+      allWidthsSet: false
     };
   }
 
@@ -71,6 +74,13 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
     });
   }
 
+  @autobind
+  private onAllHeaderWidthsSet() {
+    if (!this.state.allWidthsSet) {
+      this.setState({ allWidthsSet: true });
+    }
+  }
+
   public render() {
     const {
       children,
@@ -89,11 +99,11 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
       secondaryHeaderComponent,
       chooserMountPoint,
       hideDefaultChooser,
-      fixedColumnWidth,
       ...rest
     } = this.props;
 
-    const {rowComponent: row} = this.state;
+    const {rowComponent: row, allWidthsSet} = this.state;
+    const fixedColumnWidth = this.props.fixedColumnWidth ? allWidthsSet : false;
 
     const header = (
       <GridHeader
@@ -101,6 +111,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
         onSortSelection={onSortSelection}
         onFilterChanged={onFilterChanged}
         onWidthChanged={onWidthChanged}
+        onAllHeaderWidthsSet={this.onAllHeaderWidthsSet}
         onMove={onMove}
         onHiddenChange={onHiddenChange}
         pinnedRows={pinnedRows}

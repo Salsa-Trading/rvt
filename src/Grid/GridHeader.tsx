@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createPortal } from 'react-dom';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
-import { isEqual, flatten } from 'lodash';
+import { isEqual, flatten, every } from 'lodash';
 
 import { Field, FieldBase } from '../List/Field';
 import { FieldSet, isVisible } from '../List/FieldSet';
@@ -56,6 +56,7 @@ export type GridHeaderProps<TData extends object> = ListViewProps & {
   chooserMountPoint?: HTMLElement
   hideDefaultChooser?: boolean;
   fixedColumnWidth?: boolean;
+  onAllHeaderWidthsSet?: () => void;
 };
 
 export default class GridHeader<TData extends object> extends React.Component<GridHeaderProps<TData>, {
@@ -72,6 +73,10 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     onHiddenChange: PropTypes.func,
     chooserMountPoint: PropTypes.any,
     hideDefaultChooser: PropTypes.bool
+  };
+
+  public static defaultProps = {
+    onAllHeaderWidthsSet: () => {}
   };
 
   constructor(props: GridHeaderProps<TData>, context) {
@@ -140,7 +145,6 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
   private renderHeaderRow(rowCount: number, colCount: number, rowIndex: number, fieldHeader: FieldHeader, colIndex: number, fieldHeadersOnRow: FieldHeader[]) {
     const { field, colSpan, rowSpan } = fieldHeader;
     const { fieldSet, onSortSelection, onFilterChanged, onWidthChanged, fixedColumnWidth } = this.props;
-
     const isFirstRow = rowIndex === 0;
     const isLastRow = ((rowIndex + rowSpan) === rowCount);
 
@@ -224,6 +228,18 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     return headerRowElements;
   }
 
+  private allChildrenHaveWidthSet(props) {
+    const { fieldSet} = props;
+    const rows = flatten(getLevels(fieldSet)).map((r) => r.field );
+    return every(rows, 'width');
+  }
+
+  public componentWillReceiveProps(nextProps, props) {
+    if (!isEqual(nextProps, props) && this.allChildrenHaveWidthSet(nextProps)) {
+      this.props.onAllHeaderWidthsSet();
+    }
+  }
+
   public render() {
     const { fieldSet, rowHeader } = this.props;
     const rows = getLevels(fieldSet);
@@ -237,7 +253,9 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
             return (
               <tr key={r}>
                 {r === 0 && renderGridRowHeader(rowHeader, null, rows.length)}
-                {row.map(this.renderHeaderRow.bind(this, rows.length, colCount, r))}
+                {row.map((fieldHeader: FieldHeader, idx: number, headers: FieldHeader[]) => (
+                  this.renderHeaderRow(rows.length, colCount, r, fieldHeader, idx, headers))
+                )}
               </tr>
             );
           })}
@@ -245,18 +263,18 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
         </thead>
       );
     } else {
-      return (
-        <thead className={className}>
-          <tr>
-            <th>
-              <span style={{float: 'right'}}>
-                {this.renderColumnChooserButton()}
-              </span>
-            </th>
-          </tr>
-          {this.renderPinnedRows()}
-        </thead>
-      );
+        return (
+          <thead className={className}>
+            <tr>
+              <th>
+                <span style={{float: 'right'}}>
+                  {this.renderColumnChooserButton()}
+                </span>
+              </th>
+            </tr>
+            {this.renderPinnedRows()}
+          </thead>
+        );
     }
   }
 }

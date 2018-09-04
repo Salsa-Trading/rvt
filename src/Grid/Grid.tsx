@@ -4,6 +4,7 @@ import { GridRowProps, BaseGridProps } from './types';
 import GridRow from './GridRow';
 import List, { ListProps, ListViewProps } from '../List';
 import { isEqual } from 'lodash';
+import {autobind} from 'core-decorators';
 
 export type Diff<T extends string, U extends string> = ({[P in T]: P } & {[P in U]: never } & { [x: string]: never })[T];
 export type Omit<T, K extends keyof T> = Pick<T, Diff<keyof T, K>>;
@@ -20,12 +21,14 @@ export type WrappedGridProps<TData extends object> = GridProps<TData> & ListView
 
 class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>, {
   rowComponent: React.ReactElement<any>;
+  allWidthsSet: boolean;
 }> {
 
   constructor(props: WrappedGridProps<TData>, context) {
     super(props, context);
     this.state = {
-      rowComponent: this.generateRowComponent(props)
+      rowComponent: this.generateRowComponent(props),
+      allWidthsSet: false
     };
   }
 
@@ -73,6 +76,13 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
     });
   }
 
+  @autobind
+  private onAllHeaderWidthsSet() {
+    if (!this.state.allWidthsSet) {
+      this.setState({ allWidthsSet: true });
+    }
+  }
+
   public render() {
     const {
       fieldSet,
@@ -97,7 +107,8 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
       ...rest
     } = this.props;
 
-    const {rowComponent: row} = this.state;
+    const {rowComponent: row, allWidthsSet} = this.state;
+    const setFixedColumnWidth = fixedColumnWidth ? allWidthsSet : false;
 
     const header = (
       <GridHeader
@@ -107,18 +118,19 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
         onWidthChanged={onWidthChanged}
         onMove={onMove}
         onHiddenChange={onHiddenChange}
+        onAllHeaderWidthsSet={this.onAllHeaderWidthsSet}
         pinnedRows={pinnedRows}
         secondaryHeader={secondaryHeaderComponent}
         gridRow={row}
         rowHeader={rowHeaderComponent}
         chooserMountPoint={chooserMountPoint}
         hideDefaultChooser={hideDefaultChooser}
-        fixedColumnWidth={fixedColumnWidth}
+        fixedColumnWidth={setFixedColumnWidth}
       />
     );
 
     return (
-      <div className={`rvt ${fixedColumnWidth ? 'fixed-column-width' : ''}`}>
+      <div className={`rvt ${setFixedColumnWidth ? 'fixed-column-width' : ''}`}>
         <div className='rvt-table-container'>
           <table {...rest} style={tableStyle}>
             {header}
