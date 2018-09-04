@@ -76,7 +76,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
 
   @autobind
   private onAllHeaderWidthsSet() {
-    if (this.state.allWidthsSet) {
+    if (!this.state.allWidthsSet) {
       this.setState({ allWidthsSet: true });
     }
   }

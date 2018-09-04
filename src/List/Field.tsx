@@ -109,7 +109,7 @@ export class Field extends FieldBase implements FieldProps {
     const { cell, hidden } = props;
     this.hidden = fieldDisplay && !isNil(fieldDisplay.hidden) ? fieldDisplay.hidden : hidden;
     this.cell = cell;
-    this.width = fieldDisplay && fieldDisplay.width;
+    this.width = fieldDisplay && (fieldDisplay.width || undefined);
   }
 }
 

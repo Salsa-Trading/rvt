@@ -75,6 +75,10 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     hideDefaultChooser: PropTypes.bool
   };
 
+  public static defaultProps = {
+    onAllHeaderWidthsSet: () => {},
+  }
+
   constructor(props: GridHeaderProps<TData>, context) {
     super(props, context);
     this.state = {
