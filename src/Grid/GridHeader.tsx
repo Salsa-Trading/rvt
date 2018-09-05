@@ -230,8 +230,8 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
 
   private allChildrenHaveWidthSet(props) {
     const { fieldSet} = props;
-    const rows = flatten(getLevels(fieldSet)).map((r) => r.field );
-    return every(rows, 'width');
+    const rows: FieldBase[] = flatten(getLevels(fieldSet)).map((r) => r.field );
+    return every(rows, (r: FieldBase) => r.hidden || r.width);
   }
 
   public componentWillReceiveProps(nextProps, props) {
