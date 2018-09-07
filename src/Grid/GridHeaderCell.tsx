@@ -108,7 +108,13 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
 
   @autobind
   private updateHeaderWidth() {
-    this.props.onWidthChanged(this.thRef.clientWidth, this.props.field);
+    const {thRef} = this;
+    if(thRef) {
+      const width = this.thRef.clientWidth;
+      if(width) {
+        this.props.onWidthChanged(this.thRef.clientWidth, this.props.field);
+      }
+    }
   }
 
   public componentDidMount() {
