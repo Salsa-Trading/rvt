@@ -60,7 +60,10 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
 
     let startingX = e.pageX;
     safeMouseMove<HTMLDivElement>(e,
-      moveEvent => onWidthChanged(startingWidth + (moveEvent.pageX - startingX), this.props.field)
+      moveEvent => {
+        onWidthChanged(startingWidth + (moveEvent.pageX - startingX), this.props.field);
+        this.forceUpdate();
+      }
     );
   }
 
