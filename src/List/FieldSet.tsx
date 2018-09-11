@@ -46,7 +46,11 @@ export class FieldSet extends FieldBase {
   }
 
   public get width() {
-    return sum(this.children.filter((c) => !c.hidden).map((c) => c.width));
+    const {children} = this;
+    const visibleChildren = this.children.filter((c) => !c.hidden);
+    if(visibleChildren.every((c) => Boolean(c.width))) {
+      return sum(visibleChildren.map((c) => c.width));
+    }
   }
 
   public set width(value: number) {

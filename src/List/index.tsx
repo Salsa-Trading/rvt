@@ -93,7 +93,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       }
     }
 
-    private createFields(props: React.Props<ListProps> & ListProps) {
+    private createFields(props: React.Props<ListProps> & ListProps): FieldSet {
       const { fieldDefaults, children, fixedColumnWidth } = props;
       const { sorts, filters, fields } = ListContainer.getListState(props.listState);
 
@@ -171,8 +171,18 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       const { onListStateChanged } = this.listStateHelper();
       const { fieldSet } = this.state;
 
-      field.resize(width);
-      onListStateChanged(ListStateChangeType.fields, fieldSet.getFieldDisplay(), field.name);
+      // Note: this is a hack.
+      // For some reason the 'field' we receive
+      // is different from the field in the fieldSet
+      const fieldSetField = fieldSet.children.find((f) => f.name === field.name);
+
+      if(fieldSetField && width !== fieldSetField.width && width > 0) {
+        field.resize(width);
+        fieldSetField.resize(width);
+        const fieldDisplay: FieldDisplay = fieldSet.getFieldDisplay();
+
+        onListStateChanged(ListStateChangeType.fields, fieldDisplay, field.name);
+      }
     }
 
     private onMove(newIndex: number, field: Field) {
