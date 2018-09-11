@@ -436,12 +436,12 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     }
 
     const rowElement = React.isValidElement(row)
-      ? row as React.ReactElement<Indexed<TableRowProps<TData>> & {key: number}>
-      : React.createElement(row as React.ComponentType<Indexed<TableRowProps<TData> & {key: number}>>);
+      ? row as React.ReactElement<Indexed<TableRowProps<TData>>>
+      : React.createElement(row as React.ComponentType<Indexed<TableRowProps<TData>>>);
 
     return rows.map((props, i) => React.cloneElement(rowElement, {
       ...props,
-      key: this.dataKeyToRowKeyMap[props.key] || i
+      key: (this.dataKeyToRowKeyMap[props.key] || i).toString()
     }));
   }
 
