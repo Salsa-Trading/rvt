@@ -379,7 +379,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       rowCount - topRow
     );
 
-    if(!numRows) {
+    if(numRows <= 0) {
       return [];
     }
 
