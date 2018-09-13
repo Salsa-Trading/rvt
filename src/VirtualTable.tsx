@@ -442,7 +442,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     return rows.map((props, i) => React.cloneElement(rowElement, {
       ...props,
       key: (this.dataKeyToRowKeyMap[props.key] || i).toString()
-    }));
+    } as Indexed<TableRowProps<TData>>));
   }
 
   @autobind
