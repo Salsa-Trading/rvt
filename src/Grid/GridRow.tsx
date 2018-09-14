@@ -60,8 +60,8 @@ export default class GridRow<TData> extends React.Component<GridRowComponentProp
         {(fields || []).map(field => {
           const dataSet = {'data-field': field.name};
           const style: React.CSSProperties = {
-            maxWidth: field.width,
-            width: fixedColumnWidth ? undefined : field.width
+            maxWidth: fixedColumnWidth ? field.width : undefined,
+            width: field.width
           };
           return (
             <td key={field.name} style={style} {...dataSet}>
