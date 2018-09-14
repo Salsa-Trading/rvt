@@ -61,7 +61,8 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
       onClick,
       onDoubleClick,
       rowComponent,
-      rowHeaderComponent
+      rowHeaderComponent,
+      fixedColumnWidth
     } = props;
 
     const fields = fieldSet.getFields();
@@ -70,7 +71,8 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
       onMouseDown: onMouseDown,
       onClick: onClick,
       onDoubleClick: onDoubleClick,
-      rowHeaderComponent
+      rowHeaderComponent,
+      fixedColumnWidth
     });
   }
 
