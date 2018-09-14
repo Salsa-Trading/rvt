@@ -175,12 +175,13 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       // For some reason the 'field' we receive
       // is different from the field in the fieldSet
       const fieldSetField = fieldSet.children.find((f) => f.name === field.name);
-
-      if(fieldSetField && width !== fieldSetField.width && width > 0) {
-        field.resize(width);
+      if(fieldSetField && width !== fieldSetField.width) {
         fieldSetField.resize(width);
-        const fieldDisplay: FieldDisplay = fieldSet.getFieldDisplay();
+      }
 
+      if(field.width !== width) {
+        field.resize(width);
+        const fieldDisplay: FieldDisplay = fieldSet.getFieldDisplay();
         onListStateChanged(ListStateChangeType.fields, fieldDisplay, field.name);
       }
     }
