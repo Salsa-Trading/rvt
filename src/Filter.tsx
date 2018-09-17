@@ -34,6 +34,7 @@ class DefaultFilter extends React.Component<FilterControlProps, {}> {
 
 export type FilterProps = {
   field: Field
+  openOnMounted?: boolean;
   onSortSelection?: (sortDirection: SortDirection) => void;
   onFilterChanged: (filter: any) => void;
 };
@@ -49,7 +50,7 @@ export default class Filter extends React.Component<FilterProps, {
     super(props, context);
 
     this.state = {
-      showFilter: false,
+      showFilter: props.openOnMounted,
       filter: props.field.filter || ''
     };
   }
@@ -73,7 +74,7 @@ export default class Filter extends React.Component<FilterProps, {
   }
 
   @autobind
-  private toggleFilterPane() {
+  public toggleFilterPane() {
     this.setState({showFilter: !this.state.showFilter });
   }
 
