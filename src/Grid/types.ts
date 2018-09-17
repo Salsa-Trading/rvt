@@ -20,6 +20,7 @@ export type GridRowComponentProps<TData> = {
   onClick?: VirtualGridMouseEventHandler;
   onDoubleClick?: VirtualGridMouseEventHandler;
   rowHeaderComponent?: React.ComponentType<GridRowHeaderProps<TData>>
+  fixedColumnWidth?: boolean;
 };
 
 export type GridSecondaryHeaderProps = {

@@ -1,6 +1,6 @@
 {
   "name": "@jax/react-virtual-table",
-  "version": "0.5.79",
+  "version": "0.5.82",
   "description": "",
   "scripts": {
     "preinstall": "rm -f .git/hooks/*",

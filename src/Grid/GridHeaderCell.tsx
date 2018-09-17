@@ -178,7 +178,8 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
       colSpan,
       onSortSelection,
       onFilterChanged,
-      onMouseDown
+      onMouseDown,
+      fixedColumnWidth
     } = this.props as any;
     const {showFilterOnClick} = this.state;
 
@@ -214,8 +215,14 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     }
     const dataSet = {'data-group': fieldSet.name, 'data-field': name};
 
+    const style: React.CSSProperties = {
+      padding: 0,
+      width,
+      maxWidth: fixedColumnWidth ? width : undefined
+    };
+
     return (
-      <th key={name} style={{width, maxWidth: width, padding: 0}} rowSpan={rowSpan} colSpan={colSpan} {...dataSet} ref={this.setRef} onClick={this.onClick}>
+      <th key={name} style={style} rowSpan={rowSpan} colSpan={colSpan} {...dataSet} ref={this.setRef} onClick={this.onClick}>
         <div className={`${headerClassName}`}>
           <div className='header' onMouseDown={onMouseDown}>
             <div className='header-text'>

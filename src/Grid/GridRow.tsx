@@ -47,7 +47,7 @@ export default class GridRow<TData> extends React.Component<GridRowComponentProp
   }
 
   public render() {
-    const { data, fields, rowProps, onClick, onDoubleClick, onMouseDown, rowHeaderComponent } = this.props;
+    const { data, fields, rowProps, onClick, onDoubleClick, onMouseDown, rowHeaderComponent, fixedColumnWidth } = this.props;
 
     return (
       <tr
@@ -59,8 +59,12 @@ export default class GridRow<TData> extends React.Component<GridRowComponentProp
         {renderGridRowHeader(rowHeaderComponent, data)}
         {(fields || []).map(field => {
           const dataSet = {'data-field': field.name};
+          const style: React.CSSProperties = {
+            maxWidth: fixedColumnWidth ? field.width : undefined,
+            width: field.width
+          };
           return (
-            <td key={field.name} style={{maxWidth: field.width}} {...dataSet}>
+            <td key={field.name} style={style} {...dataSet}>
               {renderGridCell(field, data)}
             </td>
           );
