@@ -42,15 +42,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
 
   constructor(props) {
     super(props);
-    const {
-      field: {
-        sortDirection,
-        sortable,
-        filterable,
-        filter
-      }
-    } = props as any;
-    
+
     this.state = {
       showFilterOnClick: false
     };
