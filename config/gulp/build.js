@@ -1,5 +1,6 @@
 'use strict';
 const gulp = require('gulp');
+const watch = require('gulp-watch');
 const del = require('del');
 const ts = require('gulp-typescript');
 const sass = require('gulp-sass');
@@ -29,4 +30,16 @@ gulp.task('sass', function () {
 
 gulp.task('deploy', ['clean', 'build', 'sass'],  () => {
 
+});
+
+
+gulp.task('deploy-no-clean', ['clean','build', 'sass'],  () => {
+
+});
+
+
+gulp.task('dev', ['clean', 'build', 'sass'],  () => {
+  return watch('**/*.tsx', (events, done) => {
+    gulp.run('deploy-no-clean');
+  });
 });
