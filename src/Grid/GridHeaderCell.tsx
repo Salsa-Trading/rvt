@@ -163,7 +163,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
   @autobind
   private onClick() {
     if (this.props.hideFilters) {
-      this.setState({ showFilterOnClick: true }); 
+      this.setState({showFilterOnClick: !this.state.showFilterOnClick }); 
     }
   }
 
