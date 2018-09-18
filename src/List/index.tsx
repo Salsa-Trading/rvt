@@ -173,7 +173,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
 
       // Note: this is a hack.
       // For some reason the 'field' we receive
-      // can be different from the field in the fieldSet
+      // is sometimes different from the field in the fieldSet
       const fieldSetField = fieldSet.children.find((f) => f.name === field.name);
       if(fieldSetField && width !== fieldSetField.width && fieldSetField !== field) {
         fieldSetField.resize(width);
