@@ -68,6 +68,19 @@ $sort-direction-color: royalblue;
       cursor: -webkit-grab;
     }
 
+    &.hidden-header th {
+      font-size: 0;
+      border: none;
+      overflow: hidden;
+      opacity: 0;
+
+      * {
+        min-height: 0;
+        max-height: 0;
+        display: none;
+      }
+    }
+
     th {
       &.field-moving-hover {
         background-color: $hover-highlight-color;

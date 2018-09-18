@@ -33,7 +33,7 @@ gulp.task('deploy', ['clean', 'build', 'sass'],  () => {
 });
 
 
-gulp.task('deploy-no-clean', ['clean','build', 'sass'],  () => {
+gulp.task('deploy-no-clean', ['build', 'sass'],  () => {
 
 });
 
