@@ -195,7 +195,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     ].join(' ');
 
     let sortFilterControl;
-    if(showFilterOnClick || (filterable && filter) || !hideFilters ) {
+    if(showFilterOnClick || (filterable && filter)) {
       sortFilterControl = (
         <Filter
           openOnMounted={showFilterOnClick}
