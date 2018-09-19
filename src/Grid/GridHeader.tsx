@@ -144,7 +144,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
 
   private renderHeaderRow(rowCount: number, colCount: number, rowIndex: number, fieldHeader: FieldHeader, colIndex: number, fieldHeadersOnRow: FieldHeader[]) {
     const { field, colSpan, rowSpan } = fieldHeader;
-    const { fieldSet, onSortSelection, onFilterChanged, onWidthChanged, fixedColumnWidth } = this.props;
+    const { fieldSet, onSortSelection, onFilterChanged, onWidthChanged, onTitleChanged, fixedColumnWidth } = this.props;
     const isFirstRow = rowIndex === 0;
     const isLastRow = ((rowIndex + rowSpan) === rowCount);
 
@@ -169,6 +169,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
         onSortSelection={onSortSelection}
         onFilterChanged={onFilterChanged}
         onWidthChanged={onWidthChanged}
+        onTitleChanged={onTitleChanged}
         onMouseDown={this.onFieldMouseDown}
         canResize={fixedColumnWidth || (isLastRow && !isLastCol)}
         columnChooserButton={columnChooserButton}

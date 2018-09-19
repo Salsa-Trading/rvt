@@ -90,6 +90,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
       onSortSelection,
       onFilterChanged,
       onWidthChanged,
+      onTitleChanged,
       onMove,
       onHiddenChange,
       onMouseDown,
@@ -106,13 +107,13 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
 
     const {rowComponent: row, allWidthsSet} = this.state;
     const fixedColumnWidth = this.props.fixedColumnWidth ? allWidthsSet : false;
-
     const header = (
       <GridHeader
         fieldSet={fieldSet}
         onSortSelection={onSortSelection}
         onFilterChanged={onFilterChanged}
         onWidthChanged={onWidthChanged}
+        onTitleChanged={onTitleChanged}
         onAllHeaderWidthsSet={this.onAllHeaderWidthsSet}
         onMove={onMove}
         onHiddenChange={onHiddenChange}
@@ -141,10 +142,8 @@ export default class WrappedVirtualGrid<TData extends object> extends React.Comp
   VirtualTableBaseProps & ListProps & VirtualGridProps<TData>
 , {}> {
   private Component = List(VirtualGrid);
-
   public render(): React.ReactElement<any> {
     const {Component} = this;
-
     return (
       <Component {...this.props}/>
     );

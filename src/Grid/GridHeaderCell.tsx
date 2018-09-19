@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
 
+import HeaderInput from './HeaderInput';
 import Filter from '../Filter';
 import { Field, SortDirection } from '../List/Field';
 import { FieldSet } from '../List/FieldSet';
@@ -17,6 +18,7 @@ export type GridHeaderCellProps = {
   onSortSelection?: (sortDirection: SortDirection, field: Field) => void;
   onFilterChanged?: (filter: any, field: Field) => void;
   onWidthChanged?: (width: number, field: Field) => void;
+  onTitleChanged?: (name: string, field: Field) => void;
   onMouseDown(e: React.MouseEvent<HTMLTableHeaderCellElement>);
 };
 
@@ -91,22 +93,34 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     );
   }
 
+  @autobind
+  private updateTitle(field: Field, updatedName: string) {
+    this.props.onTitleChanged(updatedName, field);
+  }
+
   private renderHeader() {
     const {
       field,
       field: {
         header,
-        name
+        name,
+        title
       }
     } = this.props;
-
-    if(header) {
-      if(typeof header === 'string' || React.isValidElement(header)) {
-        return header;
-      }
-      return React.createElement(header as any, {field});
+    const updateTitle = (updatedName) => this.updateTitle(field, updatedName);
+    let headerComponent;
+    
+    if(title) {
+      headerComponent = <HeaderInput title={title} updateTitle={updateTitle}/>
+    } else if(header && typeof header === 'string') {
+      headerComponent = <HeaderInput title={header} updateTitle={updateTitle}/>
+    } else if (header && React.isValidElement(header)) {
+      headerComponent = React.createElement(header as any, {field});
+    } else {
+      headerComponent = <HeaderInput title={name} updateTitle={updateTitle}/>
     }
-    return name;
+
+    return headerComponent;
   }
 
   @autobind

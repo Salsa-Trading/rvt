@@ -38,6 +38,7 @@ export type ListViewProps = {
   onSortSelection?: (sortDirection: SortDirection, field: Field|FieldSet) => void;
   onFilterChanged?: (filter: any, field: Field|FieldSet) => void;
   onWidthChanged?: (width: number, field: Field|FieldSet) => void;
+  onTitleChanged?: (name: string, field: Field|FieldSet) => void;
   onMove?: (newIndex: number, field: Field|FieldSet) => void;
   onHiddenChange?: (hidden: boolean, field: Field|FieldSet) => void;
 };
@@ -80,6 +81,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       this.onSortSelection = this.onSortSelection.bind(this);
       this.onFilterChanged = this.onFilterChanged.bind(this);
       this.onWidthChanged = this.onWidthChanged.bind(this);
+      this.onTitleChanged = this.onTitleChanged.bind(this);
       this.onMove = this.onMove.bind(this);
       this.onHiddenChange = this.onHiddenChange.bind(this);
     }
@@ -186,6 +188,27 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       }
     }
 
+    private onTitleChanged(title: string, field: Field) {
+      const { onListStateChanged } = this.listStateHelper();
+      const { fieldSet } = this.state;
+      
+      // Note: this is a hack.
+      // For some reason the 'field' we receive
+      // is different from the field in the fieldSet
+      const fieldSetField = fieldSet.children.find((f) => f.name === field.name);
+      if(fieldSetField && fieldSetField !== field) {
+        fieldSetField.updateTitle(title);
+      }
+
+      if(field.title !== title) {
+        const fieldDisplay: FieldDisplay = fieldSet.getFieldDisplay();
+        const child: FieldDisplay = fieldDisplay.children.find((f) => f.name === field.name);
+        child.title = title;
+        onListStateChanged(ListStateChangeType.fields, fieldDisplay, field.name);
+      }
+    }
+
+
     private onMove(newIndex: number, field: Field) {
       const { onListStateChanged } = this.listStateHelper();
       const { fieldSet } = this.state;
@@ -213,6 +236,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
         onSortSelection: this.onSortSelection,
         onFilterChanged: this.onFilterChanged,
         onWidthChanged: this.onWidthChanged,
+        onTitleChanged: this.onTitleChanged,
         onMove: this.onMove,
         onHiddenChange: this.onHiddenChange
       };
