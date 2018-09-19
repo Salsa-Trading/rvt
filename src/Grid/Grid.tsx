@@ -15,6 +15,7 @@ export type GridProps<TData extends object> = TablePropsWithoutData & BaseGridPr
   chooserMountPoint?: HTMLElement;
   hideDefaultChooser?: boolean;
   fixedColumnWidth?: boolean;
+  hideHeader?: boolean;
 };
 
 export type WrappedGridProps<TData extends object> = GridProps<TData> & ListViewProps;
@@ -106,6 +107,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
       chooserMountPoint,
       hideDefaultChooser,
       fixedColumnWidth,
+      hideHeader,
       ...rest
     } = this.props;
 
@@ -128,6 +130,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
         chooserMountPoint={chooserMountPoint}
         hideDefaultChooser={hideDefaultChooser}
         fixedColumnWidth={setFixedColumnWidth}
+        hideHeader={hideHeader}
       />
     );
 
