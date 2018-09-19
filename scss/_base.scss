@@ -68,7 +68,7 @@ $sort-direction-color: royalblue;
       cursor: -webkit-grab;
     }
 
-    &.hidden-header th {
+    &.hidden-header th.grid-header {
       font-size: 0;
       border: none;
       overflow: hidden;
