@@ -37,6 +37,7 @@ export type FilterProps = {
   openOnMounted?: boolean;
   onSortSelection?: (sortDirection: SortDirection) => void;
   onFilterChanged: (filter: any) => void;
+  onFilterClosed?: () => void;
 };
 
 export default class Filter extends React.Component<FilterProps, {
@@ -45,6 +46,9 @@ export default class Filter extends React.Component<FilterProps, {
 }> {
 
   private mouseDownHandler: () => void;
+  static defaultProps = {
+    onFilterClosed: () => {}
+  }
 
   constructor(props: FilterProps, context) {
     super(props, context);
@@ -58,7 +62,7 @@ export default class Filter extends React.Component<FilterProps, {
   public componentDidMount() {
     this.mouseDownHandler = safeMouseDown<HTMLElement>((e) => {
       if(!(e as any).target.closest('.filter-pane')) {
-        this.setState({showFilter: false});
+        this.closeFilter();
       }
     });
   }
@@ -79,18 +83,24 @@ export default class Filter extends React.Component<FilterProps, {
   }
 
   @autobind
+  closeFilter() {
+    this.setState({ showFilter: false });
+    this.props.onFilterClosed();
+  }
+  
+  @autobind
   private handleOk(e) {
     e.preventDefault();
     const { onFilterChanged } = this.props;
     const { filter } = this.state;
     onFilterChanged(filter);
-    this.setState({showFilter: false});
+    this.closeFilter();
   }
 
   @autobind
   private handleCancel(e) {
     e.preventDefault();
-    this.setState({showFilter: false});
+    this.closeFilter();
   }
 
   @autobind
