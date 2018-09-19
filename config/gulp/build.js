@@ -28,15 +28,9 @@ gulp.task('sass', function () {
     .pipe(gulp.dest('./css'));
 });
 
-gulp.task('deploy', ['clean', 'build', 'sass'],  () => {
+gulp.task('deploy', ['clean', 'build', 'sass']);
 
-});
-
-
-gulp.task('deploy-no-clean', ['build', 'sass'],  () => {
-
-});
-
+gulp.task('deploy-no-clean', ['build', 'sass']);
 
 gulp.task('dev', ['clean', 'build', 'sass'],  () => {
   return watch('**/*.tsx', (events, done) => {
