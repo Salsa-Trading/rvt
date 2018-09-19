@@ -222,7 +222,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     };
 
     return (
-      <th key={name} style={style} rowSpan={rowSpan} colSpan={colSpan} {...dataSet} ref={this.setRef} onClick={this.onClick}>
+      <th key={name} className='grid-header' style={style} rowSpan={rowSpan} colSpan={colSpan} {...dataSet} ref={this.setRef} onClick={this.onClick}>
         <div className={`${headerClassName}`}>
           <div className='header' onMouseDown={onMouseDown}>
             <div className='header-text'>

@@ -57,6 +57,7 @@ export type GridHeaderProps<TData extends object> = ListViewProps & {
   hideDefaultChooser?: boolean;
   fixedColumnWidth?: boolean;
   hideFilters?: boolean;
+  hideHeader?: boolean;
   onAllHeaderWidthsSet?: () => void;
 };
 
@@ -73,11 +74,13 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     onMove: PropTypes.func,
     onHiddenChange: PropTypes.func,
     chooserMountPoint: PropTypes.any,
-    hideDefaultChooser: PropTypes.bool
+    hideDefaultChooser: PropTypes.bool,
+    hideHeader: PropTypes.bool
   };
 
   public static defaultProps = {
-    onAllHeaderWidthsSet: () => {}
+    onAllHeaderWidthsSet: () => {},
+    hideHeader: false
   };
 
   constructor(props: GridHeaderProps<TData>, context) {
@@ -238,15 +241,20 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
 
   public componentWillReceiveProps(nextProps, props) {
     if (!isEqual(nextProps, props) && this.allChildrenHaveWidthSet(nextProps)) {
-      this.props.onAllHeaderWidthsSet();
+      const {onAllHeaderWidthsSet, hideHeader} = this.props;
+      onAllHeaderWidthsSet();
     }
   }
 
   public render() {
-    const { fieldSet, rowHeader } = this.props;
+    const { fieldSet, rowHeader, hideHeader } = this.props;
+    const { draggingColumn } = this.state;
     const rows = getLevels(fieldSet);
     const colCount = rows[0].reduce((r, i) => r + i.colSpan, 0);
-    const className = this.state.draggingColumn ? 'dragging' : null;
+    const className = [
+      this.state.draggingColumn ? 'dragging' : '',
+      hideHeader ? 'hidden-header' : ''
+    ].join(' ');
 
     if(flatten(rows).length >= 1) {
       return (
