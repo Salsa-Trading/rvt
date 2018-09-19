@@ -82,6 +82,8 @@ $sort-direction-color: royalblue;
     }
 
     th {
+      position: relative;
+
       &.field-moving-hover {
         background-color: $hover-highlight-color;
       }
