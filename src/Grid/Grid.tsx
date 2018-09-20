@@ -92,6 +92,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
       onSortSelection,
       onFilterChanged,
       onWidthChanged,
+      onTitleChanged,
       onMove,
       onHiddenChange,
       onMouseDown,
@@ -120,6 +121,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
         onSortSelection={onSortSelection}
         onFilterChanged={onFilterChanged}
         onWidthChanged={onWidthChanged}
+        onTitleChanged={onTitleChanged}
         onMove={onMove}
         onHiddenChange={onHiddenChange}
         onAllHeaderWidthsSet={this.onAllHeaderWidthsSet}
