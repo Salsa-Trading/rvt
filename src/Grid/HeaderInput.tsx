@@ -26,13 +26,13 @@ export default class TabTitle extends React.PureComponent < {
   private submitFn(e: React.FormEvent<HTMLFormElement>) {
     const {title, updateTitle} = this.props;
     const {inputTitle} = this.state;
+    e.preventDefault();
     
     updateTitle(inputTitle);
     this.setState({
       editing: false,
       inputTitle: inputTitle
     });
-    e.preventDefault();
   }
 
   private editTitleForm(): React.ReactElement<any> {

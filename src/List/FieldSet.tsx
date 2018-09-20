@@ -154,7 +154,8 @@ export class FieldSet extends FieldBase {
       name: this.name,
       width: this.width,
       hidden: this.hidden,
-      children: this.children.map(c => c.getFieldDisplay())
+      title: this.title,
+      children: this.children.map(c => c.getFieldDisplay()),
     };
   }
 

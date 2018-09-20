@@ -201,9 +201,8 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       }
 
       if(field.title !== title) {
+        field.updateTitle(title);
         const fieldDisplay: FieldDisplay = fieldSet.getFieldDisplay();
-        const child: FieldDisplay = fieldDisplay.children.find((f) => f.name === field.name);
-        child.title = title;
         onListStateChanged(ListStateChangeType.fields, fieldDisplay, field.name);
       }
     }

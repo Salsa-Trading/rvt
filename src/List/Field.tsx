@@ -73,6 +73,7 @@ export abstract class FieldBase implements FieldPropsBase {
   constructor(props: FieldPropsBase, fieldDisplay: FieldDisplay) {
     Object.assign(this, props);
     this.width = fieldDisplay && !isNil(fieldDisplay.width) ? fieldDisplay.width : props.width;
+    this.title = fieldDisplay && fieldDisplay.title;
   }
 
   public getFields(): Field[] {
@@ -90,7 +91,7 @@ export abstract class FieldBase implements FieldPropsBase {
       title: this.title
     };
   }
-
+ 
   public getFieldCount() {
     return 1;
   }
@@ -116,7 +117,6 @@ export class Field extends FieldBase implements FieldProps {
     this.hidden = fieldDisplay && !isNil(fieldDisplay.hidden) ? fieldDisplay.hidden : hidden;
     this.cell = cell;
     this.width = fieldDisplay && (fieldDisplay.width || undefined);
-    this.title = fieldDisplay && fieldDisplay.title;
   }
 }
 

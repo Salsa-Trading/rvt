@@ -96,6 +96,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
   @autobind
   private updateTitle(field: Field, updatedName: string) {
     this.props.onTitleChanged(updatedName, field);
+    this.forceUpdate();
   }
 
   private renderHeader() {
