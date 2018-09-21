@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {autobind} from 'core-decorators';
 
-export default class TabTitle extends React.PureComponent < {
+export default class HeaderInput extends React.PureComponent < {
   title: any;
   updateTitle: (title: string) => void;
 }, {
@@ -81,7 +81,7 @@ export default class TabTitle extends React.PureComponent < {
         <span className='tab-title' onDoubleClick={onDoubleClick}>
           {editing ? this.editTitleForm() : title}
         </span>
-    </span>
+      </span>
     );
   }
 }
