@@ -17,6 +17,7 @@ export type FieldDefaults = {
 
 export interface FieldDisplay {
   name: string;
+  title?: string;
   width?: number;
   hidden?: boolean;
   children?: FieldDisplay[];
@@ -33,6 +34,7 @@ export type HeaderType = JSX.Element|string|React.ComponentClass<HeaderProps>|Re
 
 export interface FieldPropsBase {
   name: string;
+  title?: string;
   header?: HeaderType;
   filterControl?: FilterControlType;
   width?: number;
@@ -57,6 +59,7 @@ export interface FieldProps extends FieldPropsBase, React.Props<FieldProps> {
 
 export abstract class FieldBase implements FieldPropsBase {
   public name: string;
+  public title: string;
   public header?: HeaderType;
   public filterControl?: FilterControlType;
   public width?: number;
@@ -70,6 +73,7 @@ export abstract class FieldBase implements FieldPropsBase {
   constructor(props: FieldPropsBase, fieldDisplay: FieldDisplay) {
     Object.assign(this, props);
     this.width = fieldDisplay && !isNil(fieldDisplay.width) ? fieldDisplay.width : props.width;
+    this.title = fieldDisplay && fieldDisplay.title;
   }
 
   public getFields(): Field[] {
@@ -83,10 +87,11 @@ export abstract class FieldBase implements FieldPropsBase {
     return {
       name: this.name,
       width: this.width,
-      hidden: this.hidden
+      hidden: this.hidden,
+      title: this.title
     };
   }
-
+ 
   public getFieldCount() {
     return 1;
   }
@@ -94,8 +99,11 @@ export abstract class FieldBase implements FieldPropsBase {
   public resize(width: number) {
     this.width = width;
   }
-}
 
+  public updateTitle(title: string) {
+    this.title = title;
+  }
+}
 export class Field extends FieldBase implements FieldProps {
 
   public format?: FormatType;
