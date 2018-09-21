@@ -63,9 +63,20 @@ $sort-direction-color: royalblue;
       cursor: -webkit-grabbing;
     }
 
-    &:not(.dragging) .header {
-      cursor: grab;
-      cursor: -webkit-grab;
+    &:not(.dragging) .grid-header-cell {
+      &:not(.sortable):not(.filterable) {
+        .header {
+          cursor: grab;
+          cursor: -webkit-grab;
+        }
+      }
+
+      &.sortable,
+      &.filterable {
+        .header {
+          cursor: pointer;
+        }
+      }
     }
 
     &.hidden-header th.grid-header {
