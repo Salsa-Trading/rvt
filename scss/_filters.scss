@@ -17,6 +17,7 @@ $filter-pane-border: 1px solid lightgray;
 
   .filter-pane {
     position: absolute;
+    z-index: 10;
 
     padding: .5rem;
 

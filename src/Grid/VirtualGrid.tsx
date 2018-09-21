@@ -13,6 +13,7 @@ export type VirtualGridProps<TData extends object> = BaseGridProps<TData> & {
   chooserMountPoint?: HTMLElement;
   hideDefaultChooser?: boolean;
   fixedColumnWidth?: boolean;
+  hideFilters?: boolean;
   hideHeader?: boolean;
 };
 
@@ -103,6 +104,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
       secondaryHeaderComponent,
       chooserMountPoint,
       hideDefaultChooser,
+      hideFilters,
       hideHeader,
       ...rest
     } = this.props;
@@ -126,6 +128,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
         chooserMountPoint={chooserMountPoint}
         hideDefaultChooser={hideDefaultChooser}
         fixedColumnWidth={fixedColumnWidth}
+        hideFilters={hideFilters}
         hideHeader={hideHeader}
       />
     );

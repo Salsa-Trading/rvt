@@ -34,8 +34,10 @@ class DefaultFilter extends React.Component<FilterControlProps, {}> {
 
 export type FilterProps = {
   field: Field
+  openOnMounted?: boolean;
   onSortSelection?: (sortDirection: SortDirection) => void;
   onFilterChanged: (filter: any) => void;
+  onFilterClosed?: () => void;
 };
 
 export default class Filter extends React.Component<FilterProps, {
@@ -44,12 +46,15 @@ export default class Filter extends React.Component<FilterProps, {
 }> {
 
   private mouseDownHandler: () => void;
+  static defaultProps = {
+    onFilterClosed: () => {}
+  }
 
   constructor(props: FilterProps, context) {
     super(props, context);
 
     this.state = {
-      showFilter: false,
+      showFilter: props.openOnMounted,
       filter: props.field.filter || ''
     };
   }
@@ -57,7 +62,7 @@ export default class Filter extends React.Component<FilterProps, {
   public componentDidMount() {
     this.mouseDownHandler = safeMouseDown<HTMLElement>((e) => {
       if(!(e as any).target.closest('.filter-pane')) {
-        this.setState({showFilter: false});
+        this.closeFilter();
       }
     });
   }
@@ -73,23 +78,29 @@ export default class Filter extends React.Component<FilterProps, {
   }
 
   @autobind
-  private toggleFilterPane() {
+  public toggleFilterPane() {
     this.setState({showFilter: !this.state.showFilter });
   }
 
+  @autobind
+  closeFilter() {
+    this.setState({ showFilter: false });
+    this.props.onFilterClosed();
+  }
+  
   @autobind
   private handleOk(e) {
     e.preventDefault();
     const { onFilterChanged } = this.props;
     const { filter } = this.state;
     onFilterChanged(filter);
-    this.setState({showFilter: false});
+    this.closeFilter();
   }
 
   @autobind
   private handleCancel(e) {
     e.preventDefault();
-    this.setState({showFilter: false});
+    this.closeFilter();
   }
 
   @autobind

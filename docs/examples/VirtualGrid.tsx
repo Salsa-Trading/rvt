@@ -116,6 +116,7 @@ export default class VirtualGridExample extends React.Component<{}, {
         pinnedRows={pinnedRows}
         secondaryHeaderComponent={secondaryHeader}
         fixedColumnWidth={true}
+        hideFilters={true}
       >
         <FieldSet header='Group 1' name='group1'>
           <FieldSet header='Group 2' name='group2'>
