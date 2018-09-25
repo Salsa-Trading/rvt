@@ -133,7 +133,6 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     } else {
       headerComponent = <HeaderInput title={name} updateTitle={updateTitle}/>
     }
-    console.log(typeof headerComponent)
     return headerComponent;
   }
 
