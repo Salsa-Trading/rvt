@@ -123,17 +123,17 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     } = this.props;
     const updateTitle = (updatedName) => this.updateTitle(field, updatedName);
     let headerComponent;
-    
+
     if(title) {
       headerComponent = <HeaderInput title={title} updateTitle={updateTitle}/>
     } else if(header && typeof header === 'string') {
       headerComponent = <HeaderInput title={header} updateTitle={updateTitle}/>
     } else if (header && React.isValidElement(header)) {
-      headerComponent = React.createElement(header as any, {field});
+      headerComponent = header;
     } else {
       headerComponent = <HeaderInput title={name} updateTitle={updateTitle}/>
     }
-
+    console.log(typeof headerComponent)
     return headerComponent;
   }
 
