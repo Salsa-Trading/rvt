@@ -57,6 +57,7 @@ export default class HeaderInput extends React.PureComponent < {
     return (
       <form onSubmit={this.submitFn} style={{display: 'inline-block'}}>
         <input
+          style={{height: '1.5rem'}}
           value={inputTitle}
           onChange={onChange}
           onFocus={onFocus}
