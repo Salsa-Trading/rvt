@@ -67,6 +67,7 @@ $sort-direction-color: royalblue;
       overflow-y: visible;
 
       .rvt-virtual-table-container-inner {
+        min-width: min-content;
         overflow: hidden;
       }
     }
