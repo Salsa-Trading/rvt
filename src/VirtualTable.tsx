@@ -499,12 +499,16 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
         style={containerStyle}
       >
         <div className='rvt-virtual-table-container'>
-          <table className={tableClassName} style={tableStyle}>
-            {header}
-            <tbody className={scrollerVisible ? 'rvt-scroller' : ''} style={tbodyStyle}>
-              {rows}
-            </tbody>
-          </table>
+          <div className='rvt-virtual-table-container-scroll'>
+            <div className='rvt-virtual-table-container-inner'>
+              <table className={tableClassName} style={tableStyle}>
+                {header}
+                <tbody className={scrollerVisible ? 'rvt-scroller' : ''} style={tbodyStyle}>
+                  {rows}
+                </tbody>
+              </table>
+            </div>
+          </div>
           <Scroller
             onScroll={this.onScroll}
             scrollOffset={topRow * rowHeight}

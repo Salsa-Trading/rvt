@@ -14,8 +14,12 @@ $sort-direction-color: royalblue;
 // When fixed layout mode is enabled
 .rvt {
   &.fixed-column-width {
-    .rvt-table-container,
     .rvt-virtual-table-container {
+      width: fit-content;
+    }
+
+    .rvt-table-container,
+    .rvt-virtual-table-container-inner {
       width: max-content;
   
       > table {
@@ -45,16 +49,28 @@ $sort-direction-color: royalblue;
 
 .rvt {
   width: 100%;
+  overflow: hidden;
 
-  .rvt-table-container,
-  .rvt-virtual-table-container {
+  .rvt-table-container {
     position: relative;
     min-width: fit-content;
   }
 
   .rvt-virtual-table-container {
+    max-width: 100%;
+    position: relative;
     overflow-x: visible;
     overflow-y: visible;
+
+    .rvt-virtual-table-container-scroll {
+      overflow-x: auto;
+      overflow-y: visible;
+
+      .rvt-virtual-table-container-inner {
+        min-width: min-content;
+        overflow: hidden;
+      }
+    }
   }
 
   thead {
