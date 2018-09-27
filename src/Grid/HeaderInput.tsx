@@ -55,7 +55,7 @@ export default class HeaderInput extends React.PureComponent < {
     };
 
     return (
-      <form onSubmit={this.submitFn} style={{display: 'inline-block'}}>
+      <form onSubmit={this.submitFn}>
         <input
           value={inputTitle}
           onChange={onChange}
@@ -77,11 +77,9 @@ export default class HeaderInput extends React.PureComponent < {
     };
 
     return (
-      <span>
-        <span className='tab-title' onDoubleClick={onDoubleClick}>
-          {editing ? this.editTitleForm() : title}
-        </span>
-      </span>
+      <div className='title' onDoubleClick={onDoubleClick}>
+        {editing ? this.editTitleForm() : title}
+      </div>
     );
   }
 }
