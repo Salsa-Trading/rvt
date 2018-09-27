@@ -125,6 +125,13 @@ $sort-direction-color: royalblue;
           flex: 1 1;
           padding: 4px;
           overflow-x: hidden;
+
+          .title {
+            input {
+              width: 100%;
+              height: 1.5rem;
+            }
+          }
         }
 
         .sort-filter,

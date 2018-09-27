@@ -182,7 +182,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
 
   @autobind
   private onClick(e) {
-    if (e.target.className.includes('tab-title')) {
+    if (e.target.className.includes('title')) {
       return;
     }
 
