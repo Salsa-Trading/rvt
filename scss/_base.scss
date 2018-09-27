@@ -127,6 +127,8 @@ $sort-direction-color: royalblue;
           overflow-x: hidden;
 
           .title {
+            display: inline;
+
             input {
               width: 100%;
               height: 1.5rem;
