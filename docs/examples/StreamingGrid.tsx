@@ -1,7 +1,6 @@
 import * as React from 'react';
-import * as _ from 'lodash';
 import { CellProps } from '../../src/List/Field';
-import { VirtualGrid, Field, FieldSet, FieldProps, ListState, ListStateChangeType, isDataChange, GridRowProps } from '../../src/index';
+import { VirtualGrid, Field, FieldSet, FieldProps, ListState, ListStateChangeType, isDataChange } from '../../src/index';
 import { generateData, SampleData, generateDataForSlice } from '../../test/dataUtils';
 import { autobind } from 'core-decorators';
 

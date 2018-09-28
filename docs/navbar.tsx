@@ -1,17 +1,13 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 import {
   UncontrolledDropdown,
   DropdownItem,
   DropdownMenu,
   Navbar,
   NavbarBrand,
-  NavbarToggler,
-  Collapse,
   Nav,
   DropdownToggle
 } from 'reactstrap';
-import { autobind } from 'core-decorators';
 
 export default class NavBar extends React.Component<
   {},

@@ -125,13 +125,13 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     let headerComponent;
 
     if(title) {
-      headerComponent = <HeaderInput title={title} updateTitle={updateTitle}/>
+      headerComponent = <HeaderInput title={title} updateTitle={updateTitle}/>;
     } else if(header && typeof header === 'string') {
-      headerComponent = <HeaderInput title={header} updateTitle={updateTitle}/>
+      headerComponent = <HeaderInput title={header} updateTitle={updateTitle}/>;
     } else if (header && React.isValidElement(header)) {
       headerComponent = header;
     } else {
-      headerComponent = <HeaderInput title={name} updateTitle={updateTitle}/>
+      headerComponent = <HeaderInput title={name} updateTitle={updateTitle}/>;
     }
     return headerComponent;
   }
@@ -169,12 +169,12 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
   }
 
   @autobind
-  setFilterOpen(open) {
+  public setFilterOpen(open) {
     this.setState({showFilterOnClick: open});
   }
 
   @autobind
-  onFilterClosed() {
+  public onFilterClosed() {
     if (this.state.showFilterOnClick) {
       this.setFilterOpen(false);
     }
@@ -217,7 +217,6 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
       colSpan,
       onSortSelection,
       onFilterChanged,
-      onMouseDown,
       fixedColumnWidth
     } = this.props as any;
     const {showFilterOnClick} = this.state;

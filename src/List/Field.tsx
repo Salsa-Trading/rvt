@@ -94,7 +94,7 @@ export abstract class FieldBase implements FieldPropsBase {
       title: this.title
     };
   }
- 
+
   public getFieldCount() {
     return 1;
   }

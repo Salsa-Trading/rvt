@@ -242,14 +242,13 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
 
   public componentWillReceiveProps(nextProps, props) {
     if (!isEqual(nextProps, props) && this.allChildrenHaveWidthSet(nextProps)) {
-      const {onAllHeaderWidthsSet, hideHeader} = this.props;
+      const {onAllHeaderWidthsSet} = this.props;
       onAllHeaderWidthsSet();
     }
   }
 
   public render() {
     const { fieldSet, rowHeader, hideHeader } = this.props;
-    const { draggingColumn } = this.state;
     const rows = getLevels(fieldSet);
     const colCount = rows[0].reduce((r, i) => r + i.colSpan, 0);
     const className = [

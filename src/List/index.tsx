@@ -4,7 +4,7 @@ import { FieldSet, RootFieldSet } from './FieldSet';
 import { Field, SortDirection, FieldDefaults, FieldDisplay } from './Field';
 import strEnum from '../utils/strEnum';
 import isNil from '../utils/isNil';
-import { isEqual, pick } from 'lodash';
+import { isEqual } from 'lodash';
 
 export type SortState = {fieldName: string, direction: SortDirection}[];
 export type FilterState = {[fieldName: string]: any };
@@ -184,7 +184,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       if(fieldSetField && width !== fieldSetField.width && fieldSetField !== field) {
         fieldSetField.resize(width);
       }
-      
+
       if(field.width !== width) {
         field.resize(width);
         const fieldDisplay: FieldDisplay = fieldSet.getFieldDisplay();
@@ -195,7 +195,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
     private onTitleChanged(title: string, field: Field) {
       const { onListStateChanged } = this.listStateHelper();
       const { fieldSet } = this.state;
-      
+
       // Note: this is a hack.
       // For some reason the 'field' we receive
       // is different from the field in the fieldSet
@@ -260,7 +260,7 @@ type FieldDefinitionProps = {
   fixedColumnWidth?: boolean;
   sorts?: SortState;
   filters?: FilterState;
-}
+};
 
 function getFieldProps(props: React.Props<ListProps> & ListProps): FieldDefinitionProps {
   return {

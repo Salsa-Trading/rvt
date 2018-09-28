@@ -24,10 +24,10 @@ export default class HeaderInput extends React.PureComponent < {
 
   @autobind
   private submitFn(e: React.FormEvent<HTMLFormElement>) {
-    const {title, updateTitle} = this.props;
+    const {updateTitle} = this.props;
     const {inputTitle} = this.state;
     e.preventDefault();
-    
+
     updateTitle(inputTitle);
     this.setState({
       editing: false,

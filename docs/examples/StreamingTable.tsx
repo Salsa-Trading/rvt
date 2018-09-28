@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { VirtualTable, GridRowProps } from '../../src/index';
+import { VirtualTable } from '../../src/index';
 import { generateData, SampleData, generateDataForSlice } from '../../test/dataUtils';
 import { autobind } from 'core-decorators';
-import { TableRowProps, VirtualTableProps } from '../../src/VirtualTable';
+import { TableRowProps } from '../../src/VirtualTable';
 
 const Head = () => (
   <thead>
@@ -28,7 +28,7 @@ const Row = (rowProps: TableRowProps<SampleData>) => {
       <td style={{whiteSpace: 'nowrap'}}>{data.col5.toFixed(5)}</td>
     </tr>
   );
-}
+};
 
 class Row2 extends React.Component<TableRowProps<SampleData>> {
   public render() {
@@ -68,7 +68,7 @@ export default class Style extends React.Component<{}, {
   public componentWillUnmount() {
     if(this.interval) {
       window.clearInterval(this.interval);
-      this.interval = null
+      this.interval = null;
     }
   }
 
@@ -77,7 +77,7 @@ export default class Style extends React.Component<{}, {
     this.setState({rows: [
       ...this.state.rows,
       ...generateDataForSlice(this.state.rows.length, 5)
-    ]})
+    ]});
   }
 
   @autobind

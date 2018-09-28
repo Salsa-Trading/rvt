@@ -45,10 +45,11 @@ export default class Filter extends React.Component<FilterProps, {
   filter: any;
 }> {
 
-  private mouseDownHandler: () => void;
-  static defaultProps = {
+  public static defaultProps = {
     onFilterClosed: () => {}
-  }
+  };
+
+  private mouseDownHandler: () => void;
 
   constructor(props: FilterProps, context) {
     super(props, context);
@@ -83,11 +84,11 @@ export default class Filter extends React.Component<FilterProps, {
   }
 
   @autobind
-  closeFilter() {
+  public closeFilter() {
     this.setState({ showFilter: false });
     this.props.onFilterClosed();
   }
-  
+
   @autobind
   private handleOk(e) {
     e.preventDefault();
