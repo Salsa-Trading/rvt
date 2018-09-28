@@ -4,7 +4,7 @@ import { FieldSet, RootFieldSet } from './FieldSet';
 import { Field, SortDirection, FieldDefaults, FieldDisplay } from './Field';
 import strEnum from '../utils/strEnum';
 import isNil from '../utils/isNil';
-import { isEqual } from 'lodash';
+import { isEqual, pick } from 'lodash';
 
 export type SortState = {fieldName: string, direction: SortDirection}[];
 export type FilterState = {[fieldName: string]: any };
@@ -87,8 +87,12 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
     }
 
     public componentWillReceiveProps(nextProps: React.Props<ListProps> & ListProps) {
-      const fieldSet = this.createFields(nextProps);
-      if(!isEqual(fieldSet, this.state.fieldSet) || !isEqual(this.props.listState.fields, nextProps.listState.fields)) {
+      const prevFieldProps = getFieldProps(this.props);
+      const nextFieldProps = getFieldProps(nextProps);
+
+      // If field definitions have changed, regenerate fields
+      if(!isEqual(prevFieldProps, nextFieldProps)) {
+        const fieldSet = this.createFields(nextProps);
         this.setState({
           fieldSet
         });
@@ -247,5 +251,23 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
         />
       );
     }
+  };
+}
+
+type FieldDefinitionProps = {
+  children?: React.ReactNode;
+  fieldDefaults?: FieldDefaults;
+  fixedColumnWidth?: boolean;
+  sorts?: SortState;
+  filters?: FilterState;
+}
+
+function getFieldProps(props: React.Props<ListProps> & ListProps): FieldDefinitionProps {
+  return {
+    children: props.children,
+    fieldDefaults: props.fieldDefaults,
+    fixedColumnWidth: props.fixedColumnWidth,
+    sorts: props.listState && props.listState.sorts,
+    filters: props.listState && props.listState.filters
   };
 }
