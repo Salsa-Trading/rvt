@@ -57,6 +57,9 @@ export interface FieldProps extends FieldPropsBase, React.Props<FieldProps> {
   cell?: CellType;
 }
 
+// Do not allow columns narrower than this
+const MIN_WIDTH = 10;
+
 export abstract class FieldBase implements FieldPropsBase {
   public name: string;
   public title: string;
@@ -97,13 +100,15 @@ export abstract class FieldBase implements FieldPropsBase {
   }
 
   public resize(width: number) {
-    this.width = width;
+    const newWidth = Math.max(MIN_WIDTH, width);
+    this.width = newWidth;
   }
 
   public updateTitle(title: string) {
     this.title = title;
   }
 }
+
 export class Field extends FieldBase implements FieldProps {
 
   public format?: FormatType;
