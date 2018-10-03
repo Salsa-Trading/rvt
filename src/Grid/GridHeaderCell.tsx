@@ -257,7 +257,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     const style: React.CSSProperties = {
       padding: 0,
       width,
-      maxWidth: fixedColumnWidth ? width : undefined
+      maxWidth: fixedColumnWidth && isFinite(width) ? width : undefined
     };
 
     return (
