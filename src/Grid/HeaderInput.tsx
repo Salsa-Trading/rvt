@@ -78,8 +78,20 @@ export default class HeaderInput extends React.PureComponent < {
 
     return (
       <div className='title' onDoubleClick={onDoubleClick}>
-        {editing ? this.editTitleForm() : title}
+        {editing ? this.editTitleForm() : addSoftHyphens(title)}
       </div>
     );
   }
+}
+
+export function addSoftHyphens(text: string): string {
+  return addPunctuationSoftHyphens(addCamelCaseSoftHyphens(text));
+}
+
+export function addCamelCaseSoftHyphens(text: string) {
+  return text.replace(/([a-z])([A-Z])/g, '$1\u00ad$2');
+}
+
+export function addPunctuationSoftHyphens(text: string): string {
+  return text.replace(/([_\.:\/])(.)/g, '$1\u00ad$2');
 }
