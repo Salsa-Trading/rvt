@@ -182,12 +182,9 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
 
   @autobind
   private onClick(e) {
-    if (e.target.className.includes('title')) {
-      return;
-    }
-
+    e.preventDefault();
     if (this.props.hideFilters) {
-      this.setFilterOpen(!this.state.showFilterOnClick);
+      this.setFilterOpen(true);
     }
   }
 
@@ -261,9 +258,21 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     };
 
     return (
-      <th key={name} className='grid-header' style={style} rowSpan={rowSpan} colSpan={colSpan} {...dataSet} ref={this.setRef}>
+      <th
+        key={name}
+        className='grid-header'
+        style={style}
+        rowSpan={rowSpan}
+        colSpan={colSpan}
+        {...dataSet}
+        ref={this.setRef}
+        onContextMenu={this.onClick}
+      >
         <div className={`${headerClassName}`}>
-          <div className='header' onMouseDown={this.onMouseDown} onClick={this.onClick}>
+          <div
+            className='header'
+            onMouseDown={this.onMouseDown}
+          >
             <div className='header-text'>
               {this.renderHeader()}
             </div>
