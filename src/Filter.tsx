@@ -183,7 +183,7 @@ export default class Filter extends React.Component<FilterProps, {
     const { showFilter } = this.state;
     return (
       <div>
-        <button className='filter-btn' onClick={this.toggleFilterPane}>
+        <button className='filter-btn' onClick={this.toggleFilterPane} onContextMenu={this.toggleFilterPane}>
           <span className='edit-filters' />
           {this.sortDirectionIcon()}
         </button>
