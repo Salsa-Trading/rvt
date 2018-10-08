@@ -181,18 +181,25 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     }
   }
 
-  @autobind 
+  @autobind
   private toggleFilterPane(e) {
     e.preventDefault();
     this.setFilterOpen(true);
-    this.filter && this.filter.toggleFilterPane();
+    if(this.filter) {
+      this.filter.toggleFilterPane();
+    }
   }
-  
+
   @autobind
   private onMouseDown(e) {
     if(!this.state.showFilterOnClick) {
        this.props.onMouseDown(e);
     }
+  }
+
+  @autobind
+  private filterRefFn(ref: Filter) {
+    this.filter = ref;
   }
 
   public render() {
@@ -233,7 +240,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     if(filterable && (showFilterOnClick || (hideFilters && filter) || !hideFilters)) {
       sortFilterControl = (
         <Filter
-          ref={(ref) => {this.filter = ref}}
+          ref={this.filterRefFn}
           openOnMounted={showFilterOnClick}
           field={field}
           onSortSelection={sortSelectionHandler}
