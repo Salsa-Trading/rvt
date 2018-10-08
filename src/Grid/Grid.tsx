@@ -109,6 +109,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
       hideDefaultChooser,
       fixedColumnWidth,
       hideHeader,
+      hideFilters,
       ...rest
     } = this.props;
 
