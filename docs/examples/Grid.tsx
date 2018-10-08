@@ -72,6 +72,7 @@ export default class GridExample extends React.Component<{}, {
         data={rows}
         onDoubleClick={() => console.log('Double click event')}
         fixedColumnWidth={true}
+        hideFilters={true}
       >
         <FieldSet header='Group 1' name='group1'>
           <Field header={Header} name='col1' sortDirection='asc' />
