@@ -10,11 +10,6 @@ import {autobind} from 'core-decorators';
 export type VirtualGridProps<TData extends object> = BaseGridProps<TData> & {
   getRows?: (rowIndex: number, length: number) => GridRowProps<TData>[];
   getRow?: (rowIndex: number) => GridRowProps<TData>;
-  chooserMountPoint?: HTMLElement;
-  hideDefaultChooser?: boolean;
-  fixedColumnWidth?: boolean;
-  hideFilters?: boolean;
-  hideHeader?: boolean;
 };
 
 export type WrappedVirtualGridProps<TData extends object> = VirtualTableBaseProps & ListViewProps & VirtualGridProps<TData>;

@@ -12,10 +12,6 @@ export type TablePropsWithoutData = Omit<React.HTMLProps<HTMLTableElement>, 'dat
 
 export type GridProps<TData extends object> = TablePropsWithoutData & BaseGridProps<TData> & {
   data: GridRowProps<TData>[];
-  chooserMountPoint?: HTMLElement;
-  hideDefaultChooser?: boolean;
-  fixedColumnWidth?: boolean;
-  hideHeader?: boolean;
 };
 
 export type WrappedGridProps<TData extends object> = GridProps<TData> & ListViewProps;
