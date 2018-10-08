@@ -42,6 +42,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
   };
 
   private thRef: HTMLDivElement;
+  private filter: Filter;
 
   constructor(props) {
     super(props);
@@ -180,17 +181,13 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     }
   }
 
-  @autobind
-  private onClick(e) {
-    if (e.target.className.includes('title')) {
-      return;
-    }
-
-    if (this.props.hideFilters) {
-      this.setFilterOpen(!this.state.showFilterOnClick);
-    }
+  @autobind 
+  private toggleFilterPane(e) {
+    e.preventDefault();
+    this.setFilterOpen(true);
+    this.filter && this.filter.toggleFilterPane();
   }
-
+  
   @autobind
   private onMouseDown(e) {
     if(!this.state.showFilterOnClick) {
@@ -236,6 +233,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     if(filterable && (showFilterOnClick || (hideFilters && filter) || !hideFilters)) {
       sortFilterControl = (
         <Filter
+          ref={(ref) => {this.filter = ref}}
           openOnMounted={showFilterOnClick}
           field={field}
           onSortSelection={sortSelectionHandler}
@@ -261,9 +259,21 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     };
 
     return (
-      <th key={name} className='grid-header' style={style} rowSpan={rowSpan} colSpan={colSpan} {...dataSet} ref={this.setRef}>
+      <th
+        key={name}
+        className='grid-header'
+        style={style}
+        rowSpan={rowSpan}
+        colSpan={colSpan}
+        {...dataSet}
+        ref={this.setRef}
+        onContextMenu={this.toggleFilterPane}
+      >
         <div className={`${headerClassName}`}>
-          <div className='header' onMouseDown={this.onMouseDown} onClick={this.onClick}>
+          <div
+            className='header'
+            onMouseDown={this.onMouseDown}
+          >
             <div className='header-text'>
               {this.renderHeader()}
             </div>

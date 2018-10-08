@@ -63,8 +63,10 @@ $sort-direction-color: royalblue;
     .rvt-virtual-table-container-scroll {
       overflow-x: auto;
       overflow-y: visible;
+      height: 100%;
 
       .rvt-virtual-table-container-inner {
+        height: 100%;
         min-width: min-content;
         overflow: hidden;
       }
