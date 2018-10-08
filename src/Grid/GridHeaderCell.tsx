@@ -184,6 +184,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
   @autobind 
   private toggleFilterPane(e) {
     e.preventDefault();
+    this.setFilterOpen(true);
     this.filter && this.filter.toggleFilterPane();
   }
   
