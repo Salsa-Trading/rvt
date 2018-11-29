@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
 import Scroller from './Scroller';
-import { difference, omit, zipObject, map, debounce } from 'lodash';
+import { difference, omit, zipObject, map, debounce, mean, sum, some, max, throttle } from 'lodash';
 
 type TableStyles = {
   container: React.CSSProperties;
@@ -176,13 +176,14 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   rowHeight: number;
   height: number;
   maxVisibleRows: number;
+  tableFillSpace: number;
   calculatingHeights: boolean;
 }> {
-
   public static propTypes = propTypes;
   public static defaultProps = defaultProps;
 
   private containerRef: HTMLDivElement;
+  
   private dataKeyToRowKeyMap: {[dataKey: string]: number} = {};
   private rowKeyCounter = 1;
   private debouncedOnWindowResize: () => void;
@@ -193,29 +194,45 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     this.state = Object.assign({
       topRow: topRowControlled ? undefined : 0,
       topRowControlled
-    },
-      this.calculateHeightStateValues(this.props.height, this.props.headerHeight, this.props.rowHeight)
-    );
+    },  this.calculateHeightStateValues(this.props.height, this.props.headerHeight, []));
   }
 
   /**
    * Caclulate the maxVisibleRows from height values for the container, header and rows
    * @private
    */
-  private calculateHeightStateValues(height: number|string, headerHeight: number, rowHeight: number) {
+  private calculateHeightStateValues(totalHeight: number | string, headerHeight: number = 0, rowHeights: number[]) {
     let maxVisibleRows = null;
-    if (typeof height === 'number') {
-      if (height && rowHeight && headerHeight) {
-        maxVisibleRows = Math.floor((height - headerHeight) / rowHeight);
-      }
+    let tmpTotalHeight = 0;
+    let leftOverSpace = 0;
+    const averageRowHeight = mean(rowHeights);
+    const maxHeight = max(rowHeights);
+
+    if (typeof totalHeight === 'number') {
+      maxVisibleRows = 0;
+      const availableHeight = totalHeight - headerHeight;
+
+      some(rowHeights, (height) => {
+        tmpTotalHeight += height
+        if(tmpTotalHeight < availableHeight) {
+          leftOverSpace = availableHeight - tmpTotalHeight;
+          maxVisibleRows++;
+          return false;
+        }
+
+        return true; 
+      });
     }
+      
     const heightState = {
-      maxVisibleRows: maxVisibleRows || 10,
+      maxVisibleRows: maxVisibleRows || 20,
       calculatingHeights: maxVisibleRows === null,
-      rowHeight,
-      headerHeight: headerHeight || rowHeight,
-      height: typeof height === 'number' ? height : null
+      rowHeight: averageRowHeight,
+      headerHeight: headerHeight || averageRowHeight,
+      height: typeof totalHeight === 'number' ? totalHeight : null,
+      tableFillSpace: leftOverSpace,
     };
+
     return heightState;
   }
 
@@ -309,6 +326,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * If the calculator is rendered on mount, calculate heights
    */
   public componentDidUpdate() {
+    this.adjustVisibleRows();
     if (this.state.calculatingHeights) {
       this.calculateHeights();
     }
@@ -333,16 +351,34 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     if(!div) {
       return;
     }
-    const height = this.props.height ? div.clientHeight : (div.parentElement.clientHeight) - 6;
+
     const header = div.querySelector('table > thead');
+    const height = this.props.height ? div.clientHeight : (div.parentElement.clientHeight) - 6;
     const headerHeight = header ? header.scrollHeight : 0;
     const scrollHeights = Array.prototype.slice.call(div.querySelectorAll('table > tbody > tr')).map(e => e.scrollHeight);
-    const rowHeight = Math.max.apply(Math, scrollHeights);
 
     this.setState({
-      ...this.calculateHeightStateValues(height, headerHeight, rowHeight)
+      ...this.calculateHeightStateValues(height, headerHeight, scrollHeights)
     }, this.scrollToTopIfAllRowsVisible);
   }
+
+  @autobind
+  private adjustVisibleRows() {
+    const div = this.containerRef;
+    if(!div) {
+      return;
+    }
+
+    const header = div.querySelector('table > thead');
+    const height = this.props.height ? div.clientHeight : (div.parentElement.clientHeight) - 6;
+    const headerHeight = header ? header.scrollHeight : 0;
+    const scrollHeights = Array.prototype.slice.call(div.querySelectorAll('table > tbody > tr')).map(e => e.scrollHeight);
+    const nextHeightState = this.calculateHeightStateValues(height, headerHeight, scrollHeights);
+    if(nextHeightState.maxVisibleRows !== this.state.maxVisibleRows) {
+      this.setState({...nextHeightState});
+    }
+  }
+
 
   @autobind
   private scrollToTopIfAllRowsVisible() {
@@ -404,7 +440,6 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     const { row } = this.props;
     const { dataKeyToRowKeyMap } = this;
     const rows = this.getRows();
-
     // Re-compute row keys for all visible elements
     const previousDataKeys: string[] = Object.keys(dataKeyToRowKeyMap);
     const newDataKeys: string[] = rows.map((row, i) => {
@@ -438,11 +473,12 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     const rowElement = React.isValidElement(row)
       ? row as React.ReactElement<Indexed<TableRowProps<TData>>>
       : React.createElement(row as React.ComponentType<Indexed<TableRowProps<TData>>>);
-
-    return rows.map((props, i) => React.cloneElement(rowElement, {
+    
+    const nextRows =  rows.map((props, i) => React.cloneElement(rowElement, {
       ...props,
       key: (this.dataKeyToRowKeyMap[props.key] || i).toString()
     } as Indexed<TableRowProps<TData>>));
+    return nextRows;
   }
 
   @autobind
@@ -484,13 +520,13 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    */
   private renderTable(header, rows, tableClassName: string, styles: TableStyles) {
     const { rowCount, fixedColumnWidth } = this.props;
-    const { headerHeight, rowHeight } = this.state;
+    const { headerHeight, rowHeight, tableFillSpace } = this.state;
     const tableStyle: React.CSSProperties = styles.table || {};
     const containerStyle: React.CSSProperties = styles.container || {};
     const tbodyStyle: React.CSSProperties = styles.tbody || {};
     const topRow = this.getTopRow();
     const scrollerVisible = rowCount > this.state.maxVisibleRows;
-
+  
     return (
       <div
         onWheel={this.onWheel}
@@ -505,6 +541,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
                 {header}
                 <tbody className={scrollerVisible ? 'rvt-scroller' : ''} style={tbodyStyle}>
                   {rows}
+                  {tableFillSpace > 0 ?  <tr style={{height: tableFillSpace}}></tr> : null}
                 </tbody>
               </table>
             </div>
