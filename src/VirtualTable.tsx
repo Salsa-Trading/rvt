@@ -474,7 +474,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       ? row as React.ReactElement<Indexed<TableRowProps<TData>>>
       : React.createElement(row as React.ComponentType<Indexed<TableRowProps<TData>>>);
     
-    const nextRows =  rows.map((props, i) => React.cloneElement(rowElement, {
+    const nextRows = rows.map((props, i) => React.cloneElement(rowElement, {
       ...props,
       key: (this.dataKeyToRowKeyMap[props.key] || i).toString()
     } as Indexed<TableRowProps<TData>>));
