@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { autobind } from 'core-decorators';
-import { omit } from 'lodash';
+import { omit, isBoolean } from 'lodash';
 
 export type CheckboxProps = React.InputHTMLAttributes<HTMLInputElement> & {
   indeterminate?: boolean;
@@ -28,11 +28,15 @@ export class Checkbox extends React.Component<CheckboxProps, {
   public render(): React.ReactNode {
     const props = omit(this.props, 'indeterminate');
 
+    // Adding key due to React v16.6 checkbox re-render bug
+    const key = isBoolean(props.value)
+      ? props.value.toString()
+      : 'undefined';
+
     return (
       <input
         {...props}
-        // Adding key due to react v16.6 re-render bug
-        key={props.value.toString()}
+        key={key}
         type='checkbox'
         ref={this.refFn}
       />
