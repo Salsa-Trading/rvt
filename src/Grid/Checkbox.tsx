@@ -31,6 +31,8 @@ export class Checkbox extends React.Component<CheckboxProps, {
     return (
       <input
         {...props}
+        // Adding key due to react v16.6 re-render bug
+        key={props.value.toString()}
         type='checkbox'
         ref={this.refFn}
       />
