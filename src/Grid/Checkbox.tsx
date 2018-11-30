@@ -29,8 +29,8 @@ export class Checkbox extends React.Component<CheckboxProps, {
     const props = omit(this.props, 'indeterminate');
 
     // Adding key due to React v16.6 checkbox re-render bug
-    const key = isBoolean(props.value)
-      ? props.value.toString()
+    const key = isBoolean(props.checked)
+      ? props.checked.toString()
       : 'undefined';
 
     return (
