@@ -29,7 +29,7 @@ describe('<Table />', () => {
         headerHeight: 25,
         rowHeight: 20
       });
-
+      
       wrapper = shallow(<VirtualTable {...props} />);
     });
 
@@ -58,7 +58,7 @@ describe('<Table />', () => {
     });
 
     it('should calculate visibleRows after construction', () => {
-      expect(wrapper).to.have.state('maxVisibleRows', 23);
+      expect(wrapper).to.have.state('maxVisibleRows', 20);
     });
 
   });
@@ -77,7 +77,7 @@ describe('<Table />', () => {
     });
 
     it('should calculate visibleRows after construction', () => {
-      expect(wrapper).to.have.state('maxVisibleRows', 23);
+      expect(wrapper).to.have.state('maxVisibleRows', 20);
     });
 
   });
@@ -94,8 +94,8 @@ describe('<Table />', () => {
         wrapper = shallow(<VirtualTable {...props} />);
       });
 
-      it('should set visibleRows equal to 10 after construction', () => {
-        expect(wrapper).to.have.state('maxVisibleRows', 10);
+      it('should set visibleRows equal to 20 after construction', () => {
+        expect(wrapper).to.have.state('maxVisibleRows', 20);
       });
 
       it('should have calculator div', () => {
@@ -114,8 +114,8 @@ describe('<Table />', () => {
         mounted = mount(<VirtualTable {...props} />);
       });
 
-      it('should set visibleRows equal to 10 after construction', () => {
-        expect(mounted).to.have.state('maxVisibleRows', 10);
+      it('should set visibleRows equal to 20 after construction', () => {
+        expect(mounted).to.have.state('maxVisibleRows', 20);
       });
 
       it('should have calculoator div until after mount & re-render', () => {

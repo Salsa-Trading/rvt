@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
 import Scroller from './Scroller';
-import { difference, omit, zipObject, map, debounce, mean, sum, some, max, throttle } from 'lodash';
+import { difference, omit, zipObject, map, debounce, mean, some } from 'lodash';
 
 type TableStyles = {
   container: React.CSSProperties;
@@ -183,7 +183,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   public static defaultProps = defaultProps;
 
   private containerRef: HTMLDivElement;
-  
+
   private dataKeyToRowKeyMap: {[dataKey: string]: number} = {};
   private rowKeyCounter = 1;
   private debouncedOnWindowResize: () => void;
@@ -201,36 +201,35 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * Caclulate the maxVisibleRows from height values for the container, header and rows
    * @private
    */
-  private calculateHeightStateValues(totalHeight: number | string, headerHeight: number = 0, rowHeights: number[]) {
+  private calculateHeightStateValues(totalHeight: number | string, headerHeight: number, rowHeights: number[]) {
     let maxVisibleRows = null;
     let tmpTotalHeight = 0;
     let leftOverSpace = 0;
     const averageRowHeight = mean(rowHeights);
-    const maxHeight = max(rowHeights);
 
     if (typeof totalHeight === 'number') {
       maxVisibleRows = 0;
       const availableHeight = totalHeight - headerHeight;
 
       some(rowHeights, (height) => {
-        tmpTotalHeight += height
+        tmpTotalHeight += height;
         if(tmpTotalHeight < availableHeight) {
           leftOverSpace = availableHeight - tmpTotalHeight;
           maxVisibleRows++;
           return false;
         }
 
-        return true; 
+        return true;
       });
     }
-      
+
     const heightState = {
       maxVisibleRows: maxVisibleRows || 20,
       calculatingHeights: maxVisibleRows === null,
       rowHeight: averageRowHeight,
       headerHeight: headerHeight || averageRowHeight,
       height: typeof totalHeight === 'number' ? totalHeight : null,
-      tableFillSpace: leftOverSpace,
+      tableFillSpace: leftOverSpace
     };
 
     return heightState;
@@ -442,7 +441,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     const rows = this.getRows();
     // Re-compute row keys for all visible elements
     const previousDataKeys: string[] = Object.keys(dataKeyToRowKeyMap);
-    const newDataKeys: string[] = rows.map((row, i) => {
+    const newDataKeys: string[] = rows.map((row) => {
       return row.key;
     });
 
@@ -473,7 +472,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     const rowElement = React.isValidElement(row)
       ? row as React.ReactElement<Indexed<TableRowProps<TData>>>
       : React.createElement(row as React.ComponentType<Indexed<TableRowProps<TData>>>);
-    
+
     const nextRows = rows.map((props, i) => React.cloneElement(rowElement, {
       ...props,
       key: (this.dataKeyToRowKeyMap[props.key] || i).toString()
@@ -526,7 +525,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     const tbodyStyle: React.CSSProperties = styles.tbody || {};
     const topRow = this.getTopRow();
     const scrollerVisible = rowCount > this.state.maxVisibleRows;
-  
+
     return (
       <div
         onWheel={this.onWheel}
@@ -541,7 +540,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
                 {header}
                 <tbody className={scrollerVisible ? 'rvt-scroller' : ''} style={tbodyStyle}>
                   {rows}
-                  {tableFillSpace > 0 ?  <tr style={{height: tableFillSpace}}></tr> : null}
+                  {tableFillSpace > 0 ?  <tr style={{height: tableFillSpace}}/> : null}
                 </tbody>
               </table>
             </div>
@@ -584,6 +583,6 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
 
   private get className(): string {
     const {containerClassName} = this.props;
-    return `rvt ${containerClassName ? containerClassName : ''}`;
+    return `rvt vt ${containerClassName ? containerClassName : ''}`;
   }
 }
