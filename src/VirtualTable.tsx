@@ -215,19 +215,20 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     return header ? header.scrollHeight : 0;
   }
 
-  private increaseMaxVisibleRowsIfSpaceAvailable() {
+  private updateMaxVisibleRows() {
     const height = this.tableHeight;
     const headerHeight = this.headerHeight;
 
     const avgRowHeight = mean(this.currentlyVisibleRowHeights);
     const unusedHeight = height - headerHeight - sum(this.currentlyVisibleRowHeights);
+    const absUnused = Math.abs(unusedHeight);
+    const direction = unusedHeight / absUnused;
 
-    if(unusedHeight > avgRowHeight) {
-      const maxVisibleRows = this.state.maxVisibleRows + Math.ceil(unusedHeight / avgRowHeight);
+    const maxVisibleRows = this.state.maxVisibleRows + direction * Math.floor(absUnused / avgRowHeight);
+    if(maxVisibleRows !== this.state.maxVisibleRows && maxVisibleRows >= 1) {
       this.setState({maxVisibleRows});
     }
   }
-
 
   /**
    * Caclulate the maxVisibleRows from height values for the container, header and rows
@@ -346,7 +347,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       this.calculateHeights();
     }
 
-    this.increaseMaxVisibleRowsIfSpaceAvailable();
+    this.updateMaxVisibleRows();
   }
 
   /**
@@ -378,11 +379,15 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   }
 
   private get currentlyVisibleRowHeights(): number[] {
+    return this.renderedRows.map(e => e.scrollHeight);
+  }
+
+  private get renderedRows() {
     const div = this.containerRef;
     if(!div) {
       return [];
     }
-    return Array.from(div.querySelectorAll('table > tbody > tr')).map(e => e.scrollHeight);
+    return Array.from(div.querySelectorAll('table > tbody > tr'));
   }
 
   @autobind
