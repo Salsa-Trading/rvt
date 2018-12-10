@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
 import Scroller from './Scroller';
-import { difference, omit, zipObject, map, debounce } from 'lodash';
+import { difference, omit, zipObject, map, debounce, mean, sum } from 'lodash';
 
 type TableStyles = {
   container: React.CSSProperties;
@@ -198,6 +198,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     );
   }
 
+
   /**
    * Caclulate the maxVisibleRows from height values for the container, header and rows
    * @private
@@ -206,9 +207,16 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     let maxVisibleRows = null;
     if (typeof height === 'number') {
       if (height && rowHeight && headerHeight) {
+        // Calculate expected number of visible rows based on average row height
         maxVisibleRows = Math.floor((height - headerHeight) / rowHeight);
+
+        const unusedHeight = height - headerHeight - sum(this.currentlyVisibleRowHeights);
+        if(unusedHeight > rowHeight) {
+          maxVisibleRows += Math.ceil(unusedHeight / rowHeight);
+        }
       }
     }
+
     const heightState = {
       maxVisibleRows: maxVisibleRows || 10,
       calculatingHeights: maxVisibleRows === null,
@@ -336,12 +344,19 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     const height = this.props.height ? div.clientHeight : (div.parentElement.clientHeight) - 6;
     const header = div.querySelector('table > thead');
     const headerHeight = header ? header.scrollHeight : 0;
-    const scrollHeights = Array.prototype.slice.call(div.querySelectorAll('table > tbody > tr')).map(e => e.scrollHeight);
-    const rowHeight = Math.max.apply(Math, scrollHeights);
+    const rowHeight = mean(this.currentlyVisibleRowHeights);
 
     this.setState({
       ...this.calculateHeightStateValues(height, headerHeight, rowHeight)
     }, this.scrollToTopIfAllRowsVisible);
+  }
+
+  private get currentlyVisibleRowHeights(): number[] {
+    const div = this.containerRef;
+    if(!div) {
+      return [];
+    }
+    return Array.from(div.querySelectorAll('table > tbody > tr')).map(e => e.scrollHeight);
   }
 
   @autobind
@@ -385,7 +400,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
 
     let rowProps: TableRowProps<TData>[];
     if(getRows) {
-      rowProps = getRows(topRow, Math.floor(numRows * 1.5), this.state.maxVisibleRows);
+      rowProps = getRows(topRow, numRows, this.state.maxVisibleRows);
     }
     else {
       rowProps = new Array(numRows);
