@@ -85,10 +85,6 @@ describe('<Scroller />', () => {
       expect(div).to.have.style('width', '15px');
     });
 
-    it('should have a div with height = {props.size}px style', () => {
-      expect(div).to.have.style('height', `${props.size}px`);
-    });
-
     it('should have a div with top = {props.margin}px style', () => {
       expect(div).to.have.style('top', `${props.margin}px`);
     });
