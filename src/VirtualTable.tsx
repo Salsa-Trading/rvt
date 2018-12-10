@@ -216,11 +216,17 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   }
 
   private updateMaxVisibleRows() {
+    if(this.props.rowCount < this.state.maxVisibleRows) {
+      return;
+    }
+
+
     const height = this.tableHeight;
     const headerHeight = this.headerHeight;
 
-    const avgRowHeight = mean(this.currentlyVisibleRowHeights);
-    const unusedHeight = height - headerHeight - sum(this.currentlyVisibleRowHeights);
+    const currentlyVisibleRowHeights = this.currentlyVisibleRowHeights;
+    const avgRowHeight = mean(currentlyVisibleRowHeights);
+    const unusedHeight = height - headerHeight - sum(currentlyVisibleRowHeights);
     const absUnused = Math.abs(unusedHeight);
     const direction = unusedHeight / absUnused;
 
