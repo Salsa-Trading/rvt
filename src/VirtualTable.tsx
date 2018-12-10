@@ -198,14 +198,26 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     );
   }
 
-  private increaseMaxVisibleRowsIfSpaceAvailable() {
+  private get tableHeight(): number {
     const div = this.containerRef;
     if(!div) {
       return;
     }
-    const height = this.props.height ? div.clientHeight : (div.parentElement.clientHeight) - 6;
+    return this.props.height ? div.clientHeight : div.parentElement.clientHeight;
+  }
+
+  private get headerHeight(): number {
+    const div = this.containerRef;
+    if(!div) {
+      return;
+    }
     const header = div.querySelector('table > thead');
-    const headerHeight = header ? header.scrollHeight : 0;
+    return header ? header.scrollHeight : 0;
+  }
+
+  private increaseMaxVisibleRowsIfSpaceAvailable() {
+    const height = this.tableHeight;
+    const headerHeight = this.headerHeight;
 
     const avgRowHeight = mean(this.currentlyVisibleRowHeights);
     const unusedHeight = height - headerHeight - sum(this.currentlyVisibleRowHeights);
@@ -356,9 +368,8 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     if(!div) {
       return;
     }
-    const height = this.props.height ? div.clientHeight : (div.parentElement.clientHeight) - 6;
-    const header = div.querySelector('table > thead');
-    const headerHeight = header ? header.scrollHeight : 0;
+    const height = this.tableHeight;
+    const headerHeight = this.headerHeight;
     const rowHeight = mean(this.currentlyVisibleRowHeights);
 
     this.setState({
