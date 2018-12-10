@@ -61,8 +61,8 @@ export default class VirtualGridExample extends React.Component<{}, {
   @autobind
   public getRows(index: number, length: number): {data: SampleData, rowProps?: React.HTMLProps<HTMLTableRowElement>}[] {
 
-    return this.state.data.slice(index, index + length).map((data, index) => {
-      const height: number = 60 + Math.floor(40 * Math.sin(index));
+    return this.state.data.slice(index, index + length).map((data, i) => {
+      const height: number = 60 + Math.floor(40 * Math.sin(index + i));
       const rowProps = data.col1 % 2 === 0 ? grayRowProps : whiteRowProps;
       return {
         data,

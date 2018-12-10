@@ -385,7 +385,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
 
     let rowProps: TableRowProps<TData>[];
     if(getRows) {
-      rowProps = getRows(topRow, numRows, this.state.maxVisibleRows);
+      rowProps = getRows(topRow, Math.floor(numRows * 1.5), this.state.maxVisibleRows);
     }
     else {
       rowProps = new Array(numRows);
@@ -460,7 +460,6 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     const styles: TableStyles = {
       container: {
         position: 'relative',
-        display: 'inline-block',
         height,
         width,
         ...containerStyle
@@ -495,7 +494,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       <div
         onWheel={this.onWheel}
         ref={this.setContainerRef}
-        className={`${this.className} ${fixedColumnWidth ? 'fixed-column-width' : '' }`}
+        className={`${this.className} rvt-virtual-table ${fixedColumnWidth ? 'fixed-column-width' : '' }`}
         style={containerStyle}
       >
         <div className='rvt-virtual-table-container'>
