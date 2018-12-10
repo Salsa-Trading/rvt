@@ -127,9 +127,9 @@ export default class Scroller extends React.Component<ScrollerProps, {}> {
       scrollerStyle = {...scrollerStyle,
         right: '0px',
         top: `${margin}px`,
-        height: `${size}px`,
-        overflowY: 'scroll' as any,
-        overflowX: 'hidden' as any,
+        bottom: 0,
+        overflowY: 'scroll',
+        overflowX: 'hidden',
         width: '15px'
       };
       viewPortStyle = {
@@ -142,8 +142,8 @@ export default class Scroller extends React.Component<ScrollerProps, {}> {
         bottom: '0px',
         left: `${margin}px`,
         width: `${size}px`,
-        overflowX: 'scroll' as any,
-        overflowY: 'hidden' as any,
+        overflowX: 'scroll',
+        overflowY: 'hidden',
         height: '15px'
       };
       viewPortStyle = {

@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
 import Scroller from './Scroller';
-import { difference, omit, zipObject, map, debounce } from 'lodash';
+import { difference, omit, zipObject, map, debounce, mean, sum } from 'lodash';
 
 type TableStyles = {
   container: React.CSSProperties;
@@ -198,6 +198,44 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     );
   }
 
+  private get tableHeight(): number {
+    const div = this.containerRef;
+    if(!div) {
+      return;
+    }
+    return this.props.height ? div.clientHeight : div.parentElement.clientHeight;
+  }
+
+  private get headerHeight(): number {
+    const div = this.containerRef;
+    if(!div) {
+      return;
+    }
+    const header = div.querySelector('table > thead');
+    return header ? header.scrollHeight : 0;
+  }
+
+  private updateMaxVisibleRows() {
+    if(this.props.rowCount < this.state.maxVisibleRows) {
+      return;
+    }
+
+
+    const height = this.tableHeight;
+    const headerHeight = this.headerHeight;
+
+    const currentlyVisibleRowHeights = this.currentlyVisibleRowHeights;
+    const avgRowHeight = mean(currentlyVisibleRowHeights);
+    const unusedHeight = height - headerHeight - sum(currentlyVisibleRowHeights);
+    const absUnused = Math.abs(unusedHeight);
+    const direction = unusedHeight / absUnused;
+
+    const maxVisibleRows = this.state.maxVisibleRows + direction * Math.floor(absUnused / avgRowHeight);
+    if(maxVisibleRows !== this.state.maxVisibleRows && maxVisibleRows >= 1) {
+      this.setState({maxVisibleRows});
+    }
+  }
+
   /**
    * Caclulate the maxVisibleRows from height values for the container, header and rows
    * @private
@@ -206,9 +244,11 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     let maxVisibleRows = null;
     if (typeof height === 'number') {
       if (height && rowHeight && headerHeight) {
+        // Calculate expected number of visible rows based on average row height
         maxVisibleRows = Math.floor((height - headerHeight) / rowHeight);
       }
     }
+
     const heightState = {
       maxVisibleRows: maxVisibleRows || 10,
       calculatingHeights: maxVisibleRows === null,
@@ -312,6 +352,8 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     if (this.state.calculatingHeights) {
       this.calculateHeights();
     }
+
+    this.updateMaxVisibleRows();
   }
 
   /**
@@ -333,15 +375,25 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     if(!div) {
       return;
     }
-    const height = this.props.height ? div.clientHeight : (div.parentElement.clientHeight) - 6;
-    const header = div.querySelector('table > thead');
-    const headerHeight = header ? header.scrollHeight : 0;
-    const scrollHeights = Array.prototype.slice.call(div.querySelectorAll('table > tbody > tr')).map(e => e.scrollHeight);
-    const rowHeight = Math.max.apply(Math, scrollHeights);
+    const height = this.tableHeight;
+    const headerHeight = this.headerHeight;
+    const rowHeight = mean(this.currentlyVisibleRowHeights);
 
     this.setState({
       ...this.calculateHeightStateValues(height, headerHeight, rowHeight)
     }, this.scrollToTopIfAllRowsVisible);
+  }
+
+  private get currentlyVisibleRowHeights(): number[] {
+    return this.renderedRows.map(e => e.scrollHeight);
+  }
+
+  private get renderedRows() {
+    const div = this.containerRef;
+    if(!div) {
+      return [];
+    }
+    return Array.from(div.querySelectorAll('table > tbody > tr'));
   }
 
   @autobind
@@ -460,7 +512,6 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     const styles: TableStyles = {
       container: {
         position: 'relative',
-        display: 'inline-block',
         height,
         width,
         ...containerStyle
@@ -495,7 +546,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       <div
         onWheel={this.onWheel}
         ref={this.setContainerRef}
-        className={`${this.className} ${fixedColumnWidth ? 'fixed-column-width' : '' }`}
+        className={`${this.className} rvt-virtual-table ${fixedColumnWidth ? 'fixed-column-width' : '' }`}
         style={containerStyle}
       >
         <div className='rvt-virtual-table-container'>

@@ -49,12 +49,17 @@ $sort-direction-color: royalblue;
   width: 100%;
   overflow: hidden;
 
+  &.rvt-virtual-table {
+    height: 100%;
+  }
+
   .rvt-table-container {
     position: relative;
     min-width: fit-content;
   }
 
   .rvt-virtual-table-container {
+    height: 100%;
     max-width: 100%;
     position: relative;
     overflow-x: visible;
