@@ -14,6 +14,7 @@ import Grid from './examples/Grid';
 import VirtualScroller from './examples/VirtualScroller';
 import StreamingTable from './examples/StreamingTable';
 import StreamingGrid from './examples/StreamingGrid';
+import VariableRowHeight from './examples/VariableRowHeight';
 
 export default class App extends React.Component<{}, {}> {
 
@@ -33,6 +34,7 @@ export default class App extends React.Component<{}, {}> {
             <Route path='/examples/virtualTable' component={VirtualTable} />
             <Route path='/examples/style' component={Style} />
             <Route path='/examples/grid' component={Grid} />
+            <Route path='/examples/variableRowHeight' component={VariableRowHeight} />
             <Route path='/examples/virtualGrid' component={VirtualGrid} />
             <Route path='/examples/customGrid' component={CustomGrid} />
             <Route path='/examples/virtualScroller' component={VirtualScroller} />
