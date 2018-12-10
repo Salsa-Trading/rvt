@@ -198,6 +198,24 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     );
   }
 
+  private increaseMaxVisibleRowsIfSpaceAvailable() {
+    const div = this.containerRef;
+    if(!div) {
+      return;
+    }
+    const height = this.props.height ? div.clientHeight : (div.parentElement.clientHeight) - 6;
+    const header = div.querySelector('table > thead');
+    const headerHeight = header ? header.scrollHeight : 0;
+
+    const avgRowHeight = mean(this.currentlyVisibleRowHeights);
+    const unusedHeight = height - headerHeight - sum(this.currentlyVisibleRowHeights);
+
+    if(unusedHeight > avgRowHeight) {
+      const maxVisibleRows = this.state.maxVisibleRows + Math.ceil(unusedHeight / avgRowHeight);
+      this.setState({maxVisibleRows});
+    }
+  }
+
 
   /**
    * Caclulate the maxVisibleRows from height values for the container, header and rows
@@ -209,11 +227,6 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       if (height && rowHeight && headerHeight) {
         // Calculate expected number of visible rows based on average row height
         maxVisibleRows = Math.floor((height - headerHeight) / rowHeight);
-
-        const unusedHeight = height - headerHeight - sum(this.currentlyVisibleRowHeights);
-        if(unusedHeight > rowHeight) {
-          maxVisibleRows += Math.ceil(unusedHeight / rowHeight);
-        }
       }
     }
 
@@ -320,6 +333,8 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     if (this.state.calculatingHeights) {
       this.calculateHeights();
     }
+
+    this.increaseMaxVisibleRowsIfSpaceAvailable();
   }
 
   /**
