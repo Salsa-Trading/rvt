@@ -7,6 +7,7 @@ rules:
   force-element-nesting: 0
   force-pseudo-nesting: 0
   indentation: 2
+  nesting-depth: 0
   no-color-keywords: 0
   no-color-literals: 2
   no-qualifying-elements: 0

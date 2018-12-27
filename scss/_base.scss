@@ -12,32 +12,31 @@ $sort-direction-color: royalblue;
 
 
 // When fixed layout mode is enabled
-.rvt {
-  &.fixed-column-width {
-    .rvt-virtual-table-container {
-      width: fit-content;
-    }
+.rvt.fixed-column-width {
+  .rvt-virtual-table-container {
+    width: fit-content;
+  }
 
-    .rvt-table-container,
-    .rvt-virtual-table-container-inner {
-      width: max-content;
-  
-      > table {
-        table-layout: fixed;
-        width: auto;
-        max-width: none;
+  .rvt-table-container,
+  .rvt-virtual-table-container-inner {
+    width: max-content;
 
-        td {
+    > table {
+      table-layout: fixed;
+      width: auto;
+      max-width: none;
+
+      > thead > tr > th .header-text {
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+      }
+
+      > thead,
+      > tbody {
+        > tr > td {
           white-space: nowrap;
           overflow-x: hidden;
           text-overflow: ellipsis;
-        }
-
-        th {
-          .header-text {
-            overflow-x: hidden;
-            text-overflow: ellipsis;
-          }
         }
       }
     }
@@ -53,24 +52,24 @@ $sort-direction-color: royalblue;
     height: 100%;
   }
 
-  .rvt-table-container {
+  > .rvt-table-container {
     position: relative;
     min-width: fit-content;
   }
 
-  .rvt-virtual-table-container {
+  > .rvt-virtual-table-container {
     height: 100%;
     max-width: 100%;
     position: relative;
     overflow-x: visible;
     overflow-y: visible;
 
-    .rvt-virtual-table-container-scroll {
+    > .rvt-virtual-table-container-scroll {
       overflow-x: auto;
       overflow-y: visible;
       height: 100%;
 
-      .rvt-virtual-table-container-inner {
+      > .rvt-virtual-table-container-inner {
         height: 100%;
         min-width: min-content;
         overflow: hidden;
