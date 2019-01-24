@@ -582,12 +582,12 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       <div
         className={`${this.className} calculator`}
         ref={this.setContainerRef}
-        style={{...styles.container, visibility: 'hidden'}}
+        style={styles.container}
       >
         <div className='rvt-virtual-table-container'>
           <table className={tableClassName} style={styles.table}>
             {header}
-            <tbody style={styles.tbody}>
+            <tbody style={{...styles.tbody, visibility: 'hidden'}}>
               {rows}
             </tbody>
           </table>
