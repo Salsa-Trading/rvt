@@ -293,7 +293,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    */
   @autobind
   private onScroll(scrollTop: number) {
-    const topRow = Math.round(scrollTop / this.state.rowHeight);
+    const topRow = Math.ceil(scrollTop / this.state.rowHeight);
     this.setTopRow(topRow);
   }
 
@@ -564,7 +564,6 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
             onScroll={this.onScroll}
             scrollOffset={topRow * rowHeight}
             margin={(headerHeight || 0)}
-            size={this.visibleRows() * rowHeight}
             visible={scrollerVisible}
             virtualSize={rowHeight * rowCount}
           />

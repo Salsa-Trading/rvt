@@ -4,7 +4,7 @@ import { autobind } from 'core-decorators';
 
 export type ScrollerProps = {
   margin?: number;
-  size: number;
+  size?: number;
   virtualSize: number;
   visible?: boolean;
   onScroll: (scrollTop: number) => void;
@@ -130,6 +130,7 @@ export default class Scroller extends React.Component<ScrollerProps, {}> {
         bottom: 0,
         overflowY: 'scroll',
         overflowX: 'hidden',
+        height: size ? `${size}px` : undefined,
         width: '15px'
       };
       viewPortStyle = {
@@ -141,9 +142,9 @@ export default class Scroller extends React.Component<ScrollerProps, {}> {
       scrollerStyle = {...scrollerStyle,
         bottom: '0px',
         left: `${margin}px`,
-        width: `${size}px`,
         overflowX: 'scroll',
         overflowY: 'hidden',
+        width: size ? `${size}px` : undefined,
         height: '15px'
       };
       viewPortStyle = {
