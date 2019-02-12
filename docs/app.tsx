@@ -41,7 +41,7 @@ export default class App extends React.Component<{}, {}> {
             <Route path='/examples/virtualScroller' component={VirtualScroller} />
             <Route path='/examples/streamingTable' component={StreamingTable} />
             <Route path='/examples/streamingGrid' component={StreamingGrid} />
-            <Route path='/examples/streamingVariableRowGrid' component={StreamingVariableRowGrid} />
+            <Route path='/examples/streamingVariableRowGrid' component={() => <StreamingVariableRowGrid variableRowHeight={true}/>} />
           </main>
         </div>
       </BrowserRouter>

@@ -44,17 +44,20 @@ const grayRowProps = {
 };
 
 export default class StreamingVariableRowHeightGrid extends React.Component<
-  {},
+  {
+    variableRowHeight: boolean;
+  },
   {
     rows?: any[];
     listState?: ListState;
     updateInterval: number;
+    minimumRowHeight: number;
     variableRowHeight: boolean;
   }
 > {
   private interval: number;
   private checkBox: any;
-  private debouncedUpdateInterval: ()  => void;
+  private debouncedUpdateInterval: () => void;
 
   constructor(props, context) {
     super(props, context);
@@ -62,7 +65,8 @@ export default class StreamingVariableRowHeightGrid extends React.Component<
     this.state = {
       rows,
       updateInterval: 3000,
-      variableRowHeight: false,
+      minimumRowHeight: 20,
+      variableRowHeight: props.variableRowHeight
     };
   }
 
@@ -82,7 +86,8 @@ export default class StreamingVariableRowHeightGrid extends React.Component<
     const { rows } = this.state;
 
     this.setState({
-      rows: [ ...rows, ...generateDataForSlice(rows.length, 5)]
+      rows: [...rows, ...generateDataForSlice(rows.length, 5)]
+      // rows: [...generateDataForSlice(rows.length, 5), ...rows]
     });
   }
 
@@ -91,21 +96,22 @@ export default class StreamingVariableRowHeightGrid extends React.Component<
     index: number,
     length: number
   ): { data: SampleData; rowProps?: React.HTMLProps<HTMLTableRowElement> }[] {
-      const {variableRowHeight} = this.state;
-     return this.state.rows.slice(index, index + length).map((data, i) => {
+    const { variableRowHeight, minimumRowHeight } = this.state;
+    return this.state.rows.slice(index, index + length).map((data, i) => {
       const rowProps = data.col1 % 2 === 0 ? grayRowProps : whiteRowProps;
-      let style =  {
-        ...rowProps.style,
+      let style = {
+        ...rowProps.style
       };
 
-       if(variableRowHeight) {
-        const height: number = 80 + Math.floor(60 * Math.sin((index + 1) / 100));
+      if (variableRowHeight) {
+        const height: number =
+          minimumRowHeight + Math.floor(60 * Math.sin((i + 1) / 100));
         style = {
           ...style,
           height
-        }
-       }
-            
+        };
+      }
+
       return {
         data,
         rowProps: {
@@ -159,50 +165,80 @@ export default class StreamingVariableRowHeightGrid extends React.Component<
       window.clearInterval(this.interval);
       this.interval = null;
     }
-
-    this.interval = window.setInterval(this.addRow, e.target.value);;
-    this.setState({updateInterval: parseInt(e.target.value, 10)});
+    const newInterval = parseInt(e.target.value, 10);
+    this.interval = window.setInterval(this.addRow, newInterval);
+    this.setState({ updateInterval:  newInterval});
   }
 
-  @autobind 
+  @autobind
+  private updateMinimumRowHeight(e) {
+    const minimumRowHeight = parseInt(e.target.value, 10);
+    this.setState({ minimumRowHeight});
+  }
+
+
+  @autobind
   private changeVariableRowHeight() {
-    this.setState({variableRowHeight: this.checkBox.checked});
+    this.setState({ variableRowHeight: this.checkBox.checked });
   }
   private col5Formatter: React.ReactElement<any> = <CustomCell label='test' />;
 
   public render() {
-    const { listState, updateInterval } = this.state;
+    const { listState, updateInterval, minimumRowHeight, variableRowHeight } = this.state;
 
     return (
-      <div>
-        <label htmlFor="">Update Interval </label>
-        <input type="number" title="Update interval" onChange={this.updateInterval} defaultValue={updateInterval.toString()} style={{marginLeft: 5}}/>
-        <br/>
-        <label htmlFor="">Vary Row Height</label>
-        <input type="checkBox" ref={(ref) => this.checkBox = ref } onClick={this.changeVariableRowHeight} style={{marginLeft: 5}}/>
-        <VirtualGrid
-          getRows={this.getRows}
-          rowCount={this.state.rows.length}
-          listState={listState}
-          onListStateChanged={this.onListStateChanged}
-          className='table table-bordered table-condensed'
-          fieldDefaults={{ sortable: true, filterable: true }}
-          autoResize={true}
-          onMouseDown={this.onMouseDown}
-          onClick={this.onClick}
-        >
-          <FieldSet header='Group 1' name='group1'>
-            <FieldSet header='Group 2' name='group2'>
-              <Field header='Col 1' name='col1' sortDirection='asc' />
-              <Field header='Col 2' name='col2' />
+      <div style={{ height: '100%' }}>
+        <div style={{ height: '100px' }}>
+          <label htmlFor=''>Update Interval </label>
+          <input
+            type='number'
+            title='Update interval'
+            onChange={this.updateInterval}
+            defaultValue={updateInterval.toString()}
+            style={{ marginLeft: 5, marginRight: 5 }}
+          />
+           <label htmlFor=''>Minimum Row Height</label>
+          <input
+            type='number'
+            title='Update minimum row height'
+            onChange={this.updateMinimumRowHeight}
+            defaultValue={minimumRowHeight.toString()}
+            style={{ marginLeft: 5, marginRight: 5 }}
+          />
+          <label htmlFor=''>Vary Row Height</label>
+          <input
+            type='checkBox'
+            ref={ref => (this.checkBox = ref)}
+            onClick={this.changeVariableRowHeight}
+            style={{ marginLeft: 5 }}
+            defaultChecked={variableRowHeight}
+          />
+        </div>
+        <div style={{ height: 'calc(100% - 100px)' }}>
+          <VirtualGrid
+            getRows={this.getRows}
+            rowCount={this.state.rows.length}
+            listState={listState}
+            onListStateChanged={this.onListStateChanged}
+            className='table table-bordered table-condensed'
+            fieldDefaults={{ sortable: true, filterable: true }}
+            autoResize={true}
+            onMouseDown={this.onMouseDown}
+            onClick={this.onClick}
+          >
+            <FieldSet header='Group 1' name='group1'>
+              <FieldSet header='Group 2' name='group2'>
+                <Field header='Col 1' name='col1' sortDirection='asc' />
+                <Field header='Col 2' name='col2' />
+              </FieldSet>
             </FieldSet>
-          </FieldSet>
-          <FieldSet header='Group 3' name='group3'>
-            <Field header='Col 3' name='col3' cell={this.col3Formatter} />
-            <Field header='Col 4' name='col4' format={this.col4Formatter} />
-            <Field header='Col 5' name='col5' cell={this.col5Formatter} />
-          </FieldSet>
-        </VirtualGrid>
+            <FieldSet header='Group 3' name='group3'>
+              <Field header='Col 3' name='col3' cell={this.col3Formatter} />
+              <Field header='Col 4' name='col4' format={this.col4Formatter} />
+              <Field header='Col 5' name='col5' cell={this.col5Formatter} />
+            </FieldSet>
+          </VirtualGrid>
+        </div>
       </div>
     );
   }
