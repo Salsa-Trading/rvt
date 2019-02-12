@@ -52,12 +52,12 @@ export default class StreamingVariableRowHeightGrid extends React.Component<
     listState?: ListState;
     updateInterval: number;
     minimumRowHeight: number;
+    dataAppendAmount: number;
     variableRowHeight: boolean;
   }
 > {
   private interval: number;
   private checkBox: any;
-  private debouncedUpdateInterval: () => void;
 
   constructor(props, context) {
     super(props, context);
@@ -66,6 +66,7 @@ export default class StreamingVariableRowHeightGrid extends React.Component<
       rows,
       updateInterval: 3000,
       minimumRowHeight: 20,
+      dataAppendAmount: 5,
       variableRowHeight: props.variableRowHeight
     };
   }
@@ -83,11 +84,11 @@ export default class StreamingVariableRowHeightGrid extends React.Component<
 
   @autobind
   private addRow() {
-    const { rows } = this.state;
+    const { rows, dataAppendAmount } = this.state;
 
     this.setState({
-      rows: [...rows, ...generateDataForSlice(rows.length, 5)]
-      // rows: [...generateDataForSlice(rows.length, 5), ...rows]
+      // rows: [...rows, ...generateDataForSlice(rows.length, dataAppendAmount)]
+      rows: [...generateDataForSlice(rows.length, dataAppendAmount), ...rows]
     });
   }
 
@@ -178,13 +179,19 @@ export default class StreamingVariableRowHeightGrid extends React.Component<
 
 
   @autobind
+  private updateDataAppendAmount(e) {
+    const dataAppendAmount = parseInt(e.target.value, 10);
+    this.setState({ dataAppendAmount });
+  }
+
+  @autobind
   private changeVariableRowHeight() {
     this.setState({ variableRowHeight: this.checkBox.checked });
   }
   private col5Formatter: React.ReactElement<any> = <CustomCell label='test' />;
 
   public render() {
-    const { listState, updateInterval, minimumRowHeight, variableRowHeight } = this.state;
+    const { listState, updateInterval, minimumRowHeight, variableRowHeight, dataAppendAmount } = this.state;
 
     return (
       <div style={{ height: '100%' }}>
@@ -203,6 +210,14 @@ export default class StreamingVariableRowHeightGrid extends React.Component<
             title='Update minimum row height'
             onChange={this.updateMinimumRowHeight}
             defaultValue={minimumRowHeight.toString()}
+            style={{ marginLeft: 5, marginRight: 5 }}
+          />
+          <label htmlFor=''>Data / Interval</label>
+          <input
+            type='number'
+            title='Update data added per interval'
+            onChange={this.updateDataAppendAmount}
+            defaultValue={dataAppendAmount.toString()}
             style={{ marginLeft: 5, marginRight: 5 }}
           />
           <label htmlFor=''>Vary Row Height</label>
