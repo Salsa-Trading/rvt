@@ -239,9 +239,9 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   private calculateHeightStateValues(height: number|string, headerHeight: number, rowHeight: number, defaultMaxVisibleRows: number = null) {
     const maxVisibleRows = defaultMaxVisibleRows || this.updateMaxVisibleRows();
     const heightState = {
-      maxVisibleRows: maxVisibleRows,
-      calculatingHeights: maxVisibleRows === null,
+      maxVisibleRows,
       rowHeight,
+      calculatingHeights: maxVisibleRows === null,
       headerHeight: headerHeight || rowHeight,
       height: typeof height === 'number' ? height : null
     };
@@ -419,6 +419,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       this.visibleRows(),
       rowCount - topRow
     );
+    console.log({topRow, numRows, visibleRows: this.visibleRows()})
 
     if(numRows <= 0) {
       return [];

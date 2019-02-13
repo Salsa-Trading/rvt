@@ -45,7 +45,7 @@ const grayRowProps = {
 };
 
 const ADDITIONALCOLUMNS = 5;
-const MINIMUMROWHEIGHT = 24;
+const MINIMUMROWHEIGHT = 20;
 const UDPATEINTERVAL = 3000;
 const DATAAPPENDAMOUNT = 15;
 export default class StreamingVariableRowHeightGrid extends React.Component<
@@ -94,7 +94,7 @@ export default class StreamingVariableRowHeightGrid extends React.Component<
     const { rows, dataAppendAmount, additionalColumns } = this.state;
 
     this.setState({
-      rows: [...generateWideTableDataForSlice(rows.length, additionalColumns,  dataAppendAmount), ...rows]
+      rows: [...generateWideTableDataForSlice(rows.length, additionalColumns,  dataAppendAmount),  ...rows]
     });
   }
 
@@ -103,8 +103,8 @@ export default class StreamingVariableRowHeightGrid extends React.Component<
     index: number,
     length: number
   ): { data: SampleData; rowProps?: React.HTMLProps<HTMLTableRowElement> }[] {
-    const { variableRowHeight, minimumRowHeight } = this.state;
-    return this.state.rows.slice(index, index + length).map((data, i) => {
+    const { variableRowHeight, minimumRowHeight, rows } = this.state;
+    return rows.slice(index, index + length).map((data, i) => {
       const rowProps = data.col1 % 2 === 0 ? grayRowProps : whiteRowProps;
       let style = {
         ...rowProps.style,
