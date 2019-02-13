@@ -9,6 +9,14 @@ body {
   margin-bottom: 0;
 }
 
+.no-padding-td td {
+  padding: 0 !important;
+  font-size: .5rem;
+  input {
+    display: none;
+  }
+}
+
 #rvt-demo {
   display: flex;
   flex-direction: column;

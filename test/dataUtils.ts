@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import {TableRowProps} from '../src/VirtualTable';
+import {times, random} from 'lodash';
 
 const longString = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas interdum',
@@ -20,21 +21,41 @@ export type SampleData = {
   col1: number;
   col2: string;
   col3: boolean;
-  col4: Date;
+  col4: number;
   col5: number;
   col6: string;
+  ['string']?: string | number;
 };
+
+export function generateWideTableDataForSlice(index: number, addtionalColumns, count: number): SampleData[] {
+  return _.range(index, index + count).map(i => {
+    return generateWideDataForIndex(i, addtionalColumns);
+  });
+}
 
 export function generateDataForIndex(index: number): SampleData {
   return {
     col1: index,
     col2: (40960 + index).toString(16),
     col3: Boolean(index % 2),
-    col4: new Date(1451628000000 + 10800000 * index),
+    col4: 1000 * random(),
     col5: Math.sin(index),
-    col6: longString
+    col6: 'test data'
   };
 }
+
+export function generateWideDataForIndex(index: number, addtionalColumns: number): SampleData {
+  const extendedCols = {};
+  times(addtionalColumns, (i) => {
+    extendedCols[`col${i + 7}`] = random(0, 10000);
+  });
+
+  return {
+    ...generateDataForIndex(index),
+    ...extendedCols
+  };
+}
+
 
 export function generateDataForSlice(index: number, count: number): SampleData[] {
   return _.range(index, index + count).map(i => generateDataForIndex(i));
@@ -44,6 +65,14 @@ export function generateData(rowCount): SampleData[] {
   const array = new Array(rowCount);
   for (let i = 0; i < rowCount; i++) {
     array[i] = generateDataForIndex(i);
+  }
+  return array;
+}
+
+export function generateWideData(rowCount, addtionalColumns: number): SampleData[] {
+  const array = new Array(rowCount);
+  for (let i = 0; i < rowCount; i++) {
+    array[i] = generateWideDataForIndex(i, addtionalColumns);
   }
   return array;
 }

@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
 import Scroller from './Scroller';
-import { difference, omit, zipObject, map, debounce, mean, sum } from 'lodash';
+import { difference, omit, zipObject, map, debounce, mean, sum, isNumber } from 'lodash';
 
 type TableStyles = {
   container: React.CSSProperties;
@@ -194,7 +194,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       topRow: topRowControlled ? undefined : 0,
       topRowControlled
     },
-      this.calculateHeightStateValues(this.props.height, this.props.headerHeight, this.props.rowHeight)
+      this.calculateHeightStateValues(this.props.height, this.props.headerHeight, this.props.rowHeight, 10)
     );
   }
 
@@ -217,10 +217,8 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
 
   private updateMaxVisibleRows() {
     if(this.props.rowCount < this.state.maxVisibleRows) {
-      return;
+      return this.state.maxVisibleRows;
     }
-
-
     const height = this.tableHeight;
     const headerHeight = this.headerHeight;
 
@@ -231,26 +229,17 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     const direction = unusedHeight / absUnused;
 
     const maxVisibleRows = this.state.maxVisibleRows + direction * Math.floor(absUnused / avgRowHeight);
-    if(maxVisibleRows !== this.state.maxVisibleRows && maxVisibleRows >= 1) {
-      this.setState({maxVisibleRows});
-    }
+    return isNumber(maxVisibleRows) ? maxVisibleRows : this.state.maxVisibleRows
   }
 
   /**
    * Caclulate the maxVisibleRows from height values for the container, header and rows
    * @private
    */
-  private calculateHeightStateValues(height: number|string, headerHeight: number, rowHeight: number) {
-    let maxVisibleRows = null;
-    if (typeof height === 'number') {
-      if (height && rowHeight && headerHeight) {
-        // Calculate expected number of visible rows based on average row height
-        maxVisibleRows = Math.floor((height - headerHeight) / rowHeight);
-      }
-    }
-
+  private calculateHeightStateValues(height: number|string, headerHeight: number, rowHeight: number, defaultMaxVisibleRows: number = null) {
+    const maxVisibleRows = defaultMaxVisibleRows || this.updateMaxVisibleRows();
     const heightState = {
-      maxVisibleRows: maxVisibleRows || 10,
+      maxVisibleRows: maxVisibleRows,
       calculatingHeights: maxVisibleRows === null,
       rowHeight,
       headerHeight: headerHeight || rowHeight,
@@ -353,7 +342,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       this.calculateHeights();
     }
 
-    this.updateMaxVisibleRows();
+    // this.updateMaxVisibleRows();
   }
 
   /**
