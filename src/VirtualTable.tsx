@@ -203,7 +203,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     if(!div) {
       return;
     }
-    return (this.props.height ? div.clientHeight : div.parentElement.clientHeight) - this.headerHeight;
+    return (this.props.height ? div.clientHeight : div.parentElement.clientHeight);
   }
 
   private get headerHeight(): number {
@@ -225,7 +225,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     if (typeof height === 'number') {
       if (height && rowHeight && headerHeight) {
         // Calculate expected number of visible rows based on average row height
-        maxVisibleRows = Math.ceil((height - headerHeight) / rowHeight);
+        maxVisibleRows = Math.ceil((height - headerHeight) / rowHeight) - 1;
       }
     }
 
@@ -358,7 +358,8 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     }
     const height = this.tableHeight;
     const headerHeight = this.headerHeight;
-    const rowHeight = mean(this.currentlyVisibleRowHeights);
+    const rows = this.currentlyVisibleRowHeights
+    const rowHeight = mean(rows);
 
     this.setState({
       ...this.calculateHeightStateValues(height, headerHeight, rowHeight)
@@ -366,7 +367,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   }
 
   private get currentlyVisibleRowHeights(): number[] {
-    return this.renderedRows.map(e => e.scrollHeight);
+    return this.renderedRows.map(e => e.getBoundingClientRect().height);
   }
 
   private get renderedRows() {
