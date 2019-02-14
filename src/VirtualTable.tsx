@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
 import Scroller from './Scroller';
-import { difference, omit, zipObject, map, debounce, mean, sum, isNumber } from 'lodash';
+import { difference, omit, zipObject, map, debounce, mean, sum } from 'lodash';
 
 type TableStyles = {
   container: React.CSSProperties;
@@ -194,7 +194,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       topRow: topRowControlled ? undefined : 0,
       topRowControlled
     },
-      this.calculateHeightStateValues(this.props.height, this.props.headerHeight, this.props.rowHeight, 10)
+      this.calculateHeightStateValues(this.props.height, this.props.headerHeight, this.props.rowHeight)
     );
   }
 
@@ -203,7 +203,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     if(!div) {
       return;
     }
-    return this.props.height ? div.clientHeight : div.parentElement.clientHeight;
+    return (this.props.height ? div.clientHeight : div.parentElement.clientHeight) - this.headerHeight;
   }
 
   private get headerHeight(): number {
@@ -211,37 +211,28 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     if(!div) {
       return;
     }
+
     const header = div.querySelector('table > thead');
     return header ? header.scrollHeight : 0;
-  }
-
-  private updateMaxVisibleRows() {
-    if(this.props.rowCount < this.state.maxVisibleRows) {
-      return this.state.maxVisibleRows;
-    }
-    const height = this.tableHeight;
-    const headerHeight = this.headerHeight;
-
-    const currentlyVisibleRowHeights = this.currentlyVisibleRowHeights;
-    const avgRowHeight = mean(currentlyVisibleRowHeights);
-    const unusedHeight = height - headerHeight - sum(currentlyVisibleRowHeights);
-    const absUnused = Math.abs(unusedHeight);
-    const direction = unusedHeight / absUnused;
-
-    const maxVisibleRows = this.state.maxVisibleRows + direction * Math.floor(absUnused / avgRowHeight);
-    return isNumber(maxVisibleRows) ? maxVisibleRows : this.state.maxVisibleRows
   }
 
   /**
    * Caclulate the maxVisibleRows from height values for the container, header and rows
    * @private
    */
-  private calculateHeightStateValues(height: number|string, headerHeight: number, rowHeight: number, defaultMaxVisibleRows: number = null) {
-    const maxVisibleRows = defaultMaxVisibleRows || this.updateMaxVisibleRows();
+  private calculateHeightStateValues(height: number|string, headerHeight: number, rowHeight: number) {
+    let maxVisibleRows = null;
+    if (typeof height === 'number') {
+      if (height && rowHeight && headerHeight) {
+        // Calculate expected number of visible rows based on average row height
+        maxVisibleRows = Math.ceil((height - headerHeight) / rowHeight);
+      }
+    }
+
     const heightState = {
-      maxVisibleRows,
-      rowHeight,
+      maxVisibleRows: maxVisibleRows || 10,
       calculatingHeights: maxVisibleRows === null,
+      rowHeight,
       headerHeight: headerHeight || rowHeight,
       height: typeof height === 'number' ? height : null
     };
@@ -264,6 +255,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * @private
    */
   private setTopRow(topRow: number) {
+    // something here needs to change
     topRow = Math.max(0, Math.min(topRow, this.props.rowCount - this.visibleRows()));
     if(this.state.topRowControlled) {
       const { onTopRowChanged } = this.props;
@@ -419,7 +411,6 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       this.visibleRows(),
       rowCount - topRow
     );
-    console.log({topRow, numRows, visibleRows: this.visibleRows()})
 
     if(numRows <= 0) {
       return [];
@@ -552,10 +543,10 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
           </div>
           <Scroller
             onScroll={this.onScroll}
-            scrollOffset={topRow * rowHeight}
+            scrollOffset={(topRow * rowHeight)}
             margin={(headerHeight || 0)}
             visible={scrollerVisible}
-            virtualSize={rowHeight * rowCount}
+            virtualSize={(rowHeight * rowCount)}
           />
         </div>
       </div>
