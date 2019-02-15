@@ -385,7 +385,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   }
 
   private get currentlyVisibleRowHeights(): number[] {
-    return this.renderedRows.map(e => e.scrollHeight);
+    return this.renderedRows.map(e => e.getBoundingClientRect().height);
   }
 
   private get renderedRows() {
