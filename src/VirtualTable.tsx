@@ -169,7 +169,7 @@ export type VirtualTableProps<TData extends object> = VirtualTableBaseProps & {
   getRows?: (topRowIndex: number, count: number, maxVisibleRows: number) => TableRowProps<TData>[];
 };
 
-export default class VirtualTable<TData extends object> extends React.PureComponent<VirtualTableProps<TData>, {
+export type VirtualTableState = {
   topRowControlled: boolean;
   topRow: number;
   headerHeight: number;
@@ -177,7 +177,9 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   height: number;
   maxVisibleRows: number;
   calculatingHeights: boolean;
-}> {
+};
+
+export default class VirtualTable<TData extends object> extends React.PureComponent<VirtualTableProps<TData>, VirtualTableState> {
 
   public static propTypes = propTypes;
   public static defaultProps = defaultProps;
@@ -348,12 +350,15 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   /**
    * If the calculator is rendered on mount, calculate heights
    */
-  public componentDidUpdate() {
+  public componentDidUpdate(prevProps: VirtualTableProps<TData>, prevState: VirtualTableState) {
     if (this.state.calculatingHeights) {
       this.calculateHeights();
     }
 
-    this.updateMaxVisibleRows();
+    const visibleRowsJustChanged = this.state.maxVisibleRows !== prevState.maxVisibleRows;
+    if(!visibleRowsJustChanged) {
+      this.updateMaxVisibleRows();
+    }
   }
 
   /**
