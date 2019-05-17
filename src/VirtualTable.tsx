@@ -307,7 +307,6 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   private onWheel(e: React.WheelEvent<{}>) {
     const { scrollWheelRows } = this.props;
     e.stopPropagation();
-    e.preventDefault();
     this.setTopRow(this.getTopRow() + ((e.deltaY > 0 ? 1 : -1) * scrollWheelRows));
   }
 
