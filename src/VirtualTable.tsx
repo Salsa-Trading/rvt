@@ -531,8 +531,8 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
 
   private onKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
     const {rowCount} = this.props;
-    const {topRow, maxVisibleRows} = this.state;
-
+    const {maxVisibleRows} = this.state;
+    const topRow = this.getTopRow();
     const pageSize = maxVisibleRows / 2;
 
     switch(event.key) {
