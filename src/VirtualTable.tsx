@@ -179,6 +179,7 @@ export type VirtualTableState = {
   calculatingHeights: boolean;
 };
 
+@autobind
 export default class VirtualTable<TData extends object> extends React.PureComponent<VirtualTableProps<TData>, VirtualTableState> {
 
   public static propTypes = propTypes;
@@ -293,7 +294,6 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * onScroll handler for Scroller or Wheel
    * @private
    */
-  @autobind
   private onScroll(scrollTop: number) {
     const topRow = Math.ceil(scrollTop / this.state.rowHeight);
     this.setTopRow(topRow);
@@ -303,7 +303,6 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * onWhell handler sets scrollRef.scrollTop, which calls onScroll
    * @private
    */
-  @autobind
   private onWheel(e: React.WheelEvent<{}>) {
     const { scrollWheelRows } = this.props;
     e.stopPropagation();
@@ -373,7 +372,6 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * Recalculate header and row heights based on container size
    * Call this method when the window or container size changed
    */
-  @autobind
   private calculateHeights() {
     const div = this.containerRef;
     if(!div) {
@@ -400,7 +398,6 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     return Array.from(div.querySelectorAll('table > tbody > tr'));
   }
 
-  @autobind
   private scrollToTopIfAllRowsVisible() {
     if (this.visibleRows() >= this.props.rowCount && this.getTopRow() !== 0) {
       this.setTopRow(0);
@@ -501,7 +498,6 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     } as Indexed<TableRowProps<TData>>));
   }
 
-  @autobind
   private setContainerRef(ref: HTMLDivElement) {
     this.containerRef = ref;
   }
@@ -533,6 +529,49 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     return this.renderTable(header, rows, tableClassName, styles);
   }
 
+  private onKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    const {rowCount} = this.props;
+    const {topRow, maxVisibleRows} = this.state;
+
+    const pageSize = maxVisibleRows / 2;
+
+    switch(event.key) {
+      case 'ArrowUp':
+        this.setTopRow(topRow - 1);
+        return;
+      case 'ArrowDown':
+        this.setTopRow(topRow + 1);
+        return;
+      case 'PageUp':
+        this.setTopRow(topRow - pageSize);
+        return;
+      case ' ':
+        if(event.shiftKey) {
+          this.setTopRow(topRow - pageSize);
+        } else {
+          this.setTopRow(topRow + pageSize);
+        }
+        return;
+      case 'PageDown':
+        this.setTopRow(topRow + pageSize);
+        return;
+      case 'Home':
+        this.setTopRow(0);
+        return;
+      case 'End':
+        this.setTopRow(rowCount - 1);
+        return;
+    }
+  }
+
+  private onMouseLeave(e: React.MouseEvent<HTMLDivElement>) {
+    this.containerRef.blur();
+  }
+
+  private onMouseEnter(e: React.MouseEvent<HTMLDivElement>) {
+    this.containerRef.focus();
+  }
+
   /**
    * Render the table
    * @private
@@ -549,9 +588,13 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     return (
       <div
         onWheel={this.onWheel}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        onKeyDown={this.onKeyDown}
         ref={this.setContainerRef}
         className={`${this.className} rvt-virtual-table ${fixedColumnWidth ? 'fixed-column-width' : '' }`}
         style={containerStyle}
+        tabIndex={1}
       >
         <div className='rvt-virtual-table-container'>
           <div className='rvt-virtual-table-container-scroll'>
