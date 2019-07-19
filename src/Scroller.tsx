@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
-import { debounce } from 'lodash';
+import { throttle } from 'lodash';
 
 export type ScrollerProps = {
   margin?: number;
@@ -55,7 +55,7 @@ export default class Scroller extends React.Component<ScrollerProps, {}> {
 
   private scrollOffset: number = null;
   private scrollerRef: HTMLDivElement;
-  private debouncedOnScroll: () => void;
+  private throttledOnScroll: () => void;
 
   private onScroll() {
     const { onScroll } = this.props;
@@ -70,7 +70,7 @@ export default class Scroller extends React.Component<ScrollerProps, {}> {
   }
 
   public componentWillMount() {
-    this.debouncedOnScroll = debounce(this.onScroll.bind(this), 250);
+    this.throttledOnScroll = throttle(this.onScroll.bind(this), 100);
   }
 
   private setScrollOffset(scrollOffset: number) {
@@ -156,7 +156,7 @@ export default class Scroller extends React.Component<ScrollerProps, {}> {
     return (
       <div
         className='virtual-table-scroller'
-        onScroll={this.debouncedOnScroll}
+        onScroll={this.throttledOnScroll}
         ref={this.setScrollerRef}
         style={scrollerStyle}
       >
