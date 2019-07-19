@@ -193,12 +193,12 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   constructor(props, context) {
     super(props, context);
     const topRowControlled = props.topRow !== undefined;
-    this.state = Object.assign({
+    this.updateMaxVisibleRows = debounce(this.updateMaxVisibleRows.bind(this), 250);
+    this.state = {
       topRow: topRowControlled ? undefined : 0,
-      topRowControlled
-    },
-      this.calculateHeightStateValues(this.props.height, this.props.headerHeight, this.props.rowHeight)
-    );
+      topRowControlled,
+      ...this.calculateHeightStateValues(this.props.height, this.props.headerHeight, this.props.rowHeight)
+    };
   }
 
   private get tableHeight(): number {
@@ -222,7 +222,6 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     if(this.props.rowCount < this.state.maxVisibleRows) {
       return;
     }
-
 
     const height = this.tableHeight;
     const headerHeight = this.headerHeight;
