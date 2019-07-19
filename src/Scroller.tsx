@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
+import { debounce } from 'lodash';
 
 export type ScrollerProps = {
   margin?: number;
@@ -54,12 +55,8 @@ export default class Scroller extends React.Component<ScrollerProps, {}> {
 
   private scrollOffset: number = null;
   private scrollerRef: HTMLDivElement;
+  private debouncedOnScroll: () => void;
 
-  constructor(props) {
-    super(props);
-  }
-
-  @autobind
   private onScroll() {
     const { onScroll } = this.props;
     if (onScroll) {
@@ -70,6 +67,10 @@ export default class Scroller extends React.Component<ScrollerProps, {}> {
         onScroll(this.scrollerRef.scrollLeft);
       }
     }
+  }
+
+  public componentWillMount() {
+    this.debouncedOnScroll = debounce(this.onScroll.bind(this), 250);
   }
 
   private setScrollOffset(scrollOffset: number) {
@@ -155,7 +156,7 @@ export default class Scroller extends React.Component<ScrollerProps, {}> {
     return (
       <div
         className='virtual-table-scroller'
-        onScroll={this.onScroll}
+        onScroll={this.debouncedOnScroll}
         ref={this.setScrollerRef}
         style={scrollerStyle}
       >
