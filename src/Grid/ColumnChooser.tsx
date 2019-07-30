@@ -1,6 +1,7 @@
+import { autobind } from 'core-decorators';
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import { Field } from '../List/Field';
+import { Field, FieldBase } from '../List/Field';
 import { FieldSet, isFieldSet } from '../List/FieldSet';
 import safeMouseDown from '../utils/safeMouseDown';
 import { Checkbox } from './Checkbox';
@@ -11,7 +12,13 @@ export type ColumnChooserProps = {
   onToggleVisibility: (isVisible: boolean) => void;
 };
 
-export default class ColumnChooser extends React.Component<ColumnChooserProps, {}> {
+export interface ColumnChooserState {
+  showFilter: boolean;
+  filter: string;
+}
+
+@autobind
+export default class ColumnChooser extends React.Component<ColumnChooserProps, ColumnChooserState> {
 
   public static propTypes = {
     fieldSet: PropTypes.any
@@ -19,9 +26,10 @@ export default class ColumnChooser extends React.Component<ColumnChooserProps, {
 
   private mouseDownHandler: () => void;
 
-  constructor(props, context) {
-    super(props, context);
-  }
+  public state: ColumnChooserState = {
+    showFilter: false,
+    filter: ''
+  };
 
   public componentDidMount() {
     const { onToggleVisibility } = this.props;
@@ -46,14 +54,16 @@ export default class ColumnChooser extends React.Component<ColumnChooserProps, {
     }
   }
 
-  private renderFieldSet(fieldSet: FieldSet) {
+  private renderFieldSet(fieldSet: FieldSet, filter: string) {
+    const filteredChildren = fieldSet.children.filter((c: FieldBase) => c.containsString(filter));
+
     return (
       <div>
         <ul>
-          {fieldSet.children.map(field => {
+          {filteredChildren.map(field => {
             let children;
             if(field instanceof FieldSet) {
-              children = this.renderFieldSet(field);
+              children = this.renderFieldSet(field, filter);
             }
             let name = field.name;
             if(typeof field.header === 'string' || field.header instanceof String) {
@@ -96,10 +106,25 @@ export default class ColumnChooser extends React.Component<ColumnChooserProps, {
     this.props.onHiddenChange(!shouldBeVisible, fieldSet);
   }
 
+  private toggleFilter() {
+    const {showFilter} = this.state;
+    this.setState({
+      showFilter: !showFilter,
+      filter: ''
+    });
+  }
+
+  private setFilter(event: React.ChangeEvent<HTMLInputElement>) {
+    const {value} = event.target;
+    this.setState({filter: value});
+  }
+
   public render() {
     const {
       fieldSet
     } = this.props as any;
+
+    const {filter, showFilter} = this.state;
 
     return (
       <div className='column-chooser-pane'>
@@ -120,8 +145,24 @@ export default class ColumnChooser extends React.Component<ColumnChooserProps, {
             />
             None
           </label>
+          <button
+            className={`btn btm-small btn-secondary edit-filters ${showFilter ? 'active' : ''}`}
+            onClick={this.toggleFilter}
+          />
         </div>
-        {this.renderFieldSet(fieldSet)}
+        {showFilter || filter ? (
+          <div>
+            <input
+              type='search'
+              className='form-control'
+              placeholder='Filter'
+              value={filter}
+              onChange={this.setFilter}
+              autoFocus={true}
+            />
+          </div>
+        ) : null}
+        {this.renderFieldSet(fieldSet, filter)}
       </div>
     );
   }

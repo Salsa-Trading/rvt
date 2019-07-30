@@ -3,6 +3,7 @@ import * as PropTypes from 'prop-types';
 import strEnum from '../utils/strEnum';
 import isNil from '../utils/isNil';
 import { FilterControlProps } from '../Filter';
+import {isString} from 'lodash';
 
 export const SortDirection = strEnum([
   'asc',
@@ -91,7 +92,9 @@ export abstract class FieldBase implements FieldPropsBase {
       name: this.name,
       width: this.width,
       hidden: this.hidden,
-      title: this.title
+      title: this.title || isString(this.header)
+        ? this.header as string
+        : undefined
     };
   }
 
@@ -106,6 +109,21 @@ export abstract class FieldBase implements FieldPropsBase {
 
   public updateTitle(title: string) {
     this.title = title;
+  }
+
+  public containsString(filter: string): boolean {
+    return fieldDisplayMatchesFilter(this.getFieldDisplay(), filter.toLowerCase());
+  }
+}
+
+function fieldDisplayMatchesFilter(fieldDisplay: FieldDisplay, filter: string) {
+  if(filter && filter.length) {
+    const {name, title, children} = fieldDisplay;
+    return name.toLowerCase().includes(filter) ||
+      (title || '').toLowerCase().includes(filter) ||
+      (children || []).some((c) => fieldDisplayMatchesFilter(c, filter));
+  } else {
+    return true;
   }
 }
 

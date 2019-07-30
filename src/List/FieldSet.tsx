@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FieldBase, FieldPropsBase, FieldDefaults, Field, FieldDisplay, FieldBasePropTypes } from './Field';
-import {sum} from 'lodash';
+import {sum, isString} from 'lodash';
 
 export const RootFieldSet = '_root_';
 
@@ -151,7 +151,9 @@ export class FieldSet extends FieldBase {
   public getFieldDisplay(): FieldDisplay {
     return {
       name: this.name,
-      title: this.title,
+      title: this.title || isString(this.header)
+        ? this.header as string
+        : undefined,
       children: this.children.map(c => c.getFieldDisplay())
       // width and hidden are derived from children...
       // width: this.width,

@@ -22,6 +22,10 @@ $column-chooser-pane-border: 1px solid lightgray;
     border: $column-chooser-pane-border;
     background-color: $column-chooser-pane-bg-color;
 
+    .edit-filters {
+      padding: .125rem .25rem;
+    }
+
     ul {
       padding: 0;
       li {
