@@ -563,14 +563,6 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     }
   }
 
-  private onMouseLeave(e: React.MouseEvent<HTMLDivElement>) {
-    this.containerRef.blur();
-  }
-
-  private onMouseEnter(e: React.MouseEvent<HTMLDivElement>) {
-    this.containerRef.focus();
-  }
-
   /**
    * Render the table
    * @private
@@ -587,8 +579,6 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     return (
       <div
         onWheel={this.onWheel}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
         onKeyDown={this.onKeyDown}
         ref={this.setContainerRef}
         className={`${this.className} rvt-virtual-table ${fixedColumnWidth ? 'fixed-column-width' : '' }`}
