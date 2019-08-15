@@ -92,9 +92,7 @@ export abstract class FieldBase implements FieldPropsBase {
       name: this.name,
       width: this.width,
       hidden: this.hidden,
-      title: this.title || isString(this.header)
-        ? this.header as string
-        : undefined
+      title: this.title
     };
   }
 
