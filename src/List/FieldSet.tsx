@@ -151,14 +151,19 @@ export class FieldSet extends FieldBase {
   public getFieldDisplay(): FieldDisplay {
     return {
       name: this.name,
-      title: this.title || isString(this.header)
-        ? this.header as string
-        : undefined,
+      title: this.title,
       children: this.children.map(c => c.getFieldDisplay())
       // width and hidden are derived from children...
       // width: this.width,
       // hidden: this.hidden,
     };
+  }
+
+  public getNestedTitles(): string {
+    return [
+      super.getNestedTitles(),
+      ...this.children.map(c => c.getNestedTitles())
+    ].join(' ');
   }
 
   public getLevelCount(): number {

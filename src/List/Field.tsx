@@ -98,6 +98,16 @@ export abstract class FieldBase implements FieldPropsBase {
     };
   }
 
+  public getNestedTitles(): string {
+    return [
+      this.name,
+      this.title,
+      isString(this.header)
+        ? this.header as string
+        : ''
+    ].join(' ');
+  }
+
   public getFieldCount() {
     return 1;
   }
@@ -112,18 +122,7 @@ export abstract class FieldBase implements FieldPropsBase {
   }
 
   public containsString(filter: string): boolean {
-    return fieldDisplayMatchesFilter(this.getFieldDisplay(), filter.toLowerCase());
-  }
-}
-
-function fieldDisplayMatchesFilter(fieldDisplay: FieldDisplay, filter: string) {
-  if(filter && filter.length) {
-    const {name, title, children} = fieldDisplay;
-    return name.toLowerCase().includes(filter) ||
-      (title || '').toLowerCase().includes(filter) ||
-      (children || []).some((c) => fieldDisplayMatchesFilter(c, filter));
-  } else {
-    return true;
+    return this.getNestedTitles().toLowerCase().includes(filter.toLowerCase());
   }
 }
 
