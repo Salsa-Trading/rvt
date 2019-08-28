@@ -166,7 +166,7 @@ $sort-direction-color: royalblue;
   }
 
   tbody.rvt-scroller {
-    tr td:last-child {
+    > tr td:last-child {
       padding-right: 1.25rem;
     }
   }
