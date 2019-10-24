@@ -240,7 +240,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     return every(rows, (r: FieldBase) => r.hidden || r.width);
   }
 
-  public componentWillReceiveProps(nextProps, props) {
+  public UNSAFE_componentWillReceiveProps(nextProps, props) {
     if (!isEqual(nextProps, props) && this.allChildrenHaveWidthSet(nextProps)) {
       const {onAllHeaderWidthsSet} = this.props;
       onAllHeaderWidthsSet();

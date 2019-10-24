@@ -361,7 +361,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   /**
    * If the table was initialized as an empty table (no rows) re-run calculator
    */
-  public componentWillReceiveProps(nextProps: VirtualTableProps<TData>) {
+  public UNSAFE_componentWillReceiveProps(nextProps: VirtualTableProps<TData>) {
     if(!this.props.rowCount && nextProps.rowCount) {
       this.setState({calculatingHeights: true});
     }

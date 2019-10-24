@@ -16,7 +16,7 @@ export default class HeaderInput extends React.PureComponent < {
     };
   }
 
-  public componentWillReceiveProps(props) {
+  public UNSAFE_componentWillReceiveProps(props) {
     if(!this.state.editing) {
       this.setState({inputTitle: props.title});
     }

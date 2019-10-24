@@ -77,7 +77,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       };
     }
 
-    public componentWillMount() {
+    public UNSAFE_componentWillMount() {
       this.onSortSelection = this.onSortSelection.bind(this);
       this.onFilterChanged = this.onFilterChanged.bind(this);
       this.onWidthChanged = this.onWidthChanged.bind(this);
@@ -86,7 +86,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       this.onHiddenChange = this.onHiddenChange.bind(this);
     }
 
-    public componentWillReceiveProps(nextProps: React.Props<ListProps> & ListProps) {
+    public UNSAFE_componentWillReceiveProps(nextProps: React.Props<ListProps> & ListProps) {
       const prevFieldProps = getFieldProps(this.props);
       const nextFieldProps = getFieldProps(nextProps);
 

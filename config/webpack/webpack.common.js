@@ -21,9 +21,18 @@ module.exports = function(_env) {
 };
 
 function resolve() {
-  return {
+  let resolve = {
     extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js', '.jsx', '.json']
   };
+  if(env === 'development') {
+    resolve = {
+      ...resolve,
+      alias: {
+        'react-dom': '@hot-loader/react-dom'
+      }
+    };
+  }
+  return resolve;
 }
 
 function moduleObj() {
@@ -65,7 +74,10 @@ function moduleObj() {
   let tsLoaders;
   if (env == 'development') {
     tsLoaders = [{
-      loader: 'react-hot-loader/webpack'
+      loader: 'react-hot-loader/webpack',
+      options: {
+        include: '/node_modules/',
+      }
     }, {
       loader: 'ts-loader',
       options: {

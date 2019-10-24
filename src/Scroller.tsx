@@ -69,7 +69,7 @@ export default class Scroller extends React.Component<ScrollerProps, {}> {
     }
   }
 
-  public componentWillMount() {
+  public UNSAFE_componentWillMount() {
     this.throttledOnScroll = throttle(this.onScroll.bind(this), 100);
   }
 

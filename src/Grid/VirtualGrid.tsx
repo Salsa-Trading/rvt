@@ -27,7 +27,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
     };
   }
 
-  public componentWillReceiveProps(nextProps: WrappedVirtualGridProps<TData>) {
+  public UNSAFE_componentWillReceiveProps(nextProps: WrappedVirtualGridProps<TData>) {
     const currentRowComponentProps = {
       fieldSet: this.props.fieldSet,
       onMouseDown: this.props.onMouseDown,
@@ -63,7 +63,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
     } = props;
 
     const fields = fieldSet.getFields();
-    return React.createElement(rowComponent || GridRow, {
+    return React.createElement<any>(rowComponent || GridRow, {
       fields: fields,
       onMouseDown: onMouseDown,
       onClick: onClick,

@@ -7,7 +7,7 @@ import { isEqual } from 'lodash';
 import {autobind} from 'core-decorators';
 
 export type Diff<T extends string, U extends string> = ({[P in T]: P } & {[P in U]: never } & { [x: string]: never })[T];
-export type Omit<T, K extends keyof T> = Pick<T, Diff<keyof T, K>>;
+export type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
 export type TablePropsWithoutData = Omit<React.HTMLProps<HTMLTableElement>, 'data' | 'onClick' | 'onDoubleClick' | 'onMouseDown' | 'style'>;
 
 export type GridProps<TData extends object> = TablePropsWithoutData & BaseGridProps<TData> & {
@@ -29,7 +29,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
     };
   }
 
-  public componentWillReceiveProps(nextProps: WrappedGridProps<TData>) {
+  public UNSAFE_componentWillcomponentWillReceiveProps(nextProps: WrappedGridProps<TData>) {
     const currentRowComponentProps = {
       fieldSet: this.props.fieldSet,
       onMouseDown: this.props.onMouseDown,
@@ -65,7 +65,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
     } = props;
 
     const fields = fieldSet.getFields();
-    return React.createElement(rowComponent || GridRow, {
+    return React.createElement<any>(rowComponent || GridRow, {
       fields: fields,
       onMouseDown: onMouseDown,
       onClick: onClick,
