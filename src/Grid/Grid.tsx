@@ -29,7 +29,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
     };
   }
 
-  public UNSAFE_componentWillcomponentWillReceiveProps(nextProps: WrappedGridProps<TData>) {
+  public UNSAFE_componentWillReceiveProps(nextProps: WrappedGridProps<TData>) {
     const currentRowComponentProps = {
       fieldSet: this.props.fieldSet,
       onMouseDown: this.props.onMouseDown,
