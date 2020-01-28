@@ -186,6 +186,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   public static defaultProps = defaultProps;
 
   private containerRef: HTMLDivElement;
+  private innerRef: HTMLDivElement;
   private dataKeyToRowKeyMap: {[dataKey: string]: number} = {};
   private rowKeyCounter = 1;
   private debouncedOnWindowResize: () => void;
@@ -202,11 +203,12 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   }
 
   private get tableHeight(): number {
-    const div = this.containerRef;
-    if(!div) {
-      return;
+    const {innerRef, containerRef} = this;
+    if(innerRef) {
+      return innerRef.clientHeight;
+    } else if(containerRef) {
+      return containerRef.clientHeight;
     }
-    return this.props.height ? div.clientHeight : div.parentElement.clientHeight;
   }
 
   private get headerHeight(): number {
@@ -501,6 +503,10 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     this.containerRef = ref;
   }
 
+  private setInnerRef(ref: HTMLDivElement) {
+    this.innerRef = ref;
+  }
+
   public render() {
     const { height, width, containerStyle = {}, tableStyle = {}, tbodyStyle = {} } = this.props;
     const { calculatingHeights } = this.state;
@@ -587,7 +593,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
       >
         <div className='rvt-virtual-table-container'>
           <div className='rvt-virtual-table-container-scroll'>
-            <div className='rvt-virtual-table-container-inner'>
+            <div className='rvt-virtual-table-container-inner' ref={this.setInnerRef} >
               <table className={tableClassName} style={tableStyle}>
                 {header}
                 <tbody className={scrollerVisible ? 'rvt-scroller' : ''} style={tbodyStyle}>
