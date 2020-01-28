@@ -1,47 +1,47 @@
 const gulp = require('gulp');
-const tslint = require('tslint');
+const {Linter} = require('tslint');
 const gulpTslint = require('gulp-tslint');
-const jsonlint = require('gulp-jsonlint');
-const sasslint = require('gulp-sass-lint');
-const eslint = require('gulp-eslint');
+const gulpJsonlint = require('gulp-jsonlint');
+const gulpSassLint = require('gulp-sass-lint');
+const gulpEslint = require('gulp-eslint');
 
-gulp.task('lint', ['tslint', 'jsonlint', 'sasslint', 'eslint']);
+const lint = gulp.series(tslint, jsonlint, sasslint, eslint);
 
-gulp.task('sasslint', () =>
-  gulp
+function sasslint() {
+  return gulp
     .src([
       'src/**/*.s?(a|c)ss',
       '!node_modules/**/*'
     ])
-    .pipe(sasslint())
-    .pipe(sasslint.format())
-    .pipe(sasslint.failOnError())
-);
+    .pipe(gulpSassLint())
+    .pipe(gulpSassLint.format())
+    .pipe(gulpSassLint.failOnError())
+ };
 
-gulp.task('eslint', () =>
-  gulp
+function eslint() {
+  return gulp
     .src([
       '**/*.js',
       '!docs/public/vendor/**/*',
       '!lib/**/*',
       '!node_modules/**/*'
     ])
-    .pipe(eslint())
-    .pipe(eslint.formatEach('compact', process.stderr))
-);
+    .pipe(gulpEslint())
+    .pipe(gulpEslint.formatEach('compact', process.stderr))
+}
 
-gulp.task('jsonlint', () =>
-  gulp
+function jsonlint() {
+  return gulp
     .src([
       '**/*.json',
       '!node_modules/**/*'
     ])
-    .pipe(jsonlint())
-    .pipe(jsonlint.reporter())
-);
+    .pipe(gulpJsonlint())
+    .pipe(gulpJsonlint.reporter())
+}
 
-gulp.task('tslint', () => {
-  const program = tslint.Linter.createProgram('./tsconfig.json');
+function tslint() {
+  const program = Linter.createProgram('./tsconfig.json');
 
   return gulp
     .src([
@@ -58,4 +58,10 @@ gulp.task('tslint', () => {
     .pipe(gulpTslint.report({
       summarizeFailureOutput: true
     }));
-});
+}
+
+exports.lint = lint;
+exports.tslint = tslint;
+exports.jsonlint = jsonlint;
+exports.eslint = eslint;
+exports.sasslint = sasslint;

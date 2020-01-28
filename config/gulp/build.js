@@ -6,13 +6,13 @@ const ts = require('gulp-typescript');
 const sass = require('gulp-sass');
 const merge2 = require('merge2');
 
-gulp.task('clean', (done) => {
+function clean(done) {
   del(['./lib/**', './css/**']).then(() => done());
-});
+};
 
 const tsProject = ts.createProject('./tsconfig.json');
 
-gulp.task('build', () => {
+function build() {
   const tsResult = gulp.src('./src/**/*.{ts,tsx}')
     .pipe(tsProject());
 
@@ -20,20 +20,29 @@ gulp.task('build', () => {
     tsResult.dts.pipe(gulp.dest('lib')),
     tsResult.js.pipe(gulp.dest('lib'))
   );
-});
+};
 
-gulp.task('sass', function () {
+function compileSass() {
   return gulp.src('./scss//**/*.scss')
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest('./css'));
-});
+}
 
-gulp.task('deploy', ['clean', 'build', 'sass']);
+const deploy = gulp.series(clean, build, compileSass);
+const deployNoClean = gulp.series(build, compileSass);
 
-gulp.task('deploy-no-clean', ['build', 'sass']);
-
-gulp.task('dev', ['clean', 'build', 'sass'],  () => {
-  return watch('**/*.tsx', (events, done) => {
+const dev = gulp.series(
+  clean,
+  build,
+  compileSass,
+  () => watch('**/*.tsx', (events, done) => {
     gulp.run('deploy-no-clean');
-  });
-});
+  })
+);
+
+exports.clean = clean;
+exports.build = build;
+exports.compileSass = compileSass;
+exports.deploy = deploy;
+exports.deployNoClean = deployNoClean;
+exports.dev = dev;

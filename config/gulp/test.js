@@ -7,7 +7,7 @@ const karmaOptions = {
 };
 
 // Execute client karma tests in a watch loop
-gulp.task('karma', function (done) {
+function karma(done) {
   const xvfb = new Xvfb({silent: true});
   const karmaServer = new KarmaServer(karmaOptions, done);
   const debugUrl = `http://${os.hostname()}:${karmaServer.get('config').port}/debug.html`;
@@ -15,10 +15,10 @@ gulp.task('karma', function (done) {
   xvfb.start(function() {
     karmaServer.start();
   });
-});
+}
 
 // Execute client karma tests once
-gulp.task('karma:run', function (done) {
+function karmaRun(done) {
   const xvfb = new Xvfb({silent: true});
   xvfb.start(function() {
     const karmaServer = new KarmaServer(Object.assign(karmaOptions, {singleRun: true}));
@@ -29,4 +29,7 @@ gulp.task('karma:run', function (done) {
 
     karmaServer.start();
   });
-});
+}
+
+exports.karma = karma;
+exports.karmaRun = karmaRun;
