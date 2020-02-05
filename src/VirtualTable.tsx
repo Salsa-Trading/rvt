@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
 import Scroller from './Scroller';
-import { difference, omit, zipObject, map, debounce, mean, sum } from 'lodash';
+import { difference, omit, zipObject, map, debounce, mean, sum, isNumber } from 'lodash';
 
 type TableStyles = {
   container: React.CSSProperties;
@@ -178,6 +178,9 @@ export type VirtualTableState = {
   calculatingHeights: boolean;
 };
 
+// Leave space for this many extra 'blank' rows so data isn't covered by horizontal scrollbars
+const ROW_OVERFLOW = 1;
+
 @autobind
 export default class VirtualTable<TData extends object> extends React.PureComponent<VirtualTableProps<TData>, VirtualTableState> {
 
@@ -203,7 +206,10 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
 
   private get tableHeight(): number {
     const {innerRef, containerRef} = this;
-    if(innerRef) {
+    if(isNumber(this.props.height)) {
+      // Avoid using clientHeight, which forces re-render
+      return this.props.height;
+    } else if(innerRef) {
       return innerRef.clientHeight;
     } else if(containerRef) {
       return containerRef.clientHeight;
@@ -229,7 +235,9 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     const headerHeight = this.headerHeight;
     const currentlyVisibleRowHeights = this.currentlyVisibleRowHeights.slice(0, prevMaxVisibleRows);
     const avgRowHeight = mean(currentlyVisibleRowHeights);
-    const unusedHeight = height - headerHeight - sum(currentlyVisibleRowHeights);
+    const numOverflowRows = Math.max(prevMaxVisibleRows - currentlyVisibleRowHeights.length, 0);
+    const overflowRowHeight = numOverflowRows * avgRowHeight;
+    const unusedHeight = height - headerHeight - sum(currentlyVisibleRowHeights) - overflowRowHeight;
     const absUnused = Math.abs(unusedHeight);
     const direction = unusedHeight / absUnused;
     const maxVisibleRows = prevMaxVisibleRows + direction * Math.floor(absUnused / avgRowHeight);
@@ -276,15 +284,16 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * @private
    */
   private setTopRow(topRow: number) {
-    topRow = Math.max(0, Math.min(topRow, this.props.rowCount - this.visibleRows()));
+    const numVisibleRows = this.visibleRows();
+    const boundedTopRow = Math.max(0, Math.min(topRow, this.props.rowCount - numVisibleRows + ROW_OVERFLOW));
     if(this.state.topRowControlled) {
       const { onTopRowChanged } = this.props;
       if(onTopRowChanged) {
-        onTopRowChanged(topRow);
+        onTopRowChanged(boundedTopRow);
       }
     }
     else {
-      this.setState({topRow});
+      this.setState({topRow: boundedTopRow});
     }
   }
 
@@ -604,7 +613,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
             scrollOffset={topRow * rowHeight}
             margin={(headerHeight || 0)}
             visible={scrollerVisible}
-            virtualSize={rowHeight * rowCount}
+            virtualSize={rowHeight * (rowCount + ROW_OVERFLOW)}
           />
         </div>
       </div>
