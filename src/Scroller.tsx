@@ -53,7 +53,7 @@ export default class Scroller extends React.Component<ScrollerProps, {}> {
     orientation: 'vertical'
   };
 
-  private scrollOffset: number = null;
+  private scrollOffset: number = 0;
   private scrollerRef: HTMLDivElement;
   private throttledOnScroll: () => void;
 
