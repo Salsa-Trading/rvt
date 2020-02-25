@@ -261,6 +261,7 @@ type FieldDefinitionProps = {
   fixedColumnWidth?: boolean;
   sorts?: SortState;
   filters?: FilterState;
+  hiddenKey?: string;
 };
 
 function getFieldProps(props: React.Props<ListProps> & ListProps): FieldDefinitionProps {
@@ -269,6 +270,15 @@ function getFieldProps(props: React.Props<ListProps> & ListProps): FieldDefiniti
     fieldDefaults: props.fieldDefaults,
     fixedColumnWidth: props.fixedColumnWidth,
     sorts: props.listState && props.listState.sorts,
-    filters: props.listState && props.listState.filters
+    filters: props.listState && props.listState.filters,
+    hiddenKey: props.listState && generateHiddenKey(props.listState.fields)
   };
+}
+
+function generateHiddenKey(fields: FieldDisplay) {
+  if(!fields) {
+    return '';
+  }
+  const {hidden, children} = fields;
+  return `${Boolean(hidden)}${(children || []).map(generateHiddenKey)}`;
 }
