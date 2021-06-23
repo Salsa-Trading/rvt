@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createPortal } from 'react-dom';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
-import { isEqual, flatten, every, debounce } from 'lodash';
+import { isEqual, flatten, every, debounce, keyBy } from 'lodash';
 
 import { Field, FieldBase } from '../List/Field';
 import { FieldSet, isVisible } from '../List/FieldSet';
@@ -80,7 +80,6 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
 
   private theadRef: HTMLDivElement;
   private debouncedUpdateWidthsAfterChange: () => void;
-  private headerCells: Map<string, Field> = new Map();
   public static defaultProps = {
     onAllHeaderWidthsSet: () => {},
     hideHeader: false
@@ -167,7 +166,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     const columnChooserButton = isFirstRow && isLastCol
       ? this.renderColumnChooserButton()
       : null;
-    this.headerCells.set(field.name, field);
+
     return (
       <GridHeaderCell
         key={field.name}
@@ -196,12 +195,14 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
 
   @autobind
   private updateWidthsAfterChange() {
+    const {fieldSet} = this.props;
     const ths = [...this.theadRef.querySelectorAll('th')];
     console.log('updating all widths');
     const updates: [number, Field][] = [];
+    const fields = keyBy(flatten(getLevels(fieldSet)).map((fh) => fh.field), 'name');
     ths.forEach((th) => {
       const fieldName = th.getAttribute('data-field');
-      const field = this.headerCells.get(fieldName);
+      const field = fields[fieldName];
       if(field instanceof Field) {
         const width = th.clientWidth;
         updates.push([width, field]);
