@@ -4,7 +4,7 @@ import { FieldSet, RootFieldSet } from './FieldSet';
 import { Field, SortDirection, FieldDefaults, FieldDisplay } from './Field';
 import strEnum from '../utils/strEnum';
 import isNil from '../utils/isNil';
-import { isEqual } from 'lodash';
+import { isEqual} from 'lodash';
 
 export type SortState = {fieldName: string, direction: SortDirection}[];
 export type FilterState = {[fieldName: string]: any };
@@ -33,11 +33,13 @@ export type ListProps = {
   fixedColumnWidth?: boolean;
 };
 
+type BulkWidthChangeProps = [number, Field][];
 export type ListViewProps = {
   fieldSet: FieldSet,
   onSortSelection?: (sortDirection: SortDirection, field: Field|FieldSet) => void;
   onFilterChanged?: (filter: any, field: Field|FieldSet) => void;
   onWidthChanged?: (width: number, field: Field|FieldSet) => void;
+  onWidthChangedBulk?: (updates: BulkWidthChangeProps) => void;
   onTitleChanged?: (name: string, field: Field|FieldSet) => void;
   onMove?: (newIndex: number, field: Field|FieldSet) => void;
   onHiddenChange?: (hidden: boolean, field: Field|FieldSet) => void;
@@ -81,6 +83,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       this.onSortSelection = this.onSortSelection.bind(this);
       this.onFilterChanged = this.onFilterChanged.bind(this);
       this.onWidthChanged = this.onWidthChanged.bind(this);
+      this.onWidthChangedBulk = this.onWidthChangedBulk.bind(this);
       this.onTitleChanged = this.onTitleChanged.bind(this);
       this.onMove = this.onMove.bind(this);
       this.onHiddenChange = this.onHiddenChange.bind(this);
@@ -123,7 +126,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
         fields: listState.fields
       };
 
-      const onListState = (listStateChange: ListStateChangeType, change: any, fieldName: string) => {
+      const onListState = (listStateChange: ListStateChangeType, change: any, fieldName?: string) => {
         if(!onListStateChanged) {
           return;
         }
@@ -192,6 +195,27 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       }
     }
 
+    private onWidthChangedBulk(updates: BulkWidthChangeProps) {
+      const { onListStateChanged } = this.listStateHelper();
+      const { fieldSet } = this.state;
+      updates.forEach(([width, field]) => {
+        // Note: this is a hack.
+      // For some reason the 'field' we receive
+      // is sometimes different from the field in the fieldSet
+        const fieldSetField = fieldSet.findFieldByName(field.name);
+        if(fieldSetField && width !== fieldSetField.width && fieldSetField !== field) {
+          fieldSetField.resize(width);
+        }
+
+        if(field.width !== width) {
+          field.resize(width);
+        }
+      });
+
+      const fieldDisplay: FieldDisplay = fieldSet.getFieldDisplay();
+      onListStateChanged(ListStateChangeType.fields, fieldDisplay);
+    }
+
     private onTitleChanged(title: string, field: Field) {
       const { onListStateChanged } = this.listStateHelper();
       const { fieldSet } = this.state;
@@ -240,6 +264,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
         onSortSelection: this.onSortSelection,
         onFilterChanged: this.onFilterChanged,
         onWidthChanged: this.onWidthChanged,
+        onWidthChangedBulk: this.onWidthChangedBulk,
         onTitleChanged: this.onTitleChanged,
         onMove: this.onMove,
         onHiddenChange: this.onHiddenChange
