@@ -87,6 +87,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
       onSortSelection,
       onFilterChanged,
       onWidthChanged,
+      onWidthChangedBulk,
       onTitleChanged,
       onMove,
       onHiddenChange,
@@ -112,6 +113,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
         onSortSelection={onSortSelection}
         onFilterChanged={onFilterChanged}
         onWidthChanged={onWidthChanged}
+        onWidthChangedBulk={onWidthChangedBulk}
         onTitleChanged={onTitleChanged}
         onAllHeaderWidthsSet={this.onAllHeaderWidthsSet}
         onMove={onMove}

@@ -188,29 +188,30 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
 
   @autobind
   private onWidthChangedProxy(width: number, field: FieldSet | Field) {
-    console.log(width, field.name)
     this.props.onWidthChanged(width, field);
-    this.debouncedUpdateWidthsAfterChange();
+    if(!this.props.fixedColumnWidth) {
+      this.debouncedUpdateWidthsAfterChange();
+    }
   }
 
   @autobind
   private updateWidthsAfterChange() {
     const {fieldSet} = this.props;
-    const ths = [...this.theadRef.querySelectorAll('th')];
-    console.log('updating all widths');
-    const updates: [number, Field][] = [];
-    const fields = keyBy(flatten(getLevels(fieldSet)).map((fh) => fh.field), 'name');
-    ths.forEach((th) => {
-      const fieldName = th.getAttribute('data-field');
-      const field = fields[fieldName];
-      if(field instanceof Field) {
-        const width = th.clientWidth;
-        updates.push([width, field]);
-        console.log([width, fieldName, field])
-      }
-    });
-
-    this.props.onWidthChangedBulk(updates);
+    if(this.theadRef) {
+      const ths = [...this.theadRef?.querySelectorAll('th')];
+      const updates: [number, Field][] = [];
+      const fields = keyBy(flatten(getLevels(fieldSet)).map((fh) => fh.field), 'name');
+      ths.forEach((th) => {
+        const fieldName = th.getAttribute('data-field');
+        const field = fields[fieldName];
+        if(field instanceof Field) {
+          const width = th.clientWidth;
+          updates.push([width, field]);
+        }
+      });
+  
+      this.props.onWidthChangedBulk(updates); 
+    }
   }
   @autobind
   private setRef(ref) {
