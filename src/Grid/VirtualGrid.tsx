@@ -57,12 +57,13 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
       onMouseDown,
       onClick,
       onDoubleClick,
-      rowComponent: RowComponent = GridRow,
+      rowComponent,
       rowHeaderComponent,
       fixedColumnWidth
     } = props;
 
     const fields = fieldSet.getFields();
+    const RowComponent = rowComponent || GridRow;
     return class VirtualGridRow extends React.Component<DynamicRowComponentProps<TData>> {
       public render() {
         return (
