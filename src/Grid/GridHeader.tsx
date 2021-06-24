@@ -99,6 +99,12 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     return !(isEqual(this.props, nextProps) && isEqual(this.state, nextState));
   }
 
+  public componentDidMount() {
+    if(!this.props.fixedColumnWidth) {
+      this.updateWidthsAfterChange();
+    }
+  }
+
   @autobind
   private onFieldMouseDown(e: React.MouseEvent<HTMLTableHeaderCellElement>) {
     const { onMove } = this.props;
