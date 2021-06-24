@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createPortal } from 'react-dom';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
-import { isEqual, flatten, every } from 'lodash';
+import { isEqual, flatten, every, debounce, keyBy } from 'lodash';
 
 import { Field, FieldBase } from '../List/Field';
 import { FieldSet, isVisible } from '../List/FieldSet';
@@ -78,6 +78,8 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     hideHeader: PropTypes.bool
   };
 
+  private theadRef: HTMLDivElement;
+  private debouncedUpdateWidthsAfterChange: () => void;
   public static defaultProps = {
     onAllHeaderWidthsSet: () => {},
     hideHeader: false
@@ -89,10 +91,18 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
       showColumnChooser: false,
       draggingColumn: false
     };
+
+    this.debouncedUpdateWidthsAfterChange = debounce(this.updateWidthsAfterChange, 200, {leading: false, trailing: true});
   }
 
   public shouldComponentUpdate(nextProps: GridHeaderProps<TData>, nextState) {
     return !(isEqual(this.props, nextProps) && isEqual(this.state, nextState));
+  }
+
+  public componentDidMount() {
+    if(!this.props.fixedColumnWidth) {
+      this.updateWidthsAfterChange();
+    }
   }
 
   @autobind
@@ -148,7 +158,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
 
   private renderHeaderRow(rowCount: number, colCount: number, rowIndex: number, fieldHeader: FieldHeader, colIndex: number, fieldHeadersOnRow: FieldHeader[]) {
     const { field, colSpan, rowSpan } = fieldHeader;
-    const { fieldSet, onSortSelection, onFilterChanged, onWidthChanged, onTitleChanged, fixedColumnWidth, hideFilters } = this.props;
+    const { fieldSet, onSortSelection, onFilterChanged, onTitleChanged, fixedColumnWidth, hideFilters } = this.props;
     const isFirstRow = rowIndex === 0;
     const isLastRow = ((rowIndex + rowSpan) === rowCount);
 
@@ -172,7 +182,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
         rowSpan={rowSpan}
         onSortSelection={onSortSelection}
         onFilterChanged={onFilterChanged}
-        onWidthChanged={onWidthChanged}
+        onWidthChanged={this.onWidthChangedProxy}
         onTitleChanged={onTitleChanged}
         onMouseDown={this.onFieldMouseDown}
         canResize={fixedColumnWidth || (isLastRow && !isLastCol)}
@@ -180,6 +190,38 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
         hideFilters={hideFilters}
       />
     );
+  }
+
+  @autobind
+  private onWidthChangedProxy(width: number, field: FieldSet | Field) {
+    this.props.onWidthChanged(width, field);
+    if(!this.props.fixedColumnWidth) {
+      this.debouncedUpdateWidthsAfterChange();
+    }
+  }
+
+  @autobind
+  private updateWidthsAfterChange() {
+    const {fieldSet} = this.props;
+    if(this.theadRef) {
+      const ths = [...this.theadRef?.querySelectorAll('th')];
+      const updates: [number, Field][] = [];
+      const fields = keyBy(flatten(getLevels(fieldSet)).map((fh) => fh.field), 'name');
+      ths.forEach((th) => {
+        const fieldName = th.getAttribute('data-field');
+        const field = fields[fieldName];
+        if(field instanceof Field) {
+          const width = th.clientWidth;
+          updates.push([width, field]);
+        }
+      });
+  
+      this.props.onWidthChangedBulk(updates); 
+    }
+  }
+  @autobind
+  private setRef(ref) {
+    this.theadRef = ref;
   }
 
   private renderColumnChooserButton(): any {
@@ -258,7 +300,10 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
 
     if(flatten(rows).length >= 1) {
       return (
-        <thead className={className}>
+        <thead
+          className={className}
+          ref={this.setRef}
+        >
           {rows.map((row: FieldHeader[], r: number) => {
             return (
               <tr key={r}>
