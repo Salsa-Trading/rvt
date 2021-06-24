@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
 import Scroller from './Scroller';
-import { difference, omit, zipObject, map, debounce, mean, sum, isNumber } from 'lodash';
+import {debounce, mean, sum, isNumber } from 'lodash';
 
 type TableStyles = {
   container: React.CSSProperties;
@@ -164,7 +164,7 @@ export type VirtualTableBaseProps = {
 
 export type VirtualTableProps<TData extends object> = VirtualTableBaseProps & {
   header: React.ComponentType<any>|React.ReactElement<any>;
-  row: React.ComponentType<TableRowProps<TData>> | React.ReactElement<TableRowProps<TData>>;
+  row: React.ComponentType<TableRowProps<TData>>;
   getRow?: (rowIndex: number) => TableRowProps<TData>;
   getRows?: (topRowIndex: number, count: number, maxVisibleRows: number) => TableRowProps<TData>[];
 };
@@ -459,19 +459,13 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * @private
    */
   private buildRows() {
-    const { row } = this.props;
+    const { row: RowComponent } = this.props;
     const rows = this.getRows();
 
     // Re-compute row keys for all visible elements
-
-    const rowElement = React.isValidElement(row)
-      ? row as React.ReactElement<Indexed<TableRowProps<TData>>>
-      : React.createElement(row as React.ComponentType<Indexed<TableRowProps<TData>>>);
-
-    return rows.map((props, i) => React.cloneElement(rowElement, {
-      ...props,
-      key: (props.key || i).toString()
-    } as Indexed<TableRowProps<TData>>));
+    return rows.map((props, i) => (
+      <RowComponent {...props} key={props.key || String(i)}/>
+    ));
   }
 
   private setContainerRef(ref: HTMLDivElement) {

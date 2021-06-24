@@ -1,6 +1,6 @@
 import * as React from 'react';
 import GridHeader from './GridHeader';
-import { GridRowProps, BaseGridProps } from './types';
+import { GridRowProps, BaseGridProps, DynamicRowComponentProps } from './types';
 import GridRow from './GridRow';
 import List, { ListProps, ListViewProps } from '../List';
 import { isEqual } from 'lodash';
@@ -17,7 +17,7 @@ export type GridProps<TData extends object> = TablePropsWithoutData & BaseGridPr
 export type WrappedGridProps<TData extends object> = GridProps<TData> & ListViewProps;
 
 class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>, {
-  rowComponent: React.ReactElement<any>;
+  rowComponent: React.ComponentType<DynamicRowComponentProps<TData>>;
   allWidthsSet: boolean;
 }> {
 
@@ -53,7 +53,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
     }
   }
 
-  private generateRowComponent(props: WrappedGridProps<TData>): React.ReactElement<any> {
+  private generateRowComponent(props: WrappedGridProps<TData>): React.ComponentClass<DynamicRowComponentProps<TData>> {
     const {
       fieldSet,
       onMouseDown,
@@ -65,14 +65,22 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
     } = props;
 
     const fields = fieldSet.getFields();
-    return React.createElement<any>(rowComponent || GridRow, {
-      fields: fields,
-      onMouseDown: onMouseDown,
-      onClick: onClick,
-      onDoubleClick: onDoubleClick,
-      rowHeaderComponent,
-      fixedColumnWidth
-    });
+    const RowComponent = rowComponent || GridRow;
+    return class GridRow extends React.Component<DynamicRowComponentProps<TData>> {
+      public render() {
+        return (
+          <RowComponent
+            {...this.props}
+            fields={fields}
+            onMouseDown={onMouseDown}
+            onClick={onClick}
+            onDoubleClick={onDoubleClick}
+            rowHeaderComponent={rowHeaderComponent}
+            fixedColumnWidth={fixedColumnWidth}
+          />
+        );
+      }
+    };
   }
 
   @autobind
@@ -109,7 +117,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
       ...rest
     } = this.props;
 
-    const {rowComponent: row, allWidthsSet} = this.state;
+    const {rowComponent: RowComponent, allWidthsSet} = this.state;
     const setFixedColumnWidth = fixedColumnWidth ? allWidthsSet : false;
 
     const header = (
@@ -123,9 +131,9 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
         onHiddenChange={onHiddenChange}
         onAllHeaderWidthsSet={this.onAllHeaderWidthsSet}
         pinnedRows={pinnedRows}
-        secondaryHeader={secondaryHeaderComponent}
-        gridRow={row}
+        gridRow={RowComponent}
         rowHeader={rowHeaderComponent}
+        secondaryHeader={secondaryHeaderComponent}
         chooserMountPoint={chooserMountPoint}
         hideDefaultChooser={hideDefaultChooser}
         fixedColumnWidth={setFixedColumnWidth}
@@ -140,13 +148,9 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
           <table {...rest} style={tableStyle}>
             {header}
             <tbody style={tbodyStyle}>
-              {data.map((d, i) => {
-                return React.cloneElement(row, {
-                  key: i,
-                  data: d.data,
-                  rowProps: d.rowProps
-                });
-              })}
+              {data.map((d, i) => (
+                <RowComponent {...d} key={d.key || String(i)}/>
+              ))}
             </tbody>
           </table>
         </div>

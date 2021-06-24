@@ -3,7 +3,7 @@ import GridHeader from './GridHeader';
 import List, { ListProps, ListViewProps } from '../List';
 
 class CustomGrid extends React.Component<React.HTMLProps<HTMLTableElement> & ListViewProps & {
-  body: React.ComponentClass<any>|React.StatelessComponent<any>;
+  body: React.ComponentClass<any>|React.FunctionComponent<any>;
   data: any;
 }, {}> {
 
@@ -15,7 +15,7 @@ class CustomGrid extends React.Component<React.HTMLProps<HTMLTableElement> & Lis
       onWidthChanged,
       onHiddenChange,
       onMove,
-      body,
+      body: Body,
       data,
       ...rest
     } = this.props;
@@ -33,13 +33,11 @@ class CustomGrid extends React.Component<React.HTMLProps<HTMLTableElement> & Lis
 
     const fields = fieldSet.getFields();
 
-    const bodyElement = React.createElement(body as any, {fields, data});
-
     return (
       <div className='rvt'>
         <table {...rest}>
           {header}
-          {bodyElement}
+          <Body fields={fields} data={data}/>
         </table>
       </div>
     );
@@ -47,7 +45,7 @@ class CustomGrid extends React.Component<React.HTMLProps<HTMLTableElement> & Lis
 }
 
 export default List(CustomGrid) as React.ComponentClass<React.HTMLProps<HTMLTableElement> & ListProps & {
-  body: React.ComponentClass<any>|React.StatelessComponent<any>;
+  body: React.ComponentClass<any>|React.FunctionComponent<any>;
   data: any;
 }>;
 

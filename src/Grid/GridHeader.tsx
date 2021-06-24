@@ -11,8 +11,8 @@ import GridHeaderCell from './GridHeaderCell';
 import ColumnChooser from './ColumnChooser';
 import ColumnChooserButton from './ColumnChooserButton';
 import safeMouseMove from '../utils/saveMouseMove';
-import { GridRowProps, GridRowComponentProps, GridRowHeaderProps, GridSecondaryHeaderProps } from './types';
-import { renderGridRowHeader} from './helpers';
+import {GridRowProps, GridRowHeaderProps, GridSecondaryHeaderProps, DynamicRowComponentProps} from './types';
+import {renderGridRowHeader} from './helpers';
 
 const hoverClassName = 'field-moving-hover';
 const movingClassName = 'field-moving';
@@ -50,7 +50,7 @@ export function getLevels(fieldSet: FieldSet): FieldHeader[][] {
 
 export type GridHeaderProps<TData extends object> = ListViewProps & {
   pinnedRows?: GridRowProps<TData>[];
-  gridRow?: React.ComponentType<GridRowComponentProps<TData>>|React.ReactElement<GridRowComponentProps<TData>>;
+  gridRow?: React.ComponentType<DynamicRowComponentProps<TData>>;
   rowHeader?: React.ComponentType<GridRowHeaderProps<TData>>;
   secondaryHeader?: React.ComponentType<GridSecondaryHeaderProps>;
   chooserMountPoint?: HTMLElement
@@ -217,25 +217,29 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
   }
 
   public renderPinnedRows() {
-    const { pinnedRows, gridRow, secondaryHeader, fieldSet } = this.props;
+    const { pinnedRows, gridRow: RowComponent, secondaryHeader: SecondaryHeader, fieldSet } = this.props;
     let headerRowElements = [];
 
-    if(secondaryHeader) {
+    if(SecondaryHeader) {
       headerRowElements = [
-        React.createElement(secondaryHeader, {fields: fieldSet.getFields(), key: 'secondary-header'})
+        <SecondaryHeader fields={fieldSet.getFields()} key='secondary-header'/>
       ];
     }
 
     if(pinnedRows) {
-      const rowElement = React.isValidElement(gridRow) ? gridRow : React.createElement(gridRow as any);
-      headerRowElements = [...headerRowElements, ...pinnedRows.map((r, i) => React.cloneElement(rowElement as any, {...r, key: i}))];
+      headerRowElements = [
+        ...headerRowElements,
+        ...pinnedRows.map((r, i) => (
+          <RowComponent {...r} key={i}/>
+        ))
+      ]
     }
 
     return headerRowElements;
   }
 
   private allChildrenHaveWidthSet(props) {
-    const { fieldSet} = props;
+    const {fieldSet} = props;
     const rows: FieldBase[] = flatten(getLevels(fieldSet)).map((r) => r.field );
     return every(rows, (r: FieldBase) => r.hidden || r.width);
   }
