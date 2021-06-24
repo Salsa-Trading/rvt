@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import strEnum from '../utils/strEnum';
-import isNil from '../utils/isNil';
 import { FilterControlProps } from '../Filter';
 import {isString} from 'lodash';
 
@@ -66,7 +65,7 @@ export abstract class FieldBase implements FieldPropsBase {
   public title: string;
   public header?: HeaderType;
   public filterControl?: FilterControlType;
-  public width?: number;
+  private _width?: number;
   public sortable?: boolean;
   public filterable?: boolean;
   public sortDirection?: SortDirection;
@@ -76,8 +75,18 @@ export abstract class FieldBase implements FieldPropsBase {
 
   constructor(props: FieldPropsBase, fieldDisplay: FieldDisplay) {
     Object.assign(this, props);
-    this.width = fieldDisplay && !isNil(fieldDisplay.width) ? fieldDisplay.width : props.width;
-    this.title = fieldDisplay && fieldDisplay.title;
+    this.width = fieldDisplay?.width ?? props.width;
+    this.title = fieldDisplay?.title;
+  }
+
+  public get width(): number {
+    return this._width;
+  }
+
+  public set width(width: number) {
+    this._width = isFinite(width)
+      ? width
+      : undefined;
   }
 
   public getFields(): Field[] {
@@ -129,14 +138,13 @@ export class Field extends FieldBase implements FieldProps {
   public format?: FormatType;
   public cell?: CellType;
   public hidden?: boolean;
-  public width?: number;
 
   constructor(props: FieldProps, fieldDisplay: FieldDisplay) {
     super(props, fieldDisplay);
     const { cell, hidden } = props;
-    this.hidden = fieldDisplay && !isNil(fieldDisplay.hidden) ? fieldDisplay.hidden : hidden;
+    this.hidden = fieldDisplay?.hidden ?? hidden;
     this.cell = cell;
-    this.width = fieldDisplay && (fieldDisplay.width || undefined);
+    this.width = fieldDisplay?.width;
   }
 }
 
