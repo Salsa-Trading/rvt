@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { VirtualGridMouseEventHandler, GridRowProps, BaseGridProps } from './types';
+import {GridRowProps, BaseGridProps, DynamicRowComponentProps} from './types';
 import GridRow from './GridRow';
 import GridHeader from './GridHeader';
 import List, { ListProps, ListViewProps } from '../List';
@@ -15,7 +15,7 @@ export type VirtualGridProps<TData extends object> = BaseGridProps<TData> & {
 export type WrappedVirtualGridProps<TData extends object> = VirtualTableBaseProps & ListViewProps & VirtualGridProps<TData>;
 
 export class VirtualGrid<TData extends object> extends React.Component<WrappedVirtualGridProps<TData>, {
-  rowComponent: React.ReactElement<any>;
+  rowComponent: React.ComponentType<DynamicRowComponentProps<TData>>;
   allWidthsSet: boolean;
 }> {
 
@@ -51,7 +51,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
     }
   }
 
-  private generateRowComponent(props: WrappedVirtualGridProps<TData>): React.ReactElement<any> {
+  private generateRowComponent(props: WrappedVirtualGridProps<TData>): React.ComponentType<DynamicRowComponentProps<TData>> {
     const {
       fieldSet,
       onMouseDown,
@@ -63,14 +63,22 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
     } = props;
 
     const fields = fieldSet.getFields();
-    return React.createElement<any>(rowComponent || GridRow, {
-      fields: fields,
-      onMouseDown: onMouseDown,
-      onClick: onClick,
-      onDoubleClick: onDoubleClick,
-      rowHeaderComponent,
-      fixedColumnWidth
-    });
+    const RowComponent = rowComponent || GridRow;
+    return class VirtualGridRow extends React.Component<DynamicRowComponentProps<TData>> {
+      public render() {
+        return (
+          <RowComponent
+            {...this.props}
+            fields={fields}
+            onMouseDown={onMouseDown}
+            onClick={onClick}
+            onDoubleClick={onDoubleClick}
+            rowHeaderComponent={rowHeaderComponent}
+            fixedColumnWidth={fixedColumnWidth}
+          />
+        );
+      }
+    }
   }
 
   @autobind
@@ -105,7 +113,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
       ...rest
     } = this.props;
 
-    const {rowComponent: row, allWidthsSet} = this.state;
+    const {rowComponent: RowComponent, allWidthsSet} = this.state;
     const fixedColumnWidth = this.props.fixedColumnWidth ? allWidthsSet : false;
     const header = (
       <GridHeader
@@ -121,7 +129,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
         pinnedRows={pinnedRows}
         secondaryHeader={secondaryHeaderComponent}
         rowHeader={rowHeaderComponent}
-        gridRow={row}
+        gridRow={RowComponent}
         chooserMountPoint={chooserMountPoint}
         hideDefaultChooser={hideDefaultChooser}
         fixedColumnWidth={fixedColumnWidth}
@@ -135,7 +143,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
         {...rest}
         header={header}
         fixedColumnWidth={fixedColumnWidth}
-        row={row}
+        row={RowComponent}
       />
     );
   }

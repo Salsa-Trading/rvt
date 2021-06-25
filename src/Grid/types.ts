@@ -2,26 +2,29 @@ import { Field } from '../List/Field';
 
 export type VirtualGridMouseEventHandler = (e: React.MouseEvent<any>, data: any, fieldName: string) => void;
 
-export type GridRowProps<TData> = {
-  data: TData;
-  rowProps?: React.HTMLProps<HTMLTableRowElement>;
+export interface GridRowProps<TData> extends DynamicRowComponentProps<TData> {
   key?: string;
-};
+}
 
 export type GridRowHeaderProps<TData> = {
   data: TData;
 };
 
-export type GridRowComponentProps<TData> = {
-  fields: Field[];
-  data?: TData;
+export interface GridRowComponentProps<TData> extends DynamicRowComponentProps<TData>, InjectedRowComponentProps<TData> {}
+
+export interface DynamicRowComponentProps<TData> {
+  data: TData;
   rowProps?: React.HTMLProps<HTMLTableRowElement>;
+}
+
+export interface InjectedRowComponentProps<TData> {
+  fields: Field[];
   onMouseDown?: VirtualGridMouseEventHandler;
   onClick?: VirtualGridMouseEventHandler;
   onDoubleClick?: VirtualGridMouseEventHandler;
   rowHeaderComponent?: React.ComponentType<GridRowHeaderProps<TData>>
   fixedColumnWidth?: boolean;
-};
+}
 
 export type GridSecondaryHeaderProps = {
   fields: Field[];
@@ -43,3 +46,5 @@ export type BaseGridProps<TData extends object> = {
   tableStyle?: React.CSSProperties;
   tbodyStyle?: React.CSSProperties;
 };
+
+
