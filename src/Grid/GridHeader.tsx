@@ -12,7 +12,7 @@ import ColumnChooser from './ColumnChooser';
 import ColumnChooserButton from './ColumnChooserButton';
 import safeMouseMove from '../utils/saveMouseMove';
 import { GridRowProps, GridRowComponentProps, GridRowHeaderProps, GridSecondaryHeaderProps } from './types';
-import { allFieldSetWidthsSet, FieldHeader, getLevels, renderGridRowHeader} from './helpers';
+import { FieldHeader, getLevels, renderGridRowHeader} from './helpers';
 
 const hoverClassName = 'field-moving-hover';
 const movingClassName = 'field-moving';
@@ -27,7 +27,6 @@ export type GridHeaderProps<TData extends object> = ListViewProps & {
   fixedColumnWidth?: boolean;
   hideFilters?: boolean;
   hideHeader?: boolean;
-  onAllHeaderWidthsSet?: () => void;
 };
 
 export default class GridHeader<TData extends object> extends React.Component<GridHeaderProps<TData>, {
@@ -50,7 +49,6 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
   private theadRef: HTMLDivElement;
   private debouncedUpdateWidthsAfterChange: () => void;
   public static defaultProps = {
-    onAllHeaderWidthsSet: () => {},
     hideHeader: false
   };
 
@@ -243,18 +241,6 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     }
 
     return headerRowElements;
-  }
-
-  private allChildrenHaveWidthSet(props) {
-    const { fieldSet} = props;
-    return allFieldSetWidthsSet(fieldSet);
-  }
-
-  public componentDidUpdate(prevProps) {
-    if (!isEqual(this.props, prevProps) && this.allChildrenHaveWidthSet(this.props)) {
-      const {onAllHeaderWidthsSet} = this.props;
-      onAllHeaderWidthsSet();
-    }
   }
 
   public render() {

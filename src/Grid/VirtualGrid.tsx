@@ -50,6 +50,13 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
         rowComponent: this.generateRowComponent(nextProps)
       });
     }
+
+    if(!this.state.allWidthsSet && !isEqual(this.props.fieldSet, nextProps.fieldSet)) {
+      const allWidthsSet = allFieldSetWidthsSet(nextProps.fieldSet);
+      this.setState({
+        allWidthsSet
+      });
+    }
   }
 
   private generateRowComponent(props: WrappedVirtualGridProps<TData>): React.ReactElement<any> {
@@ -72,13 +79,6 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
       rowHeaderComponent,
       fixedColumnWidth
     });
-  }
-
-  @autobind
-  private onAllHeaderWidthsSet() {
-    if (!this.state.allWidthsSet) {
-      this.setState({ allWidthsSet: true });
-    }
   }
 
   public render() {
@@ -116,7 +116,6 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
         onWidthChanged={onWidthChanged}
         onWidthChangedBulk={onWidthChangedBulk}
         onTitleChanged={onTitleChanged}
-        onAllHeaderWidthsSet={this.onAllHeaderWidthsSet}
         onMove={onMove}
         onHiddenChange={onHiddenChange}
         pinnedRows={pinnedRows}

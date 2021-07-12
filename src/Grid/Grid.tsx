@@ -75,13 +75,6 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
     });
   }
 
-  @autobind
-  private onAllHeaderWidthsSet() {
-    if (!this.state.allWidthsSet) {
-      this.setState({ allWidthsSet: true });
-    }
-  }
-
   public render() {
     const {
       fieldSet,
@@ -123,7 +116,6 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
         onTitleChanged={onTitleChanged}
         onMove={onMove}
         onHiddenChange={onHiddenChange}
-        onAllHeaderWidthsSet={this.onAllHeaderWidthsSet}
         pinnedRows={pinnedRows}
         secondaryHeader={secondaryHeaderComponent}
         gridRow={row}
