@@ -12,41 +12,10 @@ import ColumnChooser from './ColumnChooser';
 import ColumnChooserButton from './ColumnChooserButton';
 import safeMouseMove from '../utils/saveMouseMove';
 import { GridRowProps, GridRowComponentProps, GridRowHeaderProps, GridSecondaryHeaderProps } from './types';
-import { allFieldSetWidthsSet, renderGridRowHeader} from './helpers';
+import { allFieldSetWidthsSet, FieldHeader, getLevels, renderGridRowHeader} from './helpers';
 
 const hoverClassName = 'field-moving-hover';
 const movingClassName = 'field-moving';
-
-export type FieldHeader = {
-  field: FieldBase;
-  rowSpan: number;
-  colSpan: number;
-};
-
-export function fillLevels(fieldSet: FieldSet, rows: number): FieldHeader[][] {
-  const level: FieldHeader[] = [];
-  const levels = [level];
-  for(let child of fieldSet.children.filter(f => isVisible(f))) {
-    if(child instanceof FieldSet) {
-      level.push({field: child, colSpan: child.getFieldCount(), rowSpan: 1});
-      let subLevels = fillLevels(child, rows - 1);
-      for(let i = 0; i < subLevels.length; i++) {
-        if(subLevels[i] && subLevels[i].length > 0) {
-          levels[i + 1] = (levels[i + 1] || []).concat(subLevels[i]);
-        }
-      }
-    }
-    else if(child instanceof Field) {
-      level.push({field: child, colSpan: 1, rowSpan: Math.max(rows, 1)});
-    }
-  }
-  return levels;
-}
-
-export function getLevels(fieldSet: FieldSet): FieldHeader[][] {
-  const maxRows = fieldSet.getLevelCount();
-  return fillLevels(fieldSet, maxRows);
-}
 
 export type GridHeaderProps<TData extends object> = ListViewProps & {
   pinnedRows?: GridRowProps<TData>[];
@@ -281,8 +250,8 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     return allFieldSetWidthsSet(fieldSet);
   }
 
-  public UNSAFE_componentWillReceiveProps(nextProps, props) {
-    if (!isEqual(nextProps, props) && this.allChildrenHaveWidthSet(nextProps)) {
+  public componentDidUpdate(prevProps) {
+    if (!isEqual(this.props, prevProps) && this.allChildrenHaveWidthSet(this.props)) {
       const {onAllHeaderWidthsSet} = this.props;
       onAllHeaderWidthsSet();
     }

@@ -107,7 +107,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
     } = this.props;
 
     const {rowComponent: row, allWidthsSet} = this.state;
-    const fixedColumnWidth = this.props.fixedColumnWidth ? allWidthsSet : false;
+    const fixedColumnWidth = this.props.fixedColumnWidth && allWidthsSet;
     const header = (
       <GridHeader
         fieldSet={fieldSet}
