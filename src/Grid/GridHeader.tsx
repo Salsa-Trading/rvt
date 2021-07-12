@@ -12,7 +12,7 @@ import ColumnChooser from './ColumnChooser';
 import ColumnChooserButton from './ColumnChooserButton';
 import safeMouseMove from '../utils/saveMouseMove';
 import { GridRowProps, GridRowComponentProps, GridRowHeaderProps, GridSecondaryHeaderProps } from './types';
-import { renderGridRowHeader} from './helpers';
+import { allFieldSetWidthsSet, renderGridRowHeader} from './helpers';
 
 const hoverClassName = 'field-moving-hover';
 const movingClassName = 'field-moving';
@@ -278,8 +278,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
 
   private allChildrenHaveWidthSet(props) {
     const { fieldSet} = props;
-    const rows: FieldBase[] = flatten(getLevels(fieldSet)).map((r) => r.field );
-    return every(rows, (r: FieldBase) => r.hidden || r.width);
+    return allFieldSetWidthsSet(fieldSet);
   }
 
   public UNSAFE_componentWillReceiveProps(nextProps, props) {

@@ -6,6 +6,7 @@ import List, { ListProps, ListViewProps } from '../List';
 import VirtualTable, { VirtualTableBaseProps } from '../VirtualTable';
 import { isEqual } from 'lodash';
 import {autobind} from 'core-decorators';
+import {allFieldSetWidthsSet} from './helpers';
 
 export type VirtualGridProps<TData extends object> = BaseGridProps<TData> & {
   getRows?: (rowIndex: number, length: number) => GridRowProps<TData>[];
@@ -23,7 +24,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
     super(props, context);
     this.state = {
       rowComponent: this.generateRowComponent(props),
-      allWidthsSet: false
+      allWidthsSet: allFieldSetWidthsSet(props.fieldSet)
     };
   }
 

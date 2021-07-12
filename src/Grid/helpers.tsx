@@ -1,8 +1,12 @@
 import * as React from 'react';
-import { Field } from '../List/Field';
+import { Field, FieldBase } from '../List/Field';
 import * as get from 'lodash.get';
 import isNil from '../utils/isNil';
 import { GridRowHeaderProps } from './types';
+
+import {flatten} from 'lodash';
+import {getLevels} from './GridHeader';
+import {FieldSet} from '../List/FieldSet';
 
 export function renderGridCell<TData>(field: Field, data: TData) {
   if(field.cell) {
@@ -33,4 +37,7 @@ export function renderGridRowHeader<TData>(rowHeaderComponent: React.ComponentTy
   );
 }
 
-
+export function allFieldSetWidthsSet(fieldSet: FieldSet): boolean {
+  const rows: FieldBase[] = flatten(getLevels(fieldSet)).map((r) => r.field );
+  return rows.every((r: FieldBase) => r.hidden || r.width);
+}
