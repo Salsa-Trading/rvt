@@ -594,9 +594,10 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * @private
    */
   private renderCalculator(header, rows, tableClassName, styles: TableStyles) {
+    const {fixedColumnWidth} = this.props;
     return (
       <div
-        className={`${this.className} calculator`}
+        className={`${this.className} calculator ${fixedColumnWidth ? 'fixed-column-width' : '' }`}
         ref={this.setContainerRef}
         style={styles.container}
       >
