@@ -11,6 +11,7 @@ export type ScrollerProps = {
   onScroll: (scrollTop: number) => void;
   scrollOffset: number;
   orientation?: 'vertical'|'horizontal';
+  throttle?: number;
 };
 
 export default class Scroller extends React.Component<ScrollerProps, {}> {
@@ -70,7 +71,9 @@ export default class Scroller extends React.Component<ScrollerProps, {}> {
   }
 
   public UNSAFE_componentWillMount() {
-    this.throttledOnScroll = throttle(this.onScroll.bind(this), 100);
+    this.throttledOnScroll = this.props.throttle
+      ? throttle(this.onScroll.bind(this), this.props.throttle)
+      : this.onScroll.bind(this);
   }
 
   private setScrollOffset(scrollOffset: number) {
