@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { expect } from 'chai';
-import { getLevels } from '../../src/Grid/GridHeader';
+
 import { FieldSet as FieldSetClass} from '../../src/List/FieldSet';
 import { Field, FieldSet } from '../../src/';
+import {getLevels} from '../../src/Grid/helpers';
 
 function equalLevels(result, expected) {
   if(result.length !== expected.length) {
