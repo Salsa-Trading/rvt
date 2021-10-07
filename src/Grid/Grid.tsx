@@ -5,6 +5,7 @@ import GridRow from './GridRow';
 import List, { ListProps, ListViewProps } from '../List';
 import { isEqual } from 'lodash';
 import {autobind} from 'core-decorators';
+import {allFieldSetWidthsSet} from './helpers';
 
 export type Diff<T extends string, U extends string> = ({[P in T]: P } & {[P in U]: never } & { [x: string]: never })[T];
 export type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
@@ -25,7 +26,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
     super(props, context);
     this.state = {
       rowComponent: this.generateRowComponent(props),
-      allWidthsSet: false
+      allWidthsSet: allFieldSetWidthsSet(props.fieldSet)
     };
   }
 
@@ -49,6 +50,13 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
     if(!isEqual(currentRowComponentProps, nextRowComponentProps)) {
       this.setState({
         rowComponent: this.generateRowComponent(nextProps)
+      });
+    }
+
+    if(!this.state.allWidthsSet && !isEqual(this.props.fieldSet, nextProps.fieldSet)) {
+      const allWidthsSet = allFieldSetWidthsSet(nextProps.fieldSet);
+      this.setState({
+        allWidthsSet
       });
     }
   }
