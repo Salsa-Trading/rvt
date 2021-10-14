@@ -300,7 +300,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * @private
    */
   private onScroll(scrollTop: number) {
-    const topRow = Math.ceil(scrollTop / this.state.rowHeight);
+    const topRow = Math.round(scrollTop / this.state.rowHeight);
     this.setTopRow(topRow);
   }
 
