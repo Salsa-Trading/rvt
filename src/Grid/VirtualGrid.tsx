@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { VirtualGridMouseEventHandler, GridRowProps, BaseGridProps } from './types';
+import { GridRowProps, BaseGridProps } from './types';
 import GridRow from './GridRow';
 import GridHeader from './GridHeader';
 import List, { ListProps, ListViewProps } from '../List';
 import VirtualTable, { VirtualTableBaseProps } from '../VirtualTable';
 import { isEqual } from 'lodash';
-import {autobind} from 'core-decorators';
 import {allFieldSetWidthsSet} from './helpers';
 
 export type VirtualGridProps<TData extends object> = BaseGridProps<TData> & {
