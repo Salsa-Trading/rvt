@@ -69,19 +69,21 @@ export default class ColumnChooser extends React.Component<ColumnChooserProps, C
             if(typeof field.header === 'string' || field.header instanceof String) {
               name = field.header as string;
             }
-            return <li key={field.name}>
-              <label>
-                <Checkbox
-                  id={field.name}
-                  checked={!field.hidden}
-                  disabled={!field.hidden && field.showAlways}
-                  onChange={this.onChange.bind(this, field)}
-                  indeterminate={isFieldSet(field) ? field.partiallyHidden : false}
-                />
-                {name}
-              </label>
-              {children}
-            </li>;
+            return (
+              <li key={field.name}>
+                <label>
+                  <Checkbox
+                    id={field.name}
+                    checked={!field.hidden}
+                    disabled={!field.hidden && field.showAlways}
+                    onChange={this.onChange.bind(this, field)}
+                    indeterminate={isFieldSet(field) ? field.partiallyHidden : false}
+                  />
+                  {name}
+                </label>
+                {children}
+              </li>
+            );
           })}
         </ul>
       </div>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FieldBase, FieldPropsBase, FieldDefaults, Field, FieldDisplay, FieldBasePropTypes } from './Field';
-import {sum, isString} from 'lodash';
+import { sum } from 'lodash';
 
 export const RootFieldSet = '_root_';
 
