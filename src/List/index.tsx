@@ -5,7 +5,6 @@ import { Field, SortDirection, FieldDefaults, FieldDisplay } from './Field';
 import strEnum from '../utils/strEnum';
 import isNil from '../utils/isNil';
 import { isEqual, isUndefined} from 'lodash';
-import { allFieldSetWidthsSet } from '../Grid/helpers';
 
 export type SortState = {fieldName: string, direction: SortDirection}[];
 export type FilterState = {[fieldName: string]: any };
