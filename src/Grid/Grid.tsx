@@ -4,7 +4,6 @@ import { GridRowProps, BaseGridProps } from './types';
 import GridRow from './GridRow';
 import List, { ListProps, ListViewProps } from '../List';
 import { isEqual } from 'lodash';
-import {autobind} from 'core-decorators';
 import {allFieldSetWidthsSet} from './helpers';
 
 export type Diff<T extends string, U extends string> = ({[P in T]: P } & {[P in U]: never } & { [x: string]: never })[T];

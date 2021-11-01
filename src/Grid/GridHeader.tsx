@@ -2,10 +2,10 @@ import * as React from 'react';
 import { createPortal } from 'react-dom';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
-import { isEqual, flatten, every, debounce, keyBy } from 'lodash';
+import { isEqual, flatten, debounce, keyBy } from 'lodash';
 
-import { Field, FieldBase } from '../List/Field';
-import { FieldSet, isVisible } from '../List/FieldSet';
+import { Field } from '../List/Field';
+import { FieldSet } from '../List/FieldSet';
 import { ListViewProps } from '../List';
 import GridHeaderCell from './GridHeaderCell';
 import ColumnChooser from './ColumnChooser';
@@ -46,11 +46,12 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     hideHeader: PropTypes.bool
   };
 
-  private theadRef: HTMLDivElement;
-  private debouncedUpdateWidthsAfterChange: () => void;
   public static defaultProps = {
     hideHeader: false
   };
+
+  private theadRef: HTMLDivElement;
+  private debouncedUpdateWidthsAfterChange: () => void;
 
   constructor(props: GridHeaderProps<TData>, context) {
     super(props, context);
@@ -182,8 +183,8 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
           updates.push([width, field]);
         }
       });
-  
-      this.props.onWidthChangedBulk(updates); 
+
+      this.props.onWidthChangedBulk(updates);
     }
   }
   @autobind

@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { autobind } from 'core-decorators';
 import Scroller from './Scroller';
-import { difference, omit, zipObject, map, debounce, mean, sum, isNumber } from 'lodash';
+import { debounce, mean, sum, isNumber } from 'lodash';
 
 type TableStyles = {
   container: React.CSSProperties;

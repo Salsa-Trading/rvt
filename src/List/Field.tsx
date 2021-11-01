@@ -72,6 +72,7 @@ export abstract class FieldBase implements FieldPropsBase {
   public filter?: any;
   public abstract hidden?: boolean;
   public showAlways?: boolean;
+  public fixedColumnWidth?: boolean; // hack to get the type system to recognize fixedColumnWidth does exist on Field
 
   constructor(props: FieldPropsBase, fieldDisplay: FieldDisplay) {
     Object.assign(this, props);

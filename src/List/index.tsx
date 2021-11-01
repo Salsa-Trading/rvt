@@ -4,7 +4,7 @@ import { FieldSet, RootFieldSet } from './FieldSet';
 import { Field, SortDirection, FieldDefaults, FieldDisplay } from './Field';
 import strEnum from '../utils/strEnum';
 import isNil from '../utils/isNil';
-import { isEqual} from 'lodash';
+import { isEqual, isUndefined} from 'lodash';
 
 export type SortState = {fieldName: string, direction: SortDirection}[];
 export type FilterState = {[fieldName: string]: any };
@@ -188,7 +188,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
         fieldSetField.resize(width);
       }
 
-      if(field.width !== width) {
+      if(isUndefined(field.width) || field.width !== width) {
         field.resize(width);
         const fieldDisplay: FieldDisplay = fieldSet.getFieldDisplay();
         onListStateChanged(ListStateChangeType.fields, fieldDisplay, field.name);
@@ -200,14 +200,17 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       const { fieldSet } = this.state;
       updates.forEach(([width, field]) => {
         // Note: this is a hack.
-      // For some reason the 'field' we receive
-      // is sometimes different from the field in the fieldSet
+        // For some reason the 'field' we receive
+        // is sometimes different from the field in the fieldSet
         const fieldSetField = fieldSet.findFieldByName(field.name);
-        if(fieldSetField && width !== fieldSetField.width && fieldSetField !== field) {
+        if(fieldSetField
+            && width !== fieldSetField.width
+            && fieldSetField !== field
+            && !fieldSetField.fixedColumnWidth) {
           fieldSetField.resize(width);
         }
 
-        if(field.width !== width) {
+        if(field.width !== width && !field.fixedColumnWidth) {
           field.resize(width);
         }
       });
