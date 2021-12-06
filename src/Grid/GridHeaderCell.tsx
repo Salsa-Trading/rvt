@@ -20,6 +20,7 @@ export type GridHeaderCellProps = {
   onSortSelection?: (sortDirection: SortDirection, field: Field) => void;
   onFilterChanged?: (filter: any, field: Field) => void;
   onWidthChanged?: (width: number, field: Field) => void;
+  onHiddenChanged?: (field: Field) => void;
   onTitleChanged?: (name: string, field: Field) => void;
   onMouseDown(e: React.MouseEvent<HTMLTableHeaderCellElement>);
 };
@@ -198,6 +199,11 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
   }
 
   @autobind
+  private onHide() {
+    this.props.onHiddenChanged(this.props.field);
+  }
+
+  @autobind
   private filterRefFn(ref: Filter) {
     this.filter = ref;
   }
@@ -221,7 +227,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
       colSpan,
       onSortSelection,
       onFilterChanged,
-      fixedColumnWidth
+      fixedColumnWidth,
     } = this.props as any;
     const {showFilterOnClick} = this.state;
 
@@ -246,6 +252,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
           onSortSelection={sortSelectionHandler}
           onFilterChanged={filterChangedHandler}
           onFilterClosed={this.onFilterClosed}
+          onHide={this.onHide}
         />
       );
     }
