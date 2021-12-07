@@ -36,6 +36,7 @@ export type FilterProps = {
   field: Field
   openOnMounted?: boolean;
   onSortSelection?: (sortDirection: SortDirection) => void;
+  onHide: () => void;
   onFilterChanged: (filter: any) => void;
   onFilterClosed?: () => void;
 };
@@ -125,7 +126,7 @@ export default class Filter extends React.Component<FilterProps, {
   }
 
   private renderFilterPane() {
-    const { field } = this.props;
+    const { field, onHide } = this.props;
     const { sortDirection } = field;
 
     const { filter } = this.state;
@@ -150,11 +151,22 @@ export default class Filter extends React.Component<FilterProps, {
       </div>
     ) : null;
 
+    const hideBtn = (
+      <div className='form-group'>
+        <div className='btn-group sort-controls'>
+          <button className='btn' onClick={onHide}>
+            Hide
+          </button>
+        </div>
+      </div>
+    );
+
     return (
       <div className='card filter-pane'>
         {sortElement}
         <form onSubmit={this.handleOk}>
           <div className='form-group'>
+            {hideBtn}
             {filterElement}
           </div>
           <div className='form-group'>

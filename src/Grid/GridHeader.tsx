@@ -37,6 +37,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
   public static propTypes = {
     fieldSet: PropTypes.any.isRequired,
     onSortSelection: PropTypes.func,
+    onHiddenChanged: PropTypes.func,
     onFilterChanged: PropTypes.func,
     onWidthChanged: PropTypes.func,
     onMove: PropTypes.func,
@@ -126,7 +127,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
 
   private renderHeaderRow(rowCount: number, colCount: number, rowIndex: number, fieldHeader: FieldHeader, colIndex: number, fieldHeadersOnRow: FieldHeader[]) {
     const { field, colSpan, rowSpan } = fieldHeader;
-    const { fieldSet, onSortSelection, onFilterChanged, onTitleChanged, fixedColumnWidth, hideFilters } = this.props;
+    const { fieldSet, onSortSelection, onFilterChanged, onTitleChanged, onHiddenChange, fixedColumnWidth, hideFilters } = this.props;
     const isFirstRow = rowIndex === 0;
     const isLastRow = ((rowIndex + rowSpan) === rowCount);
 
@@ -152,6 +153,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
         onFilterChanged={onFilterChanged}
         onWidthChanged={this.onWidthChangedProxy}
         onTitleChanged={onTitleChanged}
+        onHiddenChanged={(field: FieldSet | Field) => onHiddenChange(true, field)}
         onMouseDown={this.onFieldMouseDown}
         canResize={fixedColumnWidth || (isLastRow && !isLastCol)}
         columnChooserButton={columnChooserButton}

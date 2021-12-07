@@ -85,6 +85,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       this.onWidthChanged = this.onWidthChanged.bind(this);
       this.onWidthChangedBulk = this.onWidthChangedBulk.bind(this);
       this.onTitleChanged = this.onTitleChanged.bind(this);
+      this.onHiddenChange = this.onHiddenChange.bind(this);
       this.onMove = this.onMove.bind(this);
       this.onHiddenChange = this.onHiddenChange.bind(this);
     }
@@ -238,7 +239,6 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       }
     }
 
-
     private onMove(newIndex: number, field: Field) {
       const { onListStateChanged } = this.listStateHelper();
       const { fieldSet } = this.state;
@@ -253,7 +253,6 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       f.hidden = hidden;
       onListStateChanged(ListStateChangeType.fields, fieldSet.getFieldDisplay(), field.name);
     }
-
 
     public render() {
       const { fieldSet } = this.state;
