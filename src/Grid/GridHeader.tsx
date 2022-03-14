@@ -53,6 +53,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
 
   private theadRef: HTMLDivElement;
   private debouncedUpdateWidthsAfterChange: () => void;
+  private fieldHeaderOnChangeCache: WeakMap<FieldSet | Field, (f: FieldSet | Field) => void> = new WeakMap();
 
   constructor(props: GridHeaderProps<TData>, context) {
     super(props, context);
@@ -62,6 +63,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     };
 
     this.debouncedUpdateWidthsAfterChange = debounce(this.updateWidthsAfterChange, 200, {leading: false, trailing: true});
+    this.fieldHeaderOnChangeCache = new WeakMap();
   }
 
   public shouldComponentUpdate(nextProps: GridHeaderProps<TData>, nextState) {
@@ -130,6 +132,9 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     const { fieldSet, onSortSelection, onFilterChanged, onTitleChanged, onHiddenChange, fixedColumnWidth, hideFilters } = this.props;
     const isFirstRow = rowIndex === 0;
     const isLastRow = ((rowIndex + rowSpan) === rowCount);
+    if(!this.fieldHeaderOnChangeCache.has(field)) {
+      this.fieldHeaderOnChangeCache.set(field, (f) => onHiddenChange(true, f));
+    }
 
     let colSum = 0;
     for(let i = 0; i <= colIndex; i++) {
@@ -153,7 +158,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
         onFilterChanged={onFilterChanged}
         onWidthChanged={this.onWidthChangedProxy}
         onTitleChanged={onTitleChanged}
-        onHiddenChanged={(field: FieldSet | Field) => onHiddenChange(true, field)}
+        onHiddenChanged={this.fieldHeaderOnChangeCache.get(field)}
         onMouseDown={this.onFieldMouseDown}
         canResize={fixedColumnWidth || (isLastRow && !isLastCol)}
         columnChooserButton={columnChooserButton}
