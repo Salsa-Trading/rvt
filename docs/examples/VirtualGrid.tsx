@@ -5,6 +5,7 @@ import { generateData, SampleData } from '../../test/dataUtils';
 import { autobind } from 'core-decorators';
 
 import '../../scss/rvt_unicode.scss';
+import {FieldDisplay} from '../../src/List/Field';
 
 function CustomCell({label, data, field}: {label: string, data?: any, field?: FieldProps }) {
   return (
@@ -100,36 +101,60 @@ export default class VirtualGridExample extends React.Component<{}, {
     console.log('click', e, d, f);
   }
 
+  private randomizeColumnWidths() {
+    const newListState: ListState = {
+      ...this.state.listState,
+      fields: randomizeFieldDisplayWidth(this.state.listState.fields)
+    };
+
+    this.setState({
+      listState: newListState
+    });
+  }
+
   public render() {
     const { listState, pinnedRows } = this.state;
     return (
-      <VirtualGrid
-        getRows={this.getRows}
-        rowCount={this.state.data.length}
-        listState={listState}
-        onListStateChanged={this.onListStateChanged}
-        className='table table-bordered table-condensed'
-        fieldDefaults={{sortable: true, filterable: true}}
-        autoResize={true}
-        onMouseDown={this.onMouseDown}
-        onClick={this.onClick}
-        pinnedRows={pinnedRows}
-        secondaryHeaderComponent={secondaryHeader}
-        fixedColumnWidth={true}
-        hideFilters={true}
-      >
-        <FieldSet header='Group 1' name='group1'>
-          <FieldSet header='Group 2' name='group2'>
-            <Field header='Col 1' name='col1' sortDirection='asc' />
-            <Field header='Col 2' name='col2' />
+      <div>
+        <div>
+          <button onClick={() => this.randomizeColumnWidths()}>Adjust widths</button>
+        </div>
+        <VirtualGrid
+          getRows={this.getRows}
+          rowCount={this.state.data.length}
+          listState={listState}
+          onListStateChanged={this.onListStateChanged}
+          className='table table-bordered table-condensed'
+          fieldDefaults={{sortable: true, filterable: true}}
+          autoResize={true}
+          onMouseDown={this.onMouseDown}
+          onClick={this.onClick}
+          pinnedRows={pinnedRows}
+          secondaryHeaderComponent={secondaryHeader}
+          fixedColumnWidth={true}
+          hideFilters={true}
+        >
+          <FieldSet header='Group 1' name='group1'>
+            <FieldSet header='Group 2' name='group2'>
+              <Field header='Col 1' name='col1' sortDirection='asc' />
+              <Field header='Col 2' name='col2' />
+            </FieldSet>
           </FieldSet>
-        </FieldSet>
-        <FieldSet header='Group 3' name='group3'>
-          <Field header='Col 3' name='col3' cell={({data}) => <input type='checkbox' defaultChecked={data.col3} />} />
-          <Field header='Col 4' name='col4' format={d => d.col4.toString()} />
-          <Field header='Col 5' name='col5' cell={<CustomCell label='test' />} />
-        </FieldSet>
-      </VirtualGrid>
+          <FieldSet header='Group 3' name='group3'>
+            <Field header='Col 3' name='col3' cell={({data}) => <input type='checkbox' defaultChecked={data.col3} />} />
+            <Field header='Col 4' name='col4' format={d => d.col4.toString()} />
+            <Field header='Col 5' name='col5' cell={<CustomCell label='test' />} />
+          </FieldSet>
+        </VirtualGrid>
+      </div>
     );
+  }
+}
+
+function randomizeFieldDisplayWidth(fieldDisplay: FieldDisplay): FieldDisplay {
+  return {
+    ...fieldDisplay,
+    width: fieldDisplay.width += _.random(-50, 50),
+    children: fieldDisplay.children?.map(randomizeFieldDisplayWidth)
   }
 }
