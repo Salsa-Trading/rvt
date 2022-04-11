@@ -112,6 +112,24 @@ export default class VirtualGridExample extends React.Component<{}, {
     });
   }
 
+  // Declaring groups as static variables to assist with reference equality check
+  private group1 = (
+    <FieldSet header='Group 1' name='group1'>
+      <FieldSet header='Group 2' name='group2'>
+        <Field header='Col 1' name='col1' sortDirection='asc' />
+        <Field header='Col 2' name='col2' />
+      </FieldSet>
+    </FieldSet>
+  );
+
+  private group2 = (
+    <FieldSet header='Group 3' name='group3'>
+      <Field header='Col 3' name='col3' cell={({data}) => <input type='checkbox' defaultChecked={data.col3} />} />
+      <Field header='Col 4' name='col4' format={(d) => d.col4.toString()} />
+      <Field header='Col 5' name='col5' cell={<CustomCell label='test' />} />
+    </FieldSet>
+  );
+
   public render() {
     const { listState, pinnedRows } = this.state;
     return (
@@ -134,17 +152,8 @@ export default class VirtualGridExample extends React.Component<{}, {
           fixedColumnWidth={true}
           hideFilters={true}
         >
-          <FieldSet header='Group 1' name='group1'>
-            <FieldSet header='Group 2' name='group2'>
-              <Field header='Col 1' name='col1' sortDirection='asc' />
-              <Field header='Col 2' name='col2' />
-            </FieldSet>
-          </FieldSet>
-          <FieldSet header='Group 3' name='group3'>
-            <Field header='Col 3' name='col3' cell={({data}) => <input type='checkbox' defaultChecked={data.col3} />} />
-            <Field header='Col 4' name='col4' format={d => d.col4.toString()} />
-            <Field header='Col 5' name='col5' cell={<CustomCell label='test' />} />
-          </FieldSet>
+          {this.group1}
+          {this.group2}
         </VirtualGrid>
       </div>
     );
