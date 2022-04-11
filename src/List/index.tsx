@@ -296,8 +296,8 @@ function getFieldProps(props: React.Props<ListProps> & ListProps): FieldDefiniti
     children: props.children,
     fieldDefaults: props.fieldDefaults,
     fixedColumnWidth: props.fixedColumnWidth,
-    sorts: props.listState && props.listState.sorts,
-    filters: props.listState && props.listState.filters,
+    sorts: props.listState?.sorts,
+    filters: props.listState?.filters,
     hiddenKey: props.listState && generateHiddenKey(props.listState.fields)
   };
 }
