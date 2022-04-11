@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { autobind } from 'core-decorators';
-import { omit, isBoolean } from 'lodash';
+import {autobind} from 'core-decorators';
+import {omit, isBoolean} from 'lodash';
 
 export type CheckboxProps = React.InputHTMLAttributes<HTMLInputElement> & {
   indeterminate?: boolean;

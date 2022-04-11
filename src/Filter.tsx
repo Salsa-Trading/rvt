@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { autobind } from 'core-decorators';
-import { Field, SortDirection } from './List/Field';
+import {autobind} from 'core-decorators';
+import {Field, SortDirection} from './List/Field';
 import safeMouseDown from './utils/safeMouseDown';
 
 export type FilterControlProps = {
@@ -12,12 +12,12 @@ class DefaultFilter extends React.Component<FilterControlProps, {}> {
 
   @autobind
   private handleFilterChanged(e: React.ChangeEvent<HTMLInputElement>) {
-    const { onFilterChange } = this.props;
+    const {onFilterChange} = this.props;
     onFilterChange(e.target.value);
   }
 
   public render() {
-    const { filter } = this.props;
+    const {filter} = this.props;
 
     return (
       <input
@@ -81,20 +81,20 @@ export default class Filter extends React.Component<FilterProps, {
 
   @autobind
   public toggleFilterPane() {
-    this.setState({showFilter: !this.state.showFilter });
+    this.setState({showFilter: !this.state.showFilter});
   }
 
   @autobind
   public closeFilter() {
-    this.setState({ showFilter: false });
+    this.setState({showFilter: false});
     this.props.onFilterClosed();
   }
 
   @autobind
   private handleOk(e) {
     e.preventDefault();
-    const { onFilterChanged } = this.props;
-    const { filter } = this.state;
+    const {onFilterChanged} = this.props;
+    const {filter} = this.state;
     onFilterChanged(filter);
     this.closeFilter();
   }
@@ -126,10 +126,10 @@ export default class Filter extends React.Component<FilterProps, {
   }
 
   private renderFilterPane() {
-    const { field, onHide } = this.props;
-    const { sortDirection } = field;
+    const {field, onHide} = this.props;
+    const {sortDirection} = field;
 
-    const { filter } = this.state;
+    const {filter} = this.state;
 
     const filterElement = React.createElement((field.filterControl || DefaultFilter as any), {
       filter,
@@ -181,18 +181,17 @@ export default class Filter extends React.Component<FilterProps, {
   }
 
   private sortDirectionIcon() {
-    const { sortDirection } = this.props.field;
+    const {sortDirection} = this.props.field;
 
     if(sortDirection === SortDirection.asc) {
       return <span className='sort-asc' />;
-    }
-    else if(sortDirection === SortDirection.desc) {
+    } else if(sortDirection === SortDirection.desc) {
       return <span className='sort-desc' />;
     }
   }
 
   public render() {
-    const { showFilter } = this.state;
+    const {showFilter} = this.state;
     return (
       <div>
         <button className='filter-btn' onClick={this.toggleFilterPane} onContextMenu={this.toggleFilterPane}>

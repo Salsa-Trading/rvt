@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import { autobind } from 'core-decorators';
-import { throttle } from 'lodash';
+import {autobind} from 'core-decorators';
+import {throttle} from 'lodash';
 
 export type ScrollerProps = {
   margin?: number;
@@ -59,12 +59,11 @@ export default class Scroller extends React.Component<ScrollerProps, {}> {
   private throttledOnScroll: () => void;
 
   private onScroll() {
-    const { onScroll } = this.props;
+    const {onScroll} = this.props;
     if (onScroll) {
       if(this.props.orientation === 'vertical') {
         onScroll(this.scrollerRef.scrollTop);
-      }
-      else {
+      } else {
         onScroll(this.scrollerRef.scrollLeft);
       }
     }
@@ -84,15 +83,14 @@ export default class Scroller extends React.Component<ScrollerProps, {}> {
     if (this.scrollerRef) {
       if(this.props.orientation === 'vertical') {
         this.scrollerRef.scrollTop = scrollOffset;
-      }
-      else {
+      } else {
         this.scrollerRef.scrollLeft = scrollOffset;
       }
     }
   }
 
   public shouldComponentUpdate(nextProps: ScrollerProps) {
-    const { margin, visible, size, virtualSize, scrollOffset, orientation } = this.props;
+    const {margin, visible, size, virtualSize, scrollOffset, orientation} = this.props;
     if(nextProps.margin !== margin ||
        nextProps.visible !== visible ||
        nextProps.orientation !== orientation ||
@@ -121,7 +119,7 @@ export default class Scroller extends React.Component<ScrollerProps, {}> {
   }
 
   public render() {
-    const { margin, visible, size, virtualSize, orientation } = this.props;
+    const {margin, visible, size, virtualSize, orientation} = this.props;
     let scrollerStyle: React.CSSProperties = {
       position: 'absolute',
       display: visible ? 'block' : 'none'
@@ -141,8 +139,7 @@ export default class Scroller extends React.Component<ScrollerProps, {}> {
         width: '1px',
         height: `${virtualSize}px`
       };
-    }
-    else {
+    } else {
       scrollerStyle = {...scrollerStyle,
         bottom: '0px',
         left: `${margin}px`,

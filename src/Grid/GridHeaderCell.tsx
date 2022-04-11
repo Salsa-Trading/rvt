@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import { autobind } from 'core-decorators';
+import {autobind} from 'core-decorators';
 
 import HeaderInput from './HeaderInput';
 import Filter from '../Filter';
-import { Field, SortDirection } from '../List/Field';
-import { FieldSet } from '../List/FieldSet';
+import {Field, SortDirection} from '../List/Field';
+import {FieldSet} from '../List/FieldSet';
 import safeMouseMove from '../utils/saveMouseMove';
 import {throttle} from 'lodash';
 
@@ -61,21 +61,17 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
     }
     e.stopPropagation();
 
-    const { onWidthChanged } = this.props;
+    const {onWidthChanged} = this.props;
 
     if(!onWidthChanged) {
       return;
     }
 
-    let startingWidth;
-    if(typeof this.props.field.width === 'number') {
-      startingWidth = this.props.field.width;
-    }
-    else {
-      startingWidth = e.currentTarget.closest('th').clientWidth;
-    }
+    const startingWidth: number = typeof this.props.field.width === 'number'
+      ? this.props.field.width
+      : e.currentTarget.closest('th').clientWidth;
 
-    let startingX = e.pageX;
+    const startingX = e.pageX;
     safeMouseMove<HTMLDivElement>(e,
       moveEvent => {
         onWidthChanged(startingWidth + (moveEvent.pageX - startingX), this.props.field);
@@ -86,14 +82,14 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
 
   private onSortClick(sortDirection: SortDirection, e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation();
-    const { onSortSelection, field } = this.props;
+    const {onSortSelection, field} = this.props;
     if(onSortSelection) {
       onSortSelection(sortDirection, field);
     }
   }
 
   private sortBtn(sortDirection: SortDirection): React.ReactElement<any> {
-    const { field } = this.props;
+    const {field} = this.props;
     const classNames = [
       'sort',
       `sort-${sortDirection}`,
@@ -194,7 +190,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
   @autobind
   private onMouseDown(e) {
     if(!this.state.showFilterOnClick) {
-       this.props.onMouseDown(e);
+      this.props.onMouseDown(e);
     }
   }
 
@@ -227,7 +223,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
       colSpan,
       onSortSelection,
       onFilterChanged,
-      fixedColumnWidth,
+      fixedColumnWidth
     } = this.props as any;
     const {showFilterOnClick} = this.state;
 
@@ -255,8 +251,7 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
           onHide={this.onHide}
         />
       );
-    }
-    else if (sortable && ((hideFilters && sortDirection) || !hideFilters)) {
+    } else if (sortable && ((hideFilters && sortDirection) || !hideFilters)) {
       sortFilterControl = (
         <div>
           {this.sortBtn(SortDirection.asc)}

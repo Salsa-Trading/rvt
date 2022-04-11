@@ -1,8 +1,8 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import { autobind } from 'core-decorators';
+import {autobind} from 'core-decorators';
 import Scroller from './Scroller';
-import { debounce, mean, sum, isNumber } from 'lodash';
+import {debounce, mean, sum, isNumber} from 'lodash';
 
 type TableStyles = {
   container: React.CSSProperties;
@@ -240,7 +240,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     const direction = unusedHeight / absUnused;
     const maxVisibleRows = prevMaxVisibleRows + direction * Math.floor(absUnused / avgRowHeight);
     if (maxVisibleRows !== prevMaxVisibleRows && maxVisibleRows >= 1) {
-      this.setState({ maxVisibleRows });
+      this.setState({maxVisibleRows});
     }
   }
 
@@ -285,12 +285,11 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     const numVisibleRows = this.visibleRows();
     const boundedTopRow = Math.max(0, Math.min(topRow, this.props.rowCount - numVisibleRows + ROW_OVERFLOW));
     if(this.state.topRowControlled) {
-      const { onTopRowChanged } = this.props;
+      const {onTopRowChanged} = this.props;
       if(onTopRowChanged) {
         onTopRowChanged(boundedTopRow);
       }
-    }
-    else {
+    } else {
       this.setState({topRow: boundedTopRow});
     }
   }
@@ -309,7 +308,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * @private
    */
   private onWheel(e: React.WheelEvent<{}>) {
-    const { scrollWheelRows } = this.props;
+    const {scrollWheelRows} = this.props;
     e.stopPropagation();
     this.setTopRow(this.getTopRow() + ((e.deltaY > 0 ? 1 : -1) * scrollWheelRows));
   }
@@ -414,14 +413,14 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * @private
    */
   private buildHeader() {
-    const { header } = this.props;
+    const {header} = this.props;
     if (!header) {
       return null;
     }
     if (React.isValidElement(header)) {
       return header;
     }
-    return React.createElement(header as React.ComponentType<any>);
+    return React.createElement(header);
   }
 
   /**
@@ -429,7 +428,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * @private
    */
   private getRows(): TableRowProps<TData>[] {
-    const { getRow, getRows, rowCount } = this.props;
+    const {getRow, getRows, rowCount} = this.props;
 
     const topRow = this.getTopRow();
     const numRows = Math.min(
@@ -444,8 +443,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
     let rowProps: TableRowProps<TData>[];
     if(getRows) {
       rowProps = getRows(topRow, numRows, this.state.maxVisibleRows);
-    }
-    else {
+    } else {
       rowProps = new Array(numRows);
       for (let i = 0; i < numRows; i++) {
         rowProps[i] = getRow(topRow + i);
@@ -459,7 +457,7 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * @private
    */
   private buildRows() {
-    const { row } = this.props;
+    const {row} = this.props;
     const rows = this.getRows();
 
     // Re-compute row keys for all visible elements
@@ -483,8 +481,8 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
   }
 
   public render() {
-    const { height, width, containerStyle = {}, tableStyle = {}, tbodyStyle = {} } = this.props;
-    const { calculatingHeights } = this.state;
+    const {height, width, containerStyle = {}, tableStyle = {}, tbodyStyle = {}} = this.props;
+    const {calculatingHeights} = this.state;
     const header = this.buildHeader();
     const rows = this.buildRows();
     const tableClassName = this.props.className;
@@ -549,8 +547,8 @@ export default class VirtualTable<TData extends object> extends React.PureCompon
    * @private
    */
   private renderTable(header, rows, tableClassName: string, styles: TableStyles) {
-    const { rowCount, fixedColumnWidth } = this.props;
-    const { headerHeight, rowHeight } = this.state;
+    const {rowCount, fixedColumnWidth} = this.props;
+    const {headerHeight, rowHeight} = this.state;
     const tableStyle: React.CSSProperties = styles.table || {};
     const containerStyle: React.CSSProperties = styles.container || {};
     const tbodyStyle: React.CSSProperties = styles.tbody || {};

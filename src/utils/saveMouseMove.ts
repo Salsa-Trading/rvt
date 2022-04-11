@@ -14,8 +14,7 @@ export default function safeMouseMove<T>(
       if(onUp) {
         onUp(upEvent);
       }
-    }
-    catch(err) {}
+    } catch(err) {}
     document.removeEventListener('mousemove', onMouseMove as any);
     document.removeEventListener('mouseup', onMouseUp as any);
     upEvent.preventDefault();
@@ -25,4 +24,3 @@ export default function safeMouseMove<T>(
   document.addEventListener('mouseup', onMouseUp as any);
   e.preventDefault();
 }
-
