@@ -47,7 +47,7 @@ export type ListViewProps = {
 
 export type ListViewType = React.ComponentClass<ListViewProps>|React.StatelessComponent<ListViewProps>;
 
-export default function List(View: ListViewType): React.ComponentClass<ListProps> {
+export function List(View: ListViewType): React.ComponentClass<ListProps> {
 
   return class ListContainer extends React.Component<ListProps, {
     fieldSet: FieldSet

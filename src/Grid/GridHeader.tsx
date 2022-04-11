@@ -6,7 +6,7 @@ import { isEqual, flatten, debounce, keyBy } from 'lodash';
 
 import { Field } from '../List/Field';
 import { FieldSet } from '../List/FieldSet';
-import { ListViewProps } from '../List';
+import { ListViewProps } from '../List/List';
 import GridHeaderCell from './GridHeaderCell';
 import ColumnChooser from './ColumnChooser';
 import ColumnChooserButton from './ColumnChooserButton';
