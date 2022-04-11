@@ -1,8 +1,0 @@
-{
-  "parserOptions": {
-    "ecmaVersion": 10
-  },
-  "rules": {
-    "no-console": 0
-  }
-}
