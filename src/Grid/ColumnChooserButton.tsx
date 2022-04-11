@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { autobind } from 'core-decorators';
-import { ColumnChooserProps } from './ColumnChooser';
+import {autobind} from 'core-decorators';
+import {ColumnChooserProps} from './ColumnChooser';
 
 export default class Filter extends React.Component<{
   columnChooser: React.ReactElement<ColumnChooserProps>;
@@ -17,12 +17,12 @@ export default class Filter extends React.Component<{
 
   @autobind
   private toggleFilterPane() {
-    const { showColumnChooser, onToggleVisibility } = this.props;
+    const {showColumnChooser, onToggleVisibility} = this.props;
     onToggleVisibility(!showColumnChooser);
   }
 
   public render() {
-    const { columnChooser, showColumnChooser } = this.props;
+    const {columnChooser, showColumnChooser} = this.props;
     return (
       <div className='column-chooser'>
         <button className='column-chooser-btn' onClick={this.toggleFilterPane} />
@@ -31,5 +31,3 @@ export default class Filter extends React.Component<{
     );
   }
 }
-
-

@@ -1,10 +1,10 @@
-import { autobind } from 'core-decorators';
+import {autobind} from 'core-decorators';
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import { Field, FieldBase } from '../List/Field';
-import { FieldSet, isFieldSet } from '../List/FieldSet';
+import {Field, FieldBase} from '../List/Field';
+import {FieldSet, isFieldSet} from '../List/FieldSet';
 import safeMouseDown from '../utils/safeMouseDown';
-import { Checkbox } from './Checkbox';
+import {Checkbox} from './Checkbox';
 
 export type ColumnChooserProps = {
   fieldSet: FieldSet;
@@ -32,7 +32,7 @@ export default class ColumnChooser extends React.Component<ColumnChooserProps, C
   };
 
   public componentDidMount() {
-    const { onToggleVisibility } = this.props;
+    const {onToggleVisibility} = this.props;
     this.mouseDownHandler = safeMouseDown<HTMLElement>((e) => {
       if(!(e as any).target.closest('.column-chooser-btn') &&
          !(e as any).target.closest('.column-chooser-pane')) {
@@ -48,7 +48,7 @@ export default class ColumnChooser extends React.Component<ColumnChooserProps, C
   }
 
   private onChange(field: Field|FieldSet, e: React.ChangeEvent<HTMLInputElement>) {
-    const { onHiddenChange } = this.props;
+    const {onHiddenChange} = this.props;
     if(onHiddenChange) {
       onHiddenChange(!e.target.checked, field);
     }
@@ -169,5 +169,3 @@ export default class ColumnChooser extends React.Component<ColumnChooserProps, C
     );
   }
 }
-
-

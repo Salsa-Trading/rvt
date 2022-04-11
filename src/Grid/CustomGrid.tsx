@@ -1,6 +1,6 @@
 import * as React from 'react';
 import GridHeader from './GridHeader';
-import List, { ListProps, ListViewProps } from '../List';
+import List, {ListProps, ListViewProps} from '../List';
 
 class CustomGrid extends React.Component<React.HTMLProps<HTMLTableElement> & ListViewProps & {
   body: React.ComponentClass<any>|React.StatelessComponent<any>;
@@ -50,4 +50,3 @@ export default List(CustomGrid) as React.ComponentClass<React.HTMLProps<HTMLTabl
   body: React.ComponentClass<any>|React.StatelessComponent<any>;
   data: any;
 }>;
-

@@ -1,4 +1,4 @@
-import { Field } from '../List/Field';
+import {Field} from '../List/Field';
 
 export type VirtualGridMouseEventHandler = (e: React.MouseEvent<any>, data: any, fieldName: string) => void;
 

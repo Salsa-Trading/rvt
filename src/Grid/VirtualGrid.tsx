@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { GridRowProps, BaseGridProps } from './types';
+import {GridRowProps, BaseGridProps} from './types';
 import GridRow from './GridRow';
 import GridHeader from './GridHeader';
-import List, { ListProps, ListViewProps } from '../List';
-import VirtualTable, { VirtualTableBaseProps } from '../VirtualTable';
-import { isEqual } from 'lodash';
+import List, {ListProps, ListViewProps} from '../List';
+import VirtualTable, {VirtualTableBaseProps} from '../VirtualTable';
+import {isEqual} from 'lodash';
 import {allFieldSetWidthsSet} from './helpers';
 
 export type VirtualGridProps<TData extends object> = BaseGridProps<TData> & {
@@ -143,7 +143,7 @@ export class VirtualGrid<TData extends object> extends React.Component<WrappedVi
 export default class WrappedVirtualGrid<TData extends object> extends React.Component<
   VirtualTableBaseProps & ListProps & VirtualGridProps<TData>
 , {}> {
-  private Component = List(VirtualGrid);
+  private readonly Component = List(VirtualGrid);
   public render(): React.ReactElement<any> {
     const {Component} = this;
     return (

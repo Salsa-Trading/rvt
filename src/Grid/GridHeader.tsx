@@ -1,18 +1,18 @@
 import * as React from 'react';
-import { createPortal } from 'react-dom';
+import {createPortal} from 'react-dom';
 import * as PropTypes from 'prop-types';
-import { autobind } from 'core-decorators';
-import { isEqual, flatten, debounce, keyBy } from 'lodash';
+import {autobind} from 'core-decorators';
+import {isEqual, flatten, debounce, keyBy} from 'lodash';
 
-import { Field } from '../List/Field';
-import { FieldSet } from '../List/FieldSet';
-import { ListViewProps } from '../List';
+import {Field} from '../List/Field';
+import {FieldSet} from '../List/FieldSet';
+import {ListViewProps} from '../List';
 import GridHeaderCell from './GridHeaderCell';
 import ColumnChooser from './ColumnChooser';
 import ColumnChooserButton from './ColumnChooserButton';
 import safeMouseMove from '../utils/saveMouseMove';
-import { GridRowProps, GridRowComponentProps, GridRowHeaderProps, GridSecondaryHeaderProps } from './types';
-import { FieldHeader, getLevels, renderGridRowHeader} from './helpers';
+import {GridRowProps, GridRowComponentProps, GridRowHeaderProps, GridSecondaryHeaderProps} from './types';
+import {FieldHeader, getLevels, renderGridRowHeader} from './helpers';
 
 const hoverClassName = 'field-moving-hover';
 const movingClassName = 'field-moving';
@@ -52,8 +52,8 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
   };
 
   private theadRef: HTMLDivElement;
-  private debouncedUpdateWidthsAfterChange: () => void;
-  private fieldHeaderOnChangeCache: WeakMap<FieldSet | Field, (f: FieldSet | Field) => void> = new WeakMap();
+  private readonly debouncedUpdateWidthsAfterChange: () => void;
+  private readonly fieldHeaderOnChangeCache: WeakMap<FieldSet | Field, (f: FieldSet | Field) => void> = new WeakMap();
 
   constructor(props: GridHeaderProps<TData>, context) {
     super(props, context);
@@ -78,15 +78,15 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
 
   @autobind
   private onFieldMouseDown(e: React.MouseEvent<HTMLTableHeaderCellElement>) {
-    const { onMove } = this.props;
+    const {onMove} = this.props;
     const rootFieldSet = this.props.fieldSet;
 
     this.setState({draggingColumn: true});
 
     e.persist();
     const target = e.currentTarget;
-    const tr = e.currentTarget.closest('tr') as HTMLTableRowElement;
-    const th = target.closest('th') as HTMLTableHeaderCellElement;
+    const tr = e.currentTarget.closest('tr');
+    const th = target.closest('th');
     const group = th.dataset['group'];
     const fieldName = th.dataset['field'];
 
@@ -115,7 +115,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
             const hoverFieldName = currentHover.dataset['field'];
             const hoverField = rootFieldSet.findFieldByName(hoverFieldName);
             const parentFieldSet = rootFieldSet.findParent(hoverField);
-            onMove(parentFieldSet.findFieldIndex(hoverField) , field);
+            onMove(parentFieldSet.findFieldIndex(hoverField), field);
           }
         }
       }
@@ -128,8 +128,8 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
   }
 
   private renderHeaderRow(rowCount: number, colCount: number, rowIndex: number, fieldHeader: FieldHeader, colIndex: number, fieldHeadersOnRow: FieldHeader[]) {
-    const { field, colSpan, rowSpan } = fieldHeader;
-    const { fieldSet, onSortSelection, onFilterChanged, onTitleChanged, onHiddenChange, fixedColumnWidth, hideFilters } = this.props;
+    const {field, colSpan, rowSpan} = fieldHeader;
+    const {fieldSet, onSortSelection, onFilterChanged, onTitleChanged, onHiddenChange, fixedColumnWidth, hideFilters} = this.props;
     const isFirstRow = rowIndex === 0;
     const isLastRow = ((rowIndex + rowSpan) === rowCount);
     if(!this.fieldHeaderOnChangeCache.has(field)) {
@@ -140,7 +140,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
     for(let i = 0; i <= colIndex; i++) {
       colSum += fieldHeadersOnRow[i].colSpan;
     }
-    let isLastCol = colSum === colCount;
+    const isLastCol = colSum === colCount;
 
     // place ColumnChooser in the last column of the first row
     const columnChooserButton = isFirstRow && isLastCol
@@ -179,11 +179,11 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
   private updateWidthsAfterChange() {
     const {fieldSet} = this.props;
     if(this.theadRef) {
-      const ths = [...this.theadRef?.querySelectorAll('th')];
+      const ths = [...this.theadRef.querySelectorAll('th')];
       const updates: [number, Field][] = [];
       const fields = keyBy(flatten(getLevels(fieldSet)).map((fh) => fh.field), 'name');
       ths.forEach((th) => {
-        const fieldName = th.getAttribute('data-field');
+        const fieldName = th.dataset.field;
         const field = fields[fieldName];
         if(field instanceof Field) {
           const width = th.clientWidth;
@@ -234,7 +234,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
   }
 
   public renderPinnedRows() {
-    const { pinnedRows, gridRow, secondaryHeader, fieldSet } = this.props;
+    const {pinnedRows, gridRow, secondaryHeader, fieldSet} = this.props;
     let headerRowElements = [];
 
     if(secondaryHeader) {
@@ -252,7 +252,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
   }
 
   public render() {
-    const { fieldSet, rowHeader, hideHeader } = this.props;
+    const {fieldSet, rowHeader, hideHeader} = this.props;
     const rows = getLevels(fieldSet);
     const colCount = rows[0].reduce((r, i) => r + i.colSpan, 0);
     const className = [
@@ -280,18 +280,18 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
         </thead>
       );
     } else {
-        return (
-          <thead className={className}>
-            <tr>
-              <th>
-                <span style={{float: 'right'}}>
-                  {this.renderColumnChooserButton()}
-                </span>
-              </th>
-            </tr>
-            {this.renderPinnedRows()}
-          </thead>
-        );
+      return (
+        <thead className={className}>
+          <tr>
+            <th>
+              <span style={{float: 'right'}}>
+                {this.renderColumnChooserButton()}
+              </span>
+            </th>
+          </tr>
+          {this.renderPinnedRows()}
+        </thead>
+      );
     }
   }
 }
