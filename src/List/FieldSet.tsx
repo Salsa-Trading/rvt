@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { FieldBase, FieldPropsBase, FieldDefaults, Field, FieldDisplay, FieldBasePropTypes } from './Field';
-import { sum } from 'lodash';
+import {FieldBase, FieldPropsBase, FieldDefaults, Field, FieldDisplay, FieldBasePropTypes} from './Field';
+import {sum} from 'lodash';
 
 export const RootFieldSet = '_root_';
 
@@ -20,15 +20,15 @@ export class FieldSet extends FieldBase {
   constructor(props: FieldSetProps, fieldDefaults: FieldDefaults, fields: FieldDisplay) {
     super(props, fields);
 
-    let subFields = (fields && fields.children) || [];
+    const subFields = (fields && fields.children) || [];
 
     this.children = React.Children.map(props.children || [], (c: any) => {
       const field = subFields.find(cd => cd.name === c.props.name);
       if(c.type.name === 'FieldSetDefinition') {
-        return new FieldSet({...c.props, fixedColumnWidth: props.fixedColumnWidth}, fieldDefaults, field as FieldDisplay);
+        return new FieldSet({...c.props, fixedColumnWidth: props.fixedColumnWidth}, fieldDefaults, field);
       }
       if(c.type.name === 'FieldDefinition') {
-        return new Field({...fieldDefaults, ...c.props, fixedColumnWidth: props.fixedColumnWidth }, field);
+        return new Field({...fieldDefaults, ...c.props, fixedColumnWidth: props.fixedColumnWidth}, field);
       }
     });
     // Sort defined fields by order in fields.chilren, if the defined field is not found place at the end
@@ -80,7 +80,7 @@ export class FieldSet extends FieldBase {
       return [];
     }
     let fields: Field[] = [];
-    for(let field of this.children) {
+    for(const field of this.children) {
       if(!field.hidden) {
         fields = fields.concat(field.getFields());
       }
@@ -93,11 +93,10 @@ export class FieldSet extends FieldBase {
     if(oldIndex >= 0) {
       this.children.splice(newIndex, 0, this.children.splice(oldIndex, 1)[0]);
       return true;
-    }
-    else {
-      for(let child of this.children) {
+    } else {
+      for(const child of this.children) {
         if(child instanceof FieldSet) {
-          let moved = child.moveField(newIndex, field);
+          const moved = child.moveField(newIndex, field);
           if(moved) {
             return moved;
           }
@@ -111,12 +110,12 @@ export class FieldSet extends FieldBase {
     if(name === RootFieldSet) {
       return this;
     }
-    for(let child of this.children) {
+    for(const child of this.children) {
       if(child.name === name) {
         return child;
       }
       if(child instanceof FieldSet) {
-        let found = child.findFieldByName(name);
+        const found = child.findFieldByName(name);
         if(found) {
           return found;
         }
@@ -129,9 +128,9 @@ export class FieldSet extends FieldBase {
     if(this.findFieldIndex(field) >= 0) {
       return this;
     }
-    for(let child of this.children) {
+    for(const child of this.children) {
       if(child instanceof FieldSet) {
-        let found = child.findParent(field);
+        const found = child.findParent(field);
         if(found) {
           return found;
         }
@@ -141,7 +140,7 @@ export class FieldSet extends FieldBase {
   }
 
   public findFieldIndex(field: FieldBase) {
-    return this.children.findIndex(c => c === field);
+    return this.children.indexOf(field);
   }
 
   public getFieldIndex(index: number) {
@@ -168,7 +167,7 @@ export class FieldSet extends FieldBase {
 
   public getLevelCount(): number {
     let levels = 0;
-    for(let child of this.children) {
+    for(const child of this.children) {
       if(!isVisible(child)) {
         continue;
       }

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import { isEqual } from 'lodash';
-import { GridRowComponentProps, VirtualGridMouseEventHandler } from './types';
-import { autobind } from 'core-decorators';
-import { renderGridCell, renderGridRowHeader } from './helpers';
+import {isEqual} from 'lodash';
+import {GridRowComponentProps, VirtualGridMouseEventHandler} from './types';
+import {autobind} from 'core-decorators';
+import {renderGridCell, renderGridRowHeader} from './helpers';
 
 export default class GridRow<TData> extends React.Component<GridRowComponentProps<TData>, {}> {
 
@@ -30,24 +30,24 @@ export default class GridRow<TData> extends React.Component<GridRowComponentProp
 
   @autobind
   private onClick(e: React.MouseEvent<any>) {
-    const { onClick, data } = this.props;
+    const {onClick, data} = this.props;
     onClick(e, data, this.fieldForMouseEvent(e));
   }
 
   @autobind
   private onDoubleClick(e: React.MouseEvent<any>) {
-    const { onDoubleClick, data } = this.props;
+    const {onDoubleClick, data} = this.props;
     onDoubleClick(e, data, this.fieldForMouseEvent(e));
   }
 
   @autobind
   private onMouseDown(e: React.MouseEvent<any>) {
-    const { onMouseDown, data } = this.props;
+    const {onMouseDown, data} = this.props;
     onMouseDown(e, data, this.fieldForMouseEvent(e));
   }
 
   public render() {
-    const { data, fields, rowProps, onClick, onDoubleClick, onMouseDown, rowHeaderComponent, fixedColumnWidth } = this.props;
+    const {data, fields, rowProps, onClick, onDoubleClick, onMouseDown, rowHeaderComponent, fixedColumnWidth} = this.props;
 
     return (
       <tr

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import strEnum from '../utils/strEnum';
-import { FilterControlProps } from '../Filter';
+import {FilterControlProps} from '../Filter';
 import {isString} from 'lodash';
 
 export const SortDirection = strEnum([
@@ -111,7 +111,7 @@ export abstract class FieldBase implements FieldPropsBase {
       this.name,
       this.title,
       isString(this.header)
-        ? this.header as string
+        ? this.header
         : ''
     ].join(' ');
   }
@@ -142,7 +142,7 @@ export class Field extends FieldBase implements FieldProps {
 
   constructor(props: FieldProps, fieldDisplay: FieldDisplay) {
     super(props, fieldDisplay);
-    const { cell, hidden } = props;
+    const {cell, hidden} = props;
     this.hidden = fieldDisplay?.hidden ?? hidden;
     this.cell = cell;
     this.width = fieldDisplay?.width;
@@ -180,4 +180,3 @@ export class FieldDefinition extends React.Component<FieldProps, {}> {
     return null;
   }
 }
-

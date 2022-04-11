@@ -1,12 +1,12 @@
 import * as React from 'react';
 import GridHeader from './GridHeader';
-import { GridRowProps, BaseGridProps } from './types';
+import {GridRowProps, BaseGridProps} from './types';
 import GridRow from './GridRow';
-import List, { ListProps, ListViewProps } from '../List';
-import { isEqual } from 'lodash';
+import List, {ListProps, ListViewProps} from '../List';
+import {isEqual} from 'lodash';
 import {allFieldSetWidthsSet} from './helpers';
 
-export type Diff<T extends string, U extends string> = ({[P in T]: P } & {[P in U]: never } & { [x: string]: never })[T];
+export type Diff<T extends string, U extends string> = ({[P in T]: P} & {[P in U]: never} & {[x: string]: never})[T];
 export type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
 export type TablePropsWithoutData = Omit<React.HTMLProps<HTMLTableElement>, 'data' | 'onClick' | 'onDoubleClick' | 'onMouseDown' | 'style'>;
 
@@ -159,7 +159,7 @@ class Grid<TData extends object> extends React.Component<WrappedGridProps<TData>
 export default class WrappedGrid<TData extends object> extends React.Component<
   ListProps & GridProps<TData>
 , {}> {
-  private Component = List(Grid) as any;
+  private readonly Component = List(Grid) as any;
 
   public render(): React.ReactElement<any> {
     const {Component} = this;
