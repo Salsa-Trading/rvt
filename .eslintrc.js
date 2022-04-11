@@ -77,13 +77,6 @@ module.exports = {
         ],
         '@typescript-eslint/no-useless-constructor': 'error',
         '@typescript-eslint/quotes': ['error', 'single', {avoidEscape: true}],
-        '@typescript-eslint/typedef': [
-          'error',
-          {
-            parameter: true,
-            propertyDeclaration: true
-          }
-        ],
         '@typescript-eslint/object-curly-spacing': ['error', 'never'],
         '@typescript-eslint/prefer-optional-chain': 'error',
         '@typescript-eslint/prefer-readonly': 'error',
@@ -197,7 +190,6 @@ module.exports = {
         ignoreTemplateLiterals: true
       }
     ],
-    'max-params': ['error', 4],
     'no-caller': 'error',
     'no-console': [
       'error',
@@ -243,7 +235,6 @@ module.exports = {
       'event',
       'fdescribe',
       'fit',
-      'isFinite',
       'length',
       'name',
       'open',
@@ -284,15 +275,10 @@ module.exports = {
       markers: ['/'],
       exceptions: ['*', '-', '/']
     }],
-    'unicorn/filename-case': [
-      'error',
-      {
-        case: 'camelCase',
-        ignore: ['_spec', '_perf.tsx?$', '^\\d+_\\d+_\\d+.*.tsx?$', 'generated', '\\.[A-Z]', 'AS3', '^\\$\\$']
-      }
-    ],
 
     // Rules we can leave off permanently
+    'arrow-body-style': 'off',
+    'keyword-spacing': 'off',
     'no-async-promise-executor': 'off',
     'no-case-declarations': 'off',
     'no-constant-condition': 'off',
@@ -302,20 +288,27 @@ module.exports = {
     'no-extra-boolean-cast': 'off',
     'no-inner-declarations': 'off',
     'no-prototype-builtins': 'off',
+    'no-useless-escape': 'off',
     'react/display-name': 'off',
     'react/jsx-boolean-value': 'off',
+    'react/jsx-no-bind': 'off',
     'react/jsx-no-target-blank': 'off',
     'react/no-children-prop': 'off',
     'react/no-find-dom-node': 'off',
     'react/no-unescaped-entities': 'off',
     'react/prop-types': 'off',
+    'unicorn/better-regex': 'off',
     'unicorn/catch-error-name': 'off',
+    'unicorn/consistent-destructuring': 'off',
     'unicorn/consistent-function-scoping': 'off',
     'unicorn/escape-case': 'off',
     'unicorn/explicit-length-check': 'off',
+    'unicorn/filename-case': 'off',
     'unicorn/import-style': 'off',
     'unicorn/no-array-callback-reference': 'off',
+    'unicorn/no-array-for-each': 'off',
     'unicorn/no-array-method-this-argument': 'off',
+    'unicorn/no-array-reduce': 'off',
     'unicorn/no-await-expression-member': 'off',
     'unicorn/no-document-cookie': 'off',
     'unicorn/no-empty-file': 'off',
@@ -329,6 +322,7 @@ module.exports = {
     'unicorn/no-this-assignment': 'off',
     'unicorn/no-useless-undefined': 'off',
     'unicorn/numeric-separators-style': 'off',
+    'unicorn/prefer-add-event-listener': 'off',
     'unicorn/prefer-array-flat': 'off',
     'unicorn/prefer-code-point': 'off',
     'unicorn/prefer-dom-node-append': 'off',
@@ -347,17 +341,6 @@ module.exports = {
     'unicorn/prefer-switch': 'off',
     'unicorn/prefer-ternary': 'off', // using tslint's prefer-conditional-expression instead
     'unicorn/prefer-type-error': 'off',
-    'unicorn/prevent-abbreviations': 'off',
-
-    // Temporarily disabled rules (re-enable once we've fully migrated to eslint),
-    'arrow-body-style': 'off',
-    'keyword-spacing': 'off',
-    'no-useless-escape': 'off',
-    'react/jsx-no-bind': 'off',
-    'unicorn/better-regex': 'off',
-    'unicorn/consistent-destructuring': 'off',
-    'unicorn/no-array-for-each': 'off',
-    'unicorn/no-array-reduce': 'off',
-    'unicorn/prefer-add-event-listener': 'off'
+    'unicorn/prevent-abbreviations': 'off'
   }
 };

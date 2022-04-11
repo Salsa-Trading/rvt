@@ -67,12 +67,9 @@ export default class GridHeaderCell extends React.Component<GridHeaderCellProps,
       return;
     }
 
-    let startingWidth;
-    if(typeof this.props.field.width === 'number') {
-      startingWidth = this.props.field.width;
-    } else {
-      startingWidth = e.currentTarget.closest('th').clientWidth;
-    }
+    const startingWidth: number = typeof this.props.field.width === 'number'
+      ? this.props.field.width
+      : e.currentTarget.closest('th').clientWidth;
 
     const startingX = e.pageX;
     safeMouseMove<HTMLDivElement>(e,

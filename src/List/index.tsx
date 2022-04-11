@@ -111,7 +111,7 @@ export default function List(View: ListViewType): React.ComponentClass<ListProps
       const allFields = fieldSet.getFields();
       allFields.forEach(c => {
         const sortDirection = sorts.find(s => s.fieldName === c.name);
-        c.sortDirection = (sortDirection && sortDirection.direction) || c.sortDirection;
+        c.sortDirection = sortDirection?.direction || c.sortDirection;
         c.filter = filters[c.name];
       });
 
@@ -292,8 +292,8 @@ function getFieldProps(props: React.Props<ListProps> & ListProps): FieldDefiniti
     children: props.children,
     fieldDefaults: props.fieldDefaults,
     fixedColumnWidth: props.fixedColumnWidth,
-    sorts: props.listState && props.listState.sorts,
-    filters: props.listState && props.listState.filters,
+    sorts: props.listState?.sorts,
+    filters: props.listState?.filters,
     hiddenKey: props.listState && generateHiddenKey(props.listState.fields)
   };
 }

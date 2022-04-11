@@ -179,7 +179,7 @@ export default class GridHeader<TData extends object> extends React.Component<Gr
   private updateWidthsAfterChange() {
     const {fieldSet} = this.props;
     if(this.theadRef) {
-      const ths = [...this.theadRef?.querySelectorAll('th')];
+      const ths = [...this.theadRef.querySelectorAll('th')];
       const updates: [number, Field][] = [];
       const fields = keyBy(flatten(getLevels(fieldSet)).map((fh) => fh.field), 'name');
       ths.forEach((th) => {

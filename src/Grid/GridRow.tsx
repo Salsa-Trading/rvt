@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import {isEqual} from 'lodash';
-import {GridRowComponentProps, VirtualGridMouseEventHandler} from './types';
+import {GridRowComponentProps} from './types';
 import {autobind} from 'core-decorators';
 import {renderGridCell, renderGridRowHeader} from './helpers';
 
@@ -12,10 +12,6 @@ export default class GridRow<TData> extends React.Component<GridRowComponentProp
     data: PropTypes.any,
     className: PropTypes.string
   };
-
-  constructor(props, context) {
-    super(props, context);
-  }
 
   public shouldComponentUpdate(nextProps, nextState) {
     const shouldRender = !isEqual(this.props, nextProps);

@@ -20,7 +20,7 @@ export class FieldSet extends FieldBase {
   constructor(props: FieldSetProps, fieldDefaults: FieldDefaults, fields: FieldDisplay) {
     super(props, fields);
 
-    const subFields = (fields && fields.children) || [];
+    const subFields = (fields?.children) || [];
 
     this.children = React.Children.map(props.children || [], (c: any) => {
       const field = subFields.find(cd => cd.name === c.props.name);
@@ -206,10 +206,6 @@ export function isVisible(field: Field|FieldSet) {
 export class FieldSetDefinition extends React.Component<FieldSetProps, {}> {
 
   public static propTypes = FieldBasePropTypes;
-
-  constructor(props, context) {
-    super(props, context);
-  }
 
   public render() {
     return null;

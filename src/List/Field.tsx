@@ -172,10 +172,6 @@ export class FieldDefinition extends React.Component<FieldProps, {}> {
     format: PropTypes.any
   };
 
-  constructor(props, context) {
-    super(props, context);
-  }
-
   public render() {
     return null;
   }
