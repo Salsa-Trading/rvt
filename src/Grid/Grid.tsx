@@ -2,7 +2,7 @@ import * as React from 'react';
 import GridHeader from './GridHeader';
 import {GridRowProps, BaseGridProps} from './types';
 import GridRow from './GridRow';
-import List, {ListProps, ListViewProps} from '../List';
+import {List, ListProps, ListViewProps} from '../List/List';
 import {isEqual} from 'lodash';
 import {allFieldSetWidthsSet} from './helpers';
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 import {GridRowProps, BaseGridProps} from './types';
 import GridRow from './GridRow';
 import GridHeader from './GridHeader';
-import List, {ListProps, ListViewProps} from '../List';
+import {List, ListProps, ListViewProps} from '../List/List';
 import VirtualTable, {VirtualTableBaseProps} from '../VirtualTable';
 import {isEqual} from 'lodash';
 import {allFieldSetWidthsSet} from './helpers';

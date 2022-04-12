@@ -9,11 +9,11 @@ export {
 } from './List/FieldSet';
 
 export {
-  default as List,
+  List,
   ListState,
   ListStateChangeType,
   isDataChange
-} from './List';
+} from './List/List';
 
 export {
   default as VirtualGrid
