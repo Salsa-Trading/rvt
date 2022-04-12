@@ -109,58 +109,45 @@ export function List(View: ListViewType): React.ComponentClass<ListProps> {
 
       const fieldSet = new FieldSet({name: RootFieldSet, children, fixedColumnWidth}, fieldDefaults, fields);
       const allFields = fieldSet.getFields();
-      allFields.forEach(c => {
+      for(const c of allFields) {
         const sortDirection = sorts.find(s => s.fieldName === c.name);
         c.sortDirection = sortDirection?.direction || c.sortDirection;
         c.filter = filters[c.name];
-      });
+      }
 
       return fieldSet;
     }
 
-    private listStateHelper() {
+    private onListStateChanged(updates: Partial<ListState>, changeType: ListStateChangeType, fieldName?: string) {
       const {onListStateChanged} = this.props;
-      const listState = ListContainer.getListState(this.props.listState);
-      const newListState = {
-        sorts: listState.sorts,
-        filters: listState.filters,
-        fields: listState.fields
+      const newListState: ListState = {
+        ...ListContainer.defaultProps.listState,
+        ...this.props.listState,
+        ...updates
       };
-
-      const onListState = (listStateChange: ListStateChangeType, change: any, fieldName?: string) => {
-        if(!onListStateChanged) {
-          return;
-        }
-
-        if(listStateChange === ListStateChangeType.filters) {
-          newListState.filters = change;
-        } else if(listStateChange === ListStateChangeType.sorts) {
-          newListState.sorts = change;
-        } else if(listStateChange === ListStateChangeType.fields) {
-          newListState.fields = change;
-        }
-
-        onListStateChanged(newListState, listStateChange, fieldName);
-      };
-
-      const filters = JSON.parse(JSON.stringify(listState.filters));
-      const sorts = JSON.parse(JSON.stringify(listState.sorts));
-      return {filters, sorts, onListStateChanged: onListState};
+      onListStateChanged?.(newListState, changeType, fieldName);
     }
 
     private onSortSelection(direction: SortDirection, field: Field) {
-      const {onListStateChanged, sorts} = this.listStateHelper();
+      const sorts: SortState = [...this.props.listState.sorts || ListContainer.defaultProps.listState.sorts];
 
+      // Remove previous entry if it exists
       const index = sorts.findIndex(s => s.fieldName === field.name);
       if(index >= 0) {
         sorts.splice(index, 1);
       }
+
+      // Add the new sort the beginning
       sorts.unshift({fieldName: field.name, direction});
-      onListStateChanged(ListStateChangeType.sorts, sorts, field.name);
+      this.onListStateChanged({sorts}, 'sorts', field.name);
     }
 
-    private onFilterChanged(filter: any, field: Field) {
-      const {onListStateChanged, filters} = this.listStateHelper();
+    private onFilterChanged(filter: FilterState, field: Field) {
+
+      const filters: FilterState = {
+        ...ListContainer.defaultProps.listState.filters,
+        ...this.props.listState.filters
+      };
 
       if(isNil(filter)) {
         delete filters[field.name];
@@ -170,11 +157,10 @@ export function List(View: ListViewType): React.ComponentClass<ListProps> {
         filters[field.name] = filter;
       }
 
-      onListStateChanged(ListStateChangeType.filters, filters, field.name);
+      this.onListStateChanged({filters}, 'filters', field.name);
     }
 
     private onWidthChanged(width: number, field: Field) {
-      const {onListStateChanged} = this.listStateHelper();
       const {fieldSet} = this.state;
 
       // Note: this is a hack.
@@ -187,13 +173,12 @@ export function List(View: ListViewType): React.ComponentClass<ListProps> {
 
       if(isUndefined(field.width) || field.width !== width) {
         field.resize(width);
-        const fieldDisplay: FieldDisplay = fieldSet.getFieldDisplay();
-        onListStateChanged(ListStateChangeType.fields, fieldDisplay, field.name);
+        const fields: FieldDisplay = fieldSet.getFieldDisplay();
+        this.onListStateChanged({fields}, 'fields', field.name);
       }
     }
 
     private onWidthChangedBulk(updates: BulkWidthChangeProps) {
-      const {onListStateChanged} = this.listStateHelper();
       const {fieldSet} = this.state;
       updates.forEach(([width, field]) => {
         // Note: this is a hack.
@@ -212,12 +197,11 @@ export function List(View: ListViewType): React.ComponentClass<ListProps> {
         }
       });
 
-      const fieldDisplay: FieldDisplay = fieldSet.getFieldDisplay();
-      onListStateChanged(ListStateChangeType.fields, fieldDisplay);
+      const fields: FieldDisplay = fieldSet.getFieldDisplay();
+      this.onListStateChanged({fields}, ListStateChangeType.fields);
     }
 
     private onTitleChanged(title: string, field: Field) {
-      const {onListStateChanged} = this.listStateHelper();
       const {fieldSet} = this.state;
 
       // Note: this is a hack.
@@ -230,24 +214,24 @@ export function List(View: ListViewType): React.ComponentClass<ListProps> {
 
       if(field.title !== title) {
         field.updateTitle(title);
-        const fieldDisplay: FieldDisplay = fieldSet.getFieldDisplay();
-        onListStateChanged(ListStateChangeType.fields, fieldDisplay, field.name);
+        const fields: FieldDisplay = fieldSet.getFieldDisplay();
+        this.onListStateChanged({fields}, 'fields', field.name);
       }
     }
 
     private onMove(newIndex: number, field: Field) {
-      const {onListStateChanged} = this.listStateHelper();
       const {fieldSet} = this.state;
       fieldSet.moveField(newIndex, field);
-      onListStateChanged(ListStateChangeType.fields, fieldSet.getFieldDisplay(), field.name);
+      const fields = fieldSet.getFieldDisplay();
+      this.onListStateChanged({fields}, 'fields', field.name);
     }
 
     private onHiddenChange(hidden: boolean, field: Field|FieldSet) {
-      const {onListStateChanged} = this.listStateHelper();
       const {fieldSet} = this.state;
       const f = fieldSet.findFieldByName(field.name);
       f.hidden = hidden;
-      onListStateChanged(ListStateChangeType.fields, fieldSet.getFieldDisplay(), field.name);
+      const fields: FieldDisplay = fieldSet.getFieldDisplay();
+      this.onListStateChanged({fields}, 'fields', field.name);
     }
 
     public render() {
