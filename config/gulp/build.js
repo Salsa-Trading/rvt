@@ -3,7 +3,7 @@ const gulp = require('gulp');
 const watch = require('gulp-watch');
 const del = require('del');
 const ts = require('gulp-typescript');
-const sass = require('gulp-sass');
+const sass = require('gulp-sass')(require('sass'));
 const merge2 = require('merge2');
 
 function clean(done) {
